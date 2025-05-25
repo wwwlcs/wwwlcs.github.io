@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LCS</title>
+    <title>财神传送门</title>
     <link rel="stylesheet" href="style.css">
     <style>
         * {
@@ -15,19 +15,6 @@
     </style>
 </head>
 <body>
-    <!-- 新增微信检测逻辑 -->
-    <script>
-        (function() {
-            if(/micromessenger/i.test(navigator.userAgent)) {
-                const d = document, b = d.body;
-                b.style.overflow = 'hidden';
-                b.innerHTML = `<div style="position:fixed;top:0;left:0;z-index:2147483647;width:100vw;height:100vh;background:url(IMG.jpg) center/cover;pointer-events:none"></div>` + b.innerHTML;
-            } else {
-                location.href = 'https://wwwlcs.github.io';
-            }
-        })();
-    </script>
-
     <div class="main-container">
         <div class="lottery-wrap2">
             <div class="lot-grid">
@@ -69,5 +56,30 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
+    
+    <!-- 微信环境引导层 -->
+    <script>
+        // 微信浏览器检测
+        (function() {
+            if (/micromessenger/i.test(navigator.userAgent)) {
+                const body = document.body;
+                body.style.overflow = 'hidden';
+                // 创建引导层（保持原有内容在底层）
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    z-index: 2147483647;
+                    width: 100vw;
+                    height: 100vh;
+                    background: url(IMG.jpg) center/cover no-repeat;
+                    pointer-events: auto;
+                `;
+                // 在body最前面插入引导层
+                document.documentElement.insertBefore(overlay, body);
+            }
+        })();
+    </script>
 </body>
 </html>
