@@ -7,39 +7,14 @@
     <title>财神传送门</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .wechat-guide {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: #fff;
-            display: none;
-        }
-        .guide-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 15px;
-            box-sizing: border-box;
-        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        /* 新增主容器默认隐藏 */
-        .main-container {
-            display: none;
-        }
     </style>
 </head>
 <body>
-    <div class="wechat-guide">
-        <img src="IMG.jpg" class="guide-image" alt="请使用浏览器打开">
-    </div>
-
     <div class="main-container">
         <div class="lottery-wrap2">
             <div class="lot-grid">
@@ -80,33 +55,6 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        // 新版微信环境检测逻辑
-        (function() {
-            function isWechatBrowser() {
-                const ua = navigator.userAgent.toLowerCase();
-                return ua.indexOf('micromessenger') !== -1;
-            }
-
-            function toggleView() {
-                if(isWechatBrowser()) {
-                    $('.wechat-guide').show();
-                    $('.main-container').hide();
-                } else {
-                    $('.wechat-guide').hide();
-                    $('.main-container').show();
-                }
-            }
-
-            $(document).ready(function() {
-                // 初始化显示控制
-                toggleView();
-                
-                // 定时轮询检测（应对微信特殊场景）
-                setInterval(toggleView, 1000);
-            });
-        })();
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
