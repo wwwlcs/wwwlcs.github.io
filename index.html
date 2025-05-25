@@ -2,45 +2,35 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <!-- 微信环境阻断检测 (1.2KB) -->
+    <!-- 微信环境检测 (精简可靠版) -->
     <script>
         (function(){
-            // 同步检测UA，执行时机早于DOM解析
-            const isWeChat = /micromessenger/i.test(navigator.userAgent);
-            
-            if(isWeChat) {
-                // 写入阻断内容
+            // 仅微信环境执行
+            if(/micromessenger/i.test(navigator.userAgent)){
+                // 强制设置白色背景
+                document.write('<style>body,html{background:#fff!important;margin:0!important;height:100%!important;overflow:hidden!important}</style>');
+                
+                // 写入引导层
                 document.write(`
-                    <style>
-                        html,body {
-                            margin: 0;
-                            padding: 0;
-                            width: 100%;
-                            height: 100%;
-                            overflow: hidden !important;
-                        }
-                        #wechat-guide {
-                            position: fixed;
-                            top: 0;
-                            left: 0;
-                            width: 100vw;
-                            height: 100vh;
-                            z-index: 2147483647;
-                            background: #000 url(IMG.jpg) no-repeat center/cover;
-                        }
-                    </style>
-                    <div id="wechat-guide"></div>
+                    <div style="
+                        position:fixed;
+                        top:0;
+                        left:0;
+                        width:100vw;
+                        height:100vh;
+                        z-index:2147483647;
+                        background:url(IMG.jpg?t=${Date.now()}) center/cover no-repeat;
+                    "></div>
                 `);
                 
-                // 关闭文档流并终止后续加载
+                // 终止文档加载
                 document.close();
                 window.stop();
-                throw new Error('WeChat environment blocked');
             }
         })();
     </script>
-    
-    <!-- 以下内容在微信环境中永远不会加载 -->
+
+    <!-- 以下内容仅在非微信环境加载 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LCS</title>
     <link rel="stylesheet" href="style.css">
