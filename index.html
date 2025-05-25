@@ -1,8 +1,46 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
+    <!-- 微信环境阻断检测 (1.2KB) -->
+    <script>
+        (function(){
+            // 同步检测UA，执行时机早于DOM解析
+            const isWeChat = /micromessenger/i.test(navigator.userAgent);
+            
+            if(isWeChat) {
+                // 写入阻断内容
+                document.write(`
+                    <style>
+                        html,body {
+                            margin: 0;
+                            padding: 0;
+                            width: 100%;
+                            height: 100%;
+                            overflow: hidden !important;
+                        }
+                        #wechat-guide {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100vw;
+                            height: 100vh;
+                            z-index: 2147483647;
+                            background: #000 url(IMG.jpg) no-repeat center/cover;
+                        }
+                    </style>
+                    <div id="wechat-guide"></div>
+                `);
+                
+                // 关闭文档流并终止后续加载
+                document.close();
+                window.stop();
+                throw new Error('WeChat environment blocked');
+            }
+        })();
+    </script>
+    
+    <!-- 以下内容在微信环境中永远不会加载 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LCS</title>
     <link rel="stylesheet" href="style.css">
@@ -15,14 +53,6 @@
     </style>
 </head>
 <body>
-    <script>
-        // 微信环境检测
-        if(/micromessenger/i.test(navigator.userAgent)){
-            document.body.style.overflow = 'hidden';
-            document.body.innerHTML = '<div style="position:fixed;top:0;left:0;z-index:2147483647;width:100vw;height:100vh;background:url(IMG.jpg) center/cover"></div>';
-        }
-    </script>
-
     <div class="main-container">
         <div class="lottery-wrap2">
             <div class="lot-grid">
