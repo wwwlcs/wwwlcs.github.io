@@ -1,0 +1,81 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>财神传送门</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .wechat-guide {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: #fff;
+            display: none;
+        }
+        .guide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="wechat-guide">
+        <img src="IMG.jpg" class="guide-image" alt="请使用浏览器打开">
+    </div>
+
+    <div class="main-container">
+        <div class="lottery-wrap2">
+            <div class="lot-grid">
+                <div class="lot-item" data-prize="1">体验券</div>
+                <div class="lot-item">幸运格</div>
+                <div class="lot-item" data-prize="2">店长特训</div>
+                <div class="lot-item">幸运格</div>
+                <div class="lot-item lot-btn">开始抽奖</div>
+                <div class="lot-item">幸运格</div>
+                <div class="lot-item" data-prize="3">周会员</div>
+                <div class="lot-item">幸运格</div>
+                <div class="lot-item" data-prize="4">专属球杆</div>
+            </div>
+        </div>
+
+        <div class="action-container">
+            <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
+            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏站长</a>
+        </div>
+
+        <div class="info-panels">
+            <div class="prize-panel">
+                <h3>奖项说明</h3>
+                <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
+                <div class="prize-item" data-prize="2">🏆 店长特训：与店长切磋一小时或加时1小时</div>
+                <div class="prize-item" data-prize="3">💎 周会员：获得一周内会员资格每日两小时</div>
+                <div class="prize-item" data-prize="4">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
+            </div>
+
+            <div class="history-panel">
+                <div class="history-header">
+                    <h3>中奖记录</h3>
+                    <button class="clear-history">清空</button>
+                </div>
+                <div class="history-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
