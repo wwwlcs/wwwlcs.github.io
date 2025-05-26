@@ -8,7 +8,7 @@ const PRIZES = [
     { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
 ];
 
-const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3];
+const moveOrder = [0, 1, 2, 5, 8, 7, 6, 3];
 const prizeIndexMap = { 1:1, 2:5, 3:7, 4:3 };
 
 class Lottery {
@@ -170,26 +170,29 @@ class Lottery {
 
     runAnimation(prize) {
         return new Promise(resolve => {
-            const targetIndex = prizeIndexMap[prize.id];
-            const targetOrderIndex = clockwiseOrder.indexOf(targetIndex);
-            const baseCycles = 3; // 基础转动3圈
-            const totalSteps = baseCycles * 8 + targetOrderIndex + 1;
-            
+            const targetIndex = moveOrder.indexOf(prizeIndexMap[prize.id]);
             let currentStep = 0;
-            let currentPosition = 0;
-            const speed = 80; // 恒定速度
+            let cycleCount = 0;
+            let speed = 50;
+            const totalSteps = 24 + targetIndex;
 
             const animate = () => {
                 this.$items.removeClass('active');
-                this.$items.eq(clockwiseOrder[currentPosition]).addClass('active');
+                const currentPos = moveOrder[cycleCount % moveOrder.length];
+                this.$items.eq(currentPos).addClass('active');
 
                 if (currentStep++ < totalSteps) {
-                    currentPosition = (currentPosition + 1) % clockwiseOrder.length;
-                    setTimeout(animate, speed);
+                    cycleCount++;
+                    if (currentStep > totalSteps - 8) {
+                        speed += 50;
+                        setTimeout(animate, speed);
+                    } else {
+                        setTimeout(animate, speed);
+                    }
                 } else {
                     this.$items.removeClass('active');
-                    this.$items.eq(targetIndex).addClass('active');
-                    setTimeout(resolve, 300); // 最终停留
+                    this.$items.eq(prizeIndexMap[prize.id]).addClass('active');
+                    resolve();
                 }
             };
             animate();
