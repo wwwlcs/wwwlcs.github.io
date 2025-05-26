@@ -1,29 +1,25 @@
-const PRIZE_MAP = {
-    1: {name: '体验券', desc: '免费体验台球1小时', prob: 80},
-    2: {name: '店长特训', desc: '一对一指导1小时', prob: 15},
-    3: {name: '周会员', desc: '一周会员资格', prob: 4.9},
-    4: {name: '专属球杆', desc: '定制球杆', prob: 0.1}
+const PRIZE_CONFIG = {
+    1: { name: '体验券', prob: 80, desc: '免费体验台球1小时' },
+    2: { name: '店长特训', prob: 15, desc: '一对一指导1小时' },
+    3: { name: '周会员', prob: 4.9, desc: '一周会员资格' },
+    4: { name: '专属球杆', prob: 0.1, desc: '定制球杆' }
 };
 
 const ORDER = [0, 1, 2, 5, 8, 7, 6, 3];
 let isRunning = false;
 let currentStep = 0;
 let speed = 80;
+let historyData = [];
 
 $(function() {
-    initLottery();
+    initHistory();
     bindEvents();
 });
 
-function initLottery() {
+function initHistory() {
     try {
-        const history = JSON.parse(localStorage.getItem('lotHistory') || '[]');
-        $('.history-list').html(history.slice(-5).map(item => 
-            `<div class="history-item">
-                <span>${item.name}</span>
-                <span>${new Date(item.time).toLocaleString()}</span>
-            </div>`
-        ).join(''));
+        historyData = JSON.parse(localStorage.getItem('lotteryHistory') || '[]');
+        updateHistoryDisplay();
     } catch(e) {
         console.error('历史记录加载失败:', e);
     }
@@ -31,12 +27,7 @@ function initLottery() {
 
 function bindEvents() {
     $('#startBtn').click(startLottery);
-    $('.clear-history').click(() => {
-        localStorage.removeItem('lotHistory');
-        $('.history-list').empty();
-        showAlert('记录已清空');
-    });
-    
+    $('.clear-history').click(clearHistory);
     $('#cardBtn').click(showCardModal);
     $('#donateBtn').click(showDonateModal);
 }
@@ -45,46 +36,47 @@ function startLottery() {
     if(isRunning) return;
     isRunning = true;
     
-    const target = getRandomPrize();
-    animateLottery(target);
+    const targetPrize = calculatePrize();
+    runAnimation(targetPrize.id);
 }
 
-function getRandomPrize() {
+function calculatePrize() {
     const rand = Math.random() * 100;
     let sum = 0;
-    for(const [id, prize] of Object.entries(PRIZE_MAP)) {
-        sum += prize.prob;
-        if(rand <= sum) return id;
+    for(const [id, config] of Object.entries(PRIZE_CONFIG)) {
+        sum += config.prob;
+        if(rand <= sum) return { id: parseInt(id), ...config };
     }
-    return '1';
+    return PRIZE_CONFIG[1];
 }
 
-function animateLottery(target) {
-    const targetIndex = ORDER.indexOf(parseInt(target)-1);
+function runAnimation(targetId) {
+    const targetIndex = ORDER.indexOf(targetId - 1);
     let steps = 0;
-    let current = 0;
-    
-    function move() {
+    currentStep = 0;
+    speed = 80;
+
+    function animate() {
         $('.lot-item').removeClass('active');
-        $(`.lot-item:eq(${ORDER[current]})`).addClass('active');
-        
+        const currentPos = ORDER[currentStep % 8];
+        $(`.lot-item:eq(${currentPos})`).addClass('active');
+
         if(steps++ < 24 + targetIndex) {
-            current = (current + 1) % 8;
+            currentStep++;
             speed = Math.min(speed + 3, 150);
-            setTimeout(move, speed);
+            setTimeout(animate, speed);
         } else {
-            finishLottery(target);
+            finishAnimation(targetId);
         }
     }
-    move();
+    animate();
 }
 
-function finishLottery(target) {
+function finishAnimation(targetId) {
     isRunning = false;
-    speed = 80;
-    const prize = PRIZE_MAP[target];
+    const prize = PRIZE_CONFIG[targetId];
     showAlert(`恭喜获得：${prize.name}`);
-    saveHistory(prize);
+    saveToHistory(prize);
     showResultModal(prize);
 }
 
@@ -93,10 +85,10 @@ function showResultModal(prize) {
         <div class="modal-wrapper">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h2>🎉 中奖啦！</h2>
-                    <div class="prize-item" style="margin:20px 0">
-                        <h3>${prize.name}</h3>
-                        <p>${prize.desc}</p>
+                    <h2>🎉 中奖结果</h2>
+                    <div class="prize-item" style="margin:20px 0;padding:15px">
+                        <h3 style="color:var(--prize-color)">${prize.name}</h3>
+                        <p style="margin-top:10px">${prize.desc}</p>
                     </div>
                     <button class="action-btn close-modal">确定</button>
                 </div>
@@ -112,20 +104,22 @@ function showCardModal() {
         <div class="modal-wrapper">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h3>获取卡密</h3>
-                    <input class="card-input" placeholder="输入赞赏获得的卡密">
-                    <button class="action-btn confirm-card">确认</button>
-                    <p style="margin-top:15px;color:#ccc">赞赏后联系站长获取卡密</p>
+                    <h3>卡密验证</h3>
+                    <input class="card-input" placeholder="输入16位卡密">
+                    <button class="action-btn confirm-btn">验证</button>
+                    <p style="margin-top:15px;color:#888">
+                        <small>请通过赞赏获取有效卡密</small>
+                    </p>
                 </div>
             </div>
         </div>
     `).appendTo('body');
-    
-    modal.on('click', '.confirm-card', () => {
-        const card = $('.card-input').val();
+
+    modal.on('click', '.confirm-btn', () => {
+        const card = $('.card-input').val().trim();
         if(/^[A-Z0-9]{16}$/.test(card)) {
             modal.remove();
-            showAlert('卡密验证成功');
+            showAlert('卡密验证成功，可开始抽奖');
         } else {
             showAlert('卡密格式错误');
         }
@@ -137,9 +131,9 @@ function showDonateModal() {
         <div class="modal-wrapper">
             <div class="modal-content">
                 <div class="qrcode-body">
-                    <h3>支持站长</h3>
-                    <img src="qrcode.jpg" alt="赞赏码" style="width:200px">
-                    <p>扫码赞赏后联系站长核验</p>
+                    <h3>赞赏支持</h3>
+                    <img src="qrcode.jpg" alt="赞赏码">
+                    <p style="margin-top:15px">扫码后联系站长领取卡密</p>
                 </div>
             </div>
         </div>
@@ -148,19 +142,29 @@ function showDonateModal() {
     });
 }
 
-function saveHistory(prize) {
-    const history = JSON.parse(localStorage.getItem('lotHistory') || []);
-    history.push({
+function saveToHistory(prize) {
+    historyData.push({
         name: prize.name,
-        time: Date.now()
+        time: new Date().toLocaleString()
     });
-    localStorage.setItem('lotHistory', JSON.stringify(history.slice(-50)));
-    $('.history-list').prepend(
+    localStorage.setItem('lotteryHistory', JSON.stringify(historyData.slice(-50)));
+    updateHistoryDisplay();
+}
+
+function updateHistoryDisplay() {
+    $('.history-list').html(historyData.slice(-5).reverse().map(item => 
         `<div class="history-item">
-            <span>${prize.name}</span>
-            <span>${new Date().toLocaleTimeString()}</span>
+            <span>${item.name}</span>
+            <span>${item.time}</span>
         </div>`
-    );
+    ).join(''));
+}
+
+function clearHistory() {
+    historyData = [];
+    localStorage.removeItem('lotteryHistory');
+    updateHistoryDisplay();
+    showAlert('历史记录已清空');
 }
 
 function showAlert(msg) {
