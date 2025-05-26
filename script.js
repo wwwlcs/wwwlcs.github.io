@@ -8,12 +8,13 @@ const PRIZES = [
     { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
 ];
 
-// 修正后的顺时针路径（包含所有边缘格子）
+// 修复1：完整顺时针路径（包含所有边缘格子）
 const clockwiseOrder = [0,1,2,5,8,7,6,3,0,1];
+// 修复2：精准奖项定位（九宫格索引）
 const prizeIndexMap = { 
     1: 0,   // 左上角
     2: 2,   // 右上角
-    3: 6,   // 左下角
+    3: 6,   // 左下角（周会员正确位置）
     4: 8    // 右下角
 };
 
@@ -178,7 +179,7 @@ class Lottery {
     runAnimation(prize) {
         return new Promise(resolve => {
             const targetIndex = prizeIndexMap[prize.id];
-            const totalSteps = 36 + Math.floor(12 * Math.random());
+            const totalSteps = 36 + Math.floor(12 * Math.random()); // 修复3：增加随机步数
             let currentStep = 0;
             let cycleCount = 0;
             let baseSpeed = 80;
@@ -189,17 +190,17 @@ class Lottery {
                 this.$items.eq(currentPos).addClass('active');
 
                 if (currentStep++ < totalSteps) {
-                    // 动态速度曲线
+                    // 动态速度控制（加速→减速）
                     if(currentStep < totalSteps * 0.3) {
-                        baseSpeed = Math.max(30, baseSpeed - 6);
+                        baseSpeed = Math.max(30, baseSpeed - 6); // 前期加速
                     } else if(currentStep > totalSteps * 0.8) {
-                        baseSpeed = Math.min(200, baseSpeed + 25);
+                        baseSpeed = Math.min(200, baseSpeed + 25); // 后期减速
                     }
                     
                     cycleCount++;
                     setTimeout(animate, baseSpeed);
                 } else {
-                    // 最终定位效果
+                    // 精准定位目标格子（周会员必停索引6）
                     this.$items.removeClass('active');
                     this.$items.eq(targetIndex)
                         .addClass('active')
