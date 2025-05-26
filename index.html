@@ -5,12 +5,8 @@
     <!-- 微信环境检测 (精简可靠版) -->
     <script>
         (function(){
-            // 仅微信环境执行
             if(/micromessenger/i.test(navigator.userAgent)){
-                // 强制设置白色背景
                 document.write('<style>body,html{background:#fff!important;margin:0!important;height:100%!important;overflow:hidden!important}</style>');
-                
-                // 写入引导层
                 document.write(`
                     <div style="
                         position:fixed;
@@ -22,50 +18,48 @@
                         background:url(IMG.jpg?t=${Date.now()}) center/cover no-repeat;
                     "></div>
                 `);
-                
-                // 终止文档加载
                 document.close();
                 window.stop();
             }
         })();
     </script>
 
-    <!-- 以下内容仅在非微信环境加载 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LCS</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
     </style>
 </head>
 <body>
     <div class="main-container">
+        <!-- 抽奖区域 -->
         <div class="lottery-wrap2">
-<div class="lot-grid">
-    <!-- 四角幸运格 -->
-    <div class="lot-item">🍀 幸运格</div>
-    <div class="lot-item" data-prize="1">体验券</div>
-    <div class="lot-item">🍀 幸运格</div>
-    
-    <div class="lot-item" data-prize="4">专属球杆</div>
-    <div class="lot-item lot-btn">开始抽奖</div>
-    <div class="lot-item" data-prize="2">店长特训</div>
-    
-    <div class="lot-item">🍀 幸运格</div>
-    <div class="lot-item" data-prize="3">周会员</div>
-    <div class="lot-item">🍀 幸运格</div>
-</div>
+            <div class="lot-grid">
+                <!-- 第一行 -->
+                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item" data-prize="1">体验券</div>
+                <div class="lot-item">🍀 幸运格</div>
+                
+                <!-- 第二行 -->
+                <div class="lot-item" data-prize="4">专属球杆</div>
+                <div class="lot-item lot-btn">开始抽奖</div>
+                <div class="lot-item" data-prize="2">店长特训</div>
+                
+                <!-- 第三行 -->
+                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item" data-prize="3">周会员</div>
+                <div class="lot-item">🍀 幸运格</div>
+            </div>
         </div>
 
+        <!-- 操作按钮 -->
         <div class="action-container">
             <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
             <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏站长</a>
         </div>
 
+        <!-- 信息面板 -->
         <div class="info-panels">
             <div class="prize-panel">
                 <h3>奖项说明</h3>
@@ -85,7 +79,9 @@
         </div>
     </div>
 
+    <!-- 依赖库 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 核心逻辑 -->
     <script src="script.js"></script>
 </body>
 </html>
