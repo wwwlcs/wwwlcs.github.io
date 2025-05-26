@@ -35,21 +35,22 @@
     <div class="main-container">
         <!-- 抽奖区域 -->
         <div class="lottery-wrap2">
+            <!-- 严格按九宫格索引顺序编写 -->
             <div class="lot-grid">
                 <!-- 第一行 -->
-                <div class="lot-item">🍀 幸运格</div>
-                <div class="lot-item" data-prize="1">体验券</div>
-                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item">🍀 幸运格</div>          <!-- 0 -->
+                <div class="lot-item" data-prize="1">体验券</div> <!-- 1 -->
+                <div class="lot-item">🍀 幸运格</div>          <!-- 2 -->
                 
                 <!-- 第二行 -->
-                <div class="lot-item" data-prize="4">专属球杆</div>
-                <div class="lot-item lot-btn">开始抽奖</div>
-                <div class="lot-item" data-prize="2">店长特训</div>
+                <div class="lot-item" data-prize="4">专属球杆</div> <!-- 3 -->
+                <div class="lot-item lot-btn">开始抽奖</div>       <!-- 4 -->
+                <div class="lot-item" data-prize="2">店长特训</div> <!-- 5 -->
                 
                 <!-- 第三行 -->
-                <div class="lot-item">🍀 幸运格</div>
-                <div class="lot-item" data-prize="3">周会员</div>
-                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item">🍀 幸运格</div>          <!-- 6 -->
+                <div class="lot-item" data-prize="3">周会员</div> <!-- 7 -->
+                <div class="lot-item">🍀 幸运格</div>          <!-- 8 -->
             </div>
         </div>
 
@@ -81,7 +82,7 @@
 
     <!-- 依赖库 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- 核心逻辑 -->
+    <!-- 核心逻辑（需使用之前提供的修正版script.js） -->
     <script src="script.js"></script>
 </body>
 </html>
