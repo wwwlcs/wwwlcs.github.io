@@ -8,8 +8,16 @@ const PRIZES = [
     { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
 ];
 
-const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3];
-const prizeIndexMap = { 1:0, 2:2, 3:6, 4:8 };
+// ++ 修正顺时针路径（严格外围顺时针）++
+const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3]; // 基础单圈路径
+
+// ++ 调整后的奖品位置映射（严格对应DOM顺序）++
+const prizeIndexMap = { 
+    1: 0, // 体验券 - 第1格
+    2: 2, // 店长特训 - 第3格
+    3: 6, // 周会员 - 第7格
+    4: 8  // 专属球杆 - 第9格
+};
 
 class Lottery {
     constructor(element) {
@@ -49,7 +57,7 @@ class Lottery {
 
     init() {
         this.isDrawing = false;
-        this.speed = 80;
+        this.speed = 50;  // ++ 初始速度调整++
         this.currentIndex = 0;
         this.audioIndex = 0;
     }
@@ -168,10 +176,12 @@ class Lottery {
         });
     }
 
+    // ++ 重构动画逻辑++
     runAnimation(prize) {
         return new Promise(resolve => {
             const targetIndex = prizeIndexMap[prize.id];
-            const totalSteps = 32 + Math.floor(8 * Math.random());
+            const baseCycles = 3; // 基础循环圈数
+            const totalSteps = (baseCycles * clockwiseOrder.length) + targetIndex;
             let currentStep = 0;
             let cycleCount = 0;
 
@@ -181,15 +191,27 @@ class Lottery {
                 this.$items.eq(currentPos).addClass('active');
 
                 if (currentStep++ < totalSteps) {
-                    this.speed = Math.min(this.speed + 3, 140);
+                    // 动态速度曲线控制
+                    if(currentStep < totalSteps - clockwiseOrder.length) {
+                        this.speed = Math.max(30, this.speed - 1); // 加速阶段
+                    } else {
+                        this.speed = Math.min(200, this.speed + 15); // 减速阶段
+                    }
+                    
                     cycleCount++;
                     setTimeout(animate, this.speed);
                 } else {
+                    // 最终定位修正
                     this.$items.removeClass('active');
                     this.$items.eq(targetIndex).addClass('active');
                     resolve();
                 }
             };
+            
+            // 初始化动画参数
+            this.speed = 50;
+            cycleCount = 0;
+            currentStep = 0;
             animate();
         });
     }
