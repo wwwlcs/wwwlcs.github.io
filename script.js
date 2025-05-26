@@ -8,14 +8,20 @@ const PRIZES = [
     { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
 ];
 
-// 修正后的路径和映射
-const clockwiseOrder = [0,1,2,5,8,7,6,3]; // 标准顺时针路径
+/* 九宫格索引映射（严格对应HTML结构）
+0  1  2
+3  4  5
+6  7  8 */
 const prizeIndexMap = { 
-    1: 1,  // 体验券 → 顶部中间
-    2: 5,  // 店长特训 → 右侧中间
-    3: 7,  // 周会员 → 底部中间 
-    4: 3   // 专属球杆 → 左侧中间
+    1: 1,  // 体验券 → 顶部中间（索引1）
+    2: 5,  // 店长特训 → 右侧中间（索引5）
+    3: 7,  // 周会员 → 底部中间（索引7）
+    4: 3   // 专属球杆 → 左侧中间（索引3）
 };
+
+// 顺时针跑马灯路径（严格经过所有边缘格子）
+const runningPath = [0,1,2,5,8,7,6,3];
+let currentStep = 0;
 
 class Lottery {
     constructor(element) {
@@ -55,10 +61,13 @@ class Lottery {
 
     init() {
         this.isDrawing = false;
-        this.currentSpeed = 100; // 初始速度
-        this.acceleration = 1.08; // 加速度系数
-        this.deceleration = 0.92; // 减速度系数
-        this.currentIndex = 0;
+        this.animationParams = {
+            baseSpeed: 80,     // 初始速度
+            acceleration: 0.9, // 加速度系数
+            cycles: 3,         // 基础循环次数
+            targetIndex: null,
+            finalSteps: 0
+        };
         this.audioIndex = 0;
     }
 
@@ -178,48 +187,49 @@ class Lottery {
 
     runAnimation(prize) {
         return new Promise(resolve => {
-            const targetIndex = prizeIndexMap[prize.id];
-            let cycles = 5; // 基础循环次数
-            let steps = cycles * clockwiseOrder.length;
-            let currentStep = 0;
-            let speed = this.currentSpeed;
+            this.animationParams.targetIndex = prizeIndexMap[prize.id];
+            let currentPosition = 0;
+            let speed = this.animationParams.baseSpeed;
+            const totalSteps = this.animationParams.cycles * runningPath.length;
+            let isDecelerating = false;
 
             const animate = () => {
                 this.$items.removeClass('active');
-                const currentPos = clockwiseOrder[currentStep % clockwiseOrder.length];
-                this.$items.eq(currentPos).addClass('active');
+                
+                // 计算当前路径位置
+                const pathIndex = currentPosition % runningPath.length;
+                const currentIndex = runningPath[pathIndex];
+                this.$items.eq(currentIndex).addClass('active');
 
                 // 动态速度控制
-                if (currentStep < steps * 0.3) {
-                    speed *= this.acceleration; // 加速阶段
-                } else if (currentStep > steps * 0.7) {
-                    speed *= this.deceleration; // 减速阶段
-                    speed = Math.max(speed, 80); // 最低速度限制
+                if(currentPosition < totalSteps * 0.7) {
+                    speed = Math.max(30, speed * this.animationParams.acceleration);
+                } else {
+                    isDecelerating = true;
+                    speed = Math.min(200, speed / this.animationParams.acceleration);
                 }
 
-                if (currentStep++ < steps) {
-                    setTimeout(animate, speed);
-                } else {
-                    // 最终定位阶段
-                    let finalSteps = 0;
-                    const findTarget = () => {
-                        const current = clockwiseOrder[currentStep % clockwiseOrder.length];
-                        if(current === targetIndex) {
-                            this.$items.removeClass('active');
-                            this.$items.eq(targetIndex).addClass('active');
-                            resolve();
-                        } else {
-                            this.$items.removeClass('active');
-                            this.$items.eq(current).addClass('active');
-                            currentStep++;
-                            finalSteps++;
-                            setTimeout(findTarget, 50 + finalSteps*20);
-                        }
-                    };
-                    findTarget();
+                // 最终定位逻辑
+                if(currentPosition >= totalSteps) {
+                    if(currentIndex === this.animationParams.targetIndex && this.animationParams.finalSteps++ > 2) {
+                        resolve();
+                        return;
+                    }
+                    this.animationParams.finalSteps++;
                 }
+
+                currentPosition++;
+                setTimeout(animate, speed);
             };
-            
+
+            // 校准最终停留位置
+            const targetPositions = [];
+            runningPath.forEach((v,i) => {
+                if(v === this.animationParams.targetIndex) targetPositions.push(i);
+            });
+            this.animationParams.finalSteps = targetPositions.length > 0 ? 
+                targetPositions[targetPositions.length-1] : 0;
+
             animate();
         });
     }
