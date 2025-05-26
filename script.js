@@ -8,8 +8,13 @@ const PRIZES = [
     { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
 ];
 
-const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3];
-const prizeIndexMap = { 1:0, 2:2, 3:6, 4:8 };
+const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3]; // 顺时针移动路径
+const prizePositionMap = { 
+    1: 0,   // 左上
+    2: 2,   // 右上
+    3: 6,   // 左下
+    4: 8    // 右下
+};
 
 class Lottery {
     constructor(element) {
@@ -170,22 +175,24 @@ class Lottery {
 
     runAnimation(prize) {
         return new Promise(resolve => {
-            const targetIndex = prizeIndexMap[prize.id];
-            const totalSteps = 24 + targetIndex; // 至少转3圈
+            const targetGridPos = prizePositionMap[prize.id];
+            const targetPathIndex = clockwiseOrder.indexOf(targetGridPos);
+            const totalSteps = 24 + targetPathIndex; // 至少转3圈
+            
             let steps = 0;
             let speed = 50;
-            let currentCycleIndex = 0;
+            let currentPathIndex = 0;
             let timer = null;
 
             const animate = () => {
                 this.$items.removeClass('active');
-                const currentPos = clockwiseOrder[currentCycleIndex % clockwiseOrder.length];
-                this.$items.eq(currentPos).addClass('active');
+                const currentGridPos = clockwiseOrder[currentPathIndex];
+                this.$items.eq(currentGridPos).addClass('active');
 
                 if (steps++ < totalSteps) {
-                    currentCycleIndex++;
+                    currentPathIndex = (currentPathIndex + 1) % clockwiseOrder.length;
                     
-                    // 最后8步开始减速
+                    // 最后8步减速
                     if (steps > totalSteps - 8) {
                         speed += 50;
                         clearInterval(timer);
@@ -196,7 +203,7 @@ class Lottery {
 
                 clearInterval(timer);
                 this.$items.removeClass('active');
-                this.$items.eq(targetIndex).addClass('active');
+                this.$items.eq(targetGridPos).addClass('active');
                 resolve();
             };
 
@@ -332,7 +339,7 @@ class Lottery {
                 $(this).fadeOut(200, () => {
                     $(this).remove();
                     $('.lot-item').removeClass('active');
-                    $('.lot-item').eq(prizeIndexMap[prize.id]).addClass('active');
+                    $('.lot-item').eq(prizePositionMap[prize.id]).addClass('active');
                 });
             }
         });
