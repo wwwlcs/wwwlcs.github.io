@@ -8,15 +8,8 @@ const PRIZES = [
     { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
 ];
 
-// 新路径定义（中间四格顺时针循环）
-const clockwiseOrder = [1, 5, 7, 3, 1, 5];
-// 奖品位置映射（对应中间四格）
-const prizeIndexMap = {
-    1: 1,  // 体验券 -> 上中
-    2: 5,  // 店长特训 -> 右中
-    3: 7,  // 周会员 -> 底中
-    4: 3   // 专属球杆 -> 左中
-};
+const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3];
+const prizeIndexMap = { 1:0, 2:2, 3:6, 4:8 };
 
 class Lottery {
     constructor(element) {
@@ -56,10 +49,9 @@ class Lottery {
 
     init() {
         this.isDrawing = false;
-        this.speed = 100;
+        this.speed = 80;
         this.currentIndex = 0;
         this.audioIndex = 0;
-        this.$items.removeClass('active').css({ transform: 'scale(1)', opacity: 1 });
     }
 
     updateHistoryDisplay() {
@@ -179,10 +171,9 @@ class Lottery {
     runAnimation(prize) {
         return new Promise(resolve => {
             const targetIndex = prizeIndexMap[prize.id];
-            const totalSteps = 48 + Math.floor(16 * Math.random());
+            const totalSteps = 32 + Math.floor(8 * Math.random());
             let currentStep = 0;
             let cycleCount = 0;
-            let baseSpeed = 80;
 
             const animate = () => {
                 this.$items.removeClass('active');
@@ -190,32 +181,13 @@ class Lottery {
                 this.$items.eq(currentPos).addClass('active');
 
                 if (currentStep++ < totalSteps) {
-                    // 动态速度曲线
-                    if(currentStep < totalSteps * 0.6) {
-                        baseSpeed = Math.max(40, baseSpeed - 5);
-                    } else if(currentStep > totalSteps * 0.8) {
-                        baseSpeed = Math.min(400, baseSpeed + 30);
-                    }
-                    
+                    this.speed = Math.min(this.speed + 3, 140);
                     cycleCount++;
-                    setTimeout(animate, baseSpeed);
+                    setTimeout(animate, this.speed);
                 } else {
-                    // 最终定位动画
                     this.$items.removeClass('active');
-                    const $target = this.$items.eq(targetIndex);
-                    
-                    // 高亮动画
-                    $target.addClass('active')
-                        .css({ transform: 'scale(0.5)', opacity: 0 })
-                        .animate({
-                            opacity: 1,
-                            transform: 'scale(1.2)'
-                        }, 500, 'easeOutBack')
-                        .animate({
-                            transform: 'scale(1)'
-                        }, 300);
-                    
-                    setTimeout(resolve, 800);
+                    this.$items.eq(targetIndex).addClass('active');
+                    resolve();
                 }
             };
             animate();
