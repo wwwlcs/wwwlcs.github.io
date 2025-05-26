@@ -8,8 +8,14 @@ const PRIZES = [
     { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
 ];
 
-const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3];
-const prizeIndexMap = { 1:0, 2:2, 3:6, 4:8 };
+// 修正后的路径和映射
+const clockwiseOrder = [0,1,2,5,8,7,6,3]; // 标准顺时针路径
+const prizeIndexMap = { 
+    1: 1,  // 体验券 → 顶部中间
+    2: 5,  // 店长特训 → 右侧中间
+    3: 7,  // 周会员 → 底部中间 
+    4: 3   // 专属球杆 → 左侧中间
+};
 
 class Lottery {
     constructor(element) {
@@ -49,7 +55,9 @@ class Lottery {
 
     init() {
         this.isDrawing = false;
-        this.speed = 80;
+        this.currentSpeed = 100; // 初始速度
+        this.acceleration = 1.08; // 加速度系数
+        this.deceleration = 0.92; // 减速度系数
         this.currentIndex = 0;
         this.audioIndex = 0;
     }
@@ -171,25 +179,47 @@ class Lottery {
     runAnimation(prize) {
         return new Promise(resolve => {
             const targetIndex = prizeIndexMap[prize.id];
-            const totalSteps = 32 + Math.floor(8 * Math.random());
+            let cycles = 5; // 基础循环次数
+            let steps = cycles * clockwiseOrder.length;
             let currentStep = 0;
-            let cycleCount = 0;
+            let speed = this.currentSpeed;
 
             const animate = () => {
                 this.$items.removeClass('active');
-                const currentPos = clockwiseOrder[cycleCount % clockwiseOrder.length];
+                const currentPos = clockwiseOrder[currentStep % clockwiseOrder.length];
                 this.$items.eq(currentPos).addClass('active');
 
-                if (currentStep++ < totalSteps) {
-                    this.speed = Math.min(this.speed + 3, 140);
-                    cycleCount++;
-                    setTimeout(animate, this.speed);
+                // 动态速度控制
+                if (currentStep < steps * 0.3) {
+                    speed *= this.acceleration; // 加速阶段
+                } else if (currentStep > steps * 0.7) {
+                    speed *= this.deceleration; // 减速阶段
+                    speed = Math.max(speed, 80); // 最低速度限制
+                }
+
+                if (currentStep++ < steps) {
+                    setTimeout(animate, speed);
                 } else {
-                    this.$items.removeClass('active');
-                    this.$items.eq(targetIndex).addClass('active');
-                    resolve();
+                    // 最终定位阶段
+                    let finalSteps = 0;
+                    const findTarget = () => {
+                        const current = clockwiseOrder[currentStep % clockwiseOrder.length];
+                        if(current === targetIndex) {
+                            this.$items.removeClass('active');
+                            this.$items.eq(targetIndex).addClass('active');
+                            resolve();
+                        } else {
+                            this.$items.removeClass('active');
+                            this.$items.eq(current).addClass('active');
+                            currentStep++;
+                            finalSteps++;
+                            setTimeout(findTarget, 50 + finalSteps*20);
+                        }
+                    };
+                    findTarget();
                 }
             };
+            
             animate();
         });
     }
