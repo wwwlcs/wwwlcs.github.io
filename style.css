@@ -63,15 +63,21 @@ body {
 }
 
 .lot-item.active {
-    background: #e74c3c !important;
-    border-color: #c0392b !important;
-    transform: scale(1.1);
+    background: #2ecc71 !important;
+    border-color: #27ae60 !important;
+    transform: scale(0.95);
+    box-shadow: 0 0 15px #2ecc71;
     animation: glow 1s infinite alternate;
 }
 
 .lot-btn {
-    background: #27ae60 !important;
+    background: #e67e22 !important;
     font-size: 16px !important;
+    cursor: pointer;
+}
+
+.lot-btn:hover {
+    background: #d35400 !important;
 }
 
 .action-container {
@@ -257,8 +263,8 @@ body {
 }
 
 @keyframes glow {
-    from { box-shadow: 0 0 10px #e74c3c; }
-    to { box-shadow: 0 0 30px #e74c3c; }
+    from { box-shadow: 0 0 10px #2ecc71; }
+    to { box-shadow: 0 0 30px #2ecc71; }
 }
 
 @keyframes slideIn {
