@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 微信环境检测 (精简可靠版) -->
+    <!-- 微信环境检测 -->
     <script>
         (function(){
             if(/micromessenger/i.test(navigator.userAgent)){
@@ -15,7 +15,7 @@
                         width:100vw;
                         height:100vh;
                         z-index:2147483647;
-                        background:url(IMG.jpg?t=${Date.now()}) center/cover no-repeat;
+                        background:url(IMG.jpg) center/cover no-repeat;
                     "></div>
                 `);
                 document.close();
@@ -24,7 +24,7 @@
         })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LCS九宫格抽奖</title>
+    <title>LCS</title>
     <link rel="stylesheet" href="style.css">
     <style>* { margin: 0; padding: 0; box-sizing: border-box; }</style>
 </head>
@@ -34,21 +34,21 @@
         <div class="lottery-wrap2">
             <div class="lot-grid">
                 <div class="lot-item" data-prize="1">体验券</div>
-                <div class="lot-item" data-prize="2">🍀 幸运格</div>
+                <div class="lot-item">🍀 幸运格</div>
                 <div class="lot-item" data-prize="3">周会员</div>
-                <div class="lot-item" data-prize="8">专属球杆</div>
+                <div class="lot-item" data-prize="4">专属球杆</div>
                 <div class="lot-item lot-btn" id="startBtn">开始抽奖</div>
-                <div class="lot-item" data-prize="4">店长特训</div>
-                <div class="lot-item" data-prize="7">🍀 幸运格</div>
-                <div class="lot-item" data-prize="6">🍀 幸运格</div>
-                <div class="lot-item" data-prize="5">🍀 幸运格</div>
+                <div class="lot-item" data-prize="2">店长特训</div>
+                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item">🍀 幸运格</div>
             </div>
         </div>
 
         <!-- 操作按钮 -->
         <div class="action-container">
-            <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
-            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏站长</a>
+            <a class="action-btn" id="cardBtn">🎫 获取卡密</a>
+            <a class="action-btn" id="donateBtn">🦊 赞赏站长</a>
         </div>
 
         <!-- 信息面板 -->
@@ -56,9 +56,9 @@
             <div class="prize-panel">
                 <h3>奖项说明</h3>
                 <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
-                <div class="prize-item" data-prize="4">🏆 店长特训：与店长切磋一小时或加时1小时</div>
+                <div class="prize-item" data-prize="2">🏆 店长特训：与店长切磋一小时或加时1小时</div>
                 <div class="prize-item" data-prize="3">💎 周会员：获得一周内会员资格每日两小时</div>
-                <div class="prize-item" data-prize="8">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
+                <div class="prize-item" data-prize="4">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
             </div>
 
             <div class="history-panel">
@@ -73,9 +73,7 @@
 
     <div class="alert-message"></div>
 
-    <!-- 依赖库 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- 核心逻辑 -->
     <script src="script.js"></script>
 </body>
 </html>
