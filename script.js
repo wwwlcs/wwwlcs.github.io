@@ -8,14 +8,14 @@ const PRIZES = [
     { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
 ];
 
-// 修复1：完整顺时针路径（包含所有边缘格子）
-const clockwiseOrder = [0,1,2,5,8,7,6,3,0,1];
-// 修复2：精准奖项定位（九宫格索引）
-const prizeIndexMap = { 
-    1: 0,   // 左上角
-    2: 2,   // 右上角
-    3: 6,   // 左下角（周会员正确位置）
-    4: 8    // 右下角
+// 新路径定义（中间四格顺时针循环）
+const clockwiseOrder = [1, 5, 7, 3, 1, 5];
+// 奖品位置映射（对应中间四格）
+const prizeIndexMap = {
+    1: 1,  // 体验券 -> 上中
+    2: 5,  // 店长特训 -> 右中
+    3: 7,  // 周会员 -> 底中
+    4: 3   // 专属球杆 -> 左中
 };
 
 class Lottery {
@@ -56,10 +56,10 @@ class Lottery {
 
     init() {
         this.isDrawing = false;
-        this.speed = 80;
+        this.speed = 100;
         this.currentIndex = 0;
         this.audioIndex = 0;
-        this.$items.removeClass('active').css('transform', 'scale(1)'); // 重置状态
+        this.$items.removeClass('active').css({ transform: 'scale(1)', opacity: 1 });
     }
 
     updateHistoryDisplay() {
@@ -179,7 +179,7 @@ class Lottery {
     runAnimation(prize) {
         return new Promise(resolve => {
             const targetIndex = prizeIndexMap[prize.id];
-            const totalSteps = 36 + Math.floor(12 * Math.random()); // 修复3：增加随机步数
+            const totalSteps = 48 + Math.floor(16 * Math.random());
             let currentStep = 0;
             let cycleCount = 0;
             let baseSpeed = 80;
@@ -190,26 +190,32 @@ class Lottery {
                 this.$items.eq(currentPos).addClass('active');
 
                 if (currentStep++ < totalSteps) {
-                    // 动态速度控制（加速→减速）
-                    if(currentStep < totalSteps * 0.3) {
-                        baseSpeed = Math.max(30, baseSpeed - 6); // 前期加速
+                    // 动态速度曲线
+                    if(currentStep < totalSteps * 0.6) {
+                        baseSpeed = Math.max(40, baseSpeed - 5);
                     } else if(currentStep > totalSteps * 0.8) {
-                        baseSpeed = Math.min(200, baseSpeed + 25); // 后期减速
+                        baseSpeed = Math.min(400, baseSpeed + 30);
                     }
                     
                     cycleCount++;
                     setTimeout(animate, baseSpeed);
                 } else {
-                    // 精准定位目标格子（周会员必停索引6）
+                    // 最终定位动画
                     this.$items.removeClass('active');
-                    this.$items.eq(targetIndex)
-                        .addClass('active')
-                        .css('transform', 'scale(1.2)');
+                    const $target = this.$items.eq(targetIndex);
                     
-                    setTimeout(() => {
-                        this.$items.eq(targetIndex).css('transform', 'scale(1)');
-                        resolve();
-                    }, 600);
+                    // 高亮动画
+                    $target.addClass('active')
+                        .css({ transform: 'scale(0.5)', opacity: 0 })
+                        .animate({
+                            opacity: 1,
+                            transform: 'scale(1.2)'
+                        }, 500, 'easeOutBack')
+                        .animate({
+                            transform: 'scale(1)'
+                        }, 300);
+                    
+                    setTimeout(resolve, 800);
                 }
             };
             animate();
