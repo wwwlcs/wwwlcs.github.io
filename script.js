@@ -49,8 +49,8 @@ class Lottery {
 
     init() {
         this.isDrawing = false;
-        this.speed = 80;
-        this.currentIndex = 0;
+        this.speed = 50;
+        this.currentStep = 0;
         this.audioIndex = 0;
     }
 
@@ -171,25 +171,31 @@ class Lottery {
     runAnimation(prize) {
         return new Promise(resolve => {
             const targetIndex = prizeIndexMap[prize.id];
-            const totalSteps = 32 + Math.floor(8 * Math.random());
             let currentStep = 0;
-            let cycleCount = 0;
+            let speed = 50;
+            const baseSteps = 24; // 基础3圈（8格×3圈）
+            const targetOffset = clockwiseOrder.indexOf(targetIndex);
+            const totalSteps = baseSteps + targetOffset;
 
             const animate = () => {
                 this.$items.removeClass('active');
-                const currentPos = clockwiseOrder[cycleCount % clockwiseOrder.length];
+                const currentPos = clockwiseOrder[currentStep % clockwiseOrder.length];
                 this.$items.eq(currentPos).addClass('active');
 
                 if (currentStep++ < totalSteps) {
-                    this.speed = Math.min(this.speed + 3, 140);
-                    cycleCount++;
-                    setTimeout(animate, this.speed);
+                    if (currentStep > totalSteps - 5) {
+                        speed += 50;
+                        setTimeout(animate, speed);
+                    } else {
+                        setTimeout(animate, speed);
+                    }
                 } else {
                     this.$items.removeClass('active');
                     this.$items.eq(targetIndex).addClass('active');
                     resolve();
                 }
             };
+
             animate();
         });
     }
