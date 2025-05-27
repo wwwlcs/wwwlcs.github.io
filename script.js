@@ -11,12 +11,12 @@ const config = {
     baseSpeed: 80,
     deceleration: 55,
     moveOrder: [0,1,2,4,7,6,5,3],
-    prizeMap: { 
-        1:1,  // 体验券 → 第2个元素
-        2:5,  // 店长特训 → 第6个元素
-        3:7,  // 周会员 → 第8个元素
-        4:3   // 专属球杆 → 第4个元素
-    },
+prizeMap: { 
+    1:1,  // 体验券 → $items[1]
+    2:4,  // 店长特训 → $items[4]
+    3:6,  // 周会员 → $items[6]
+    4:3   // 专属球杆 → $items[3]
+},
     safeIndexes: new Set([1,3,5,7])
 };
 
