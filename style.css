@@ -8,8 +8,13 @@
     --deep-space: #1a1b26;
 }
 
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     min-height: 100vh;
     background: var(--deep-space) url('bg.jpg') fixed;
     font-family: 'Inter', sans-serif;
@@ -17,6 +22,17 @@ body {
     color: #fff;
     overflow-y: auto;
     backdrop-filter: blur(10px);
+}
+
+.wechat-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2147483647;
+    background: url(IMG.jpg) center/cover no-repeat;
+    display: none;
 }
 
 .main-container {
@@ -39,7 +55,6 @@ body {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     padding: 15px;
-    position: relative;
 }
 
 .glass-card {
@@ -69,7 +84,6 @@ body {
 .glass-card.center {
     background: var(--accent-orange);
     font-size: 1.2em;
-    cursor: pointer;
 }
 
 .glass-card.active {
@@ -128,6 +142,33 @@ body {
     background: rgba(255,255,255,0.05);
     border-radius: 6px;
     transition: 0.3s;
+    cursor: pointer;
+}
+
+.prize-item:hover {
+    transform: translateX(8px);
+    background: rgba(255,255,255,0.1);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.history-list {
+    display: grid;
+    gap: 8px;
+}
+
+.history-item {
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .modal-wrapper {
@@ -144,9 +185,24 @@ body {
     backdrop-filter: blur(20px);
 }
 
+.modal-content {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 25px;
+    min-width: 300px;
+    max-width: 90%;
+    animation: modalBounce 0.5s;
+}
+
 @keyframes glow {
     from { box-shadow: 0 0 10px #2ecc71; }
     to { box-shadow: 0 0 30px #2ecc71; }
+}
+
+@keyframes modalBounce {
+    0% { transform: scale(0.8) translateY(50px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 @media (max-width: 480px) {
