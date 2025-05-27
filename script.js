@@ -9,15 +9,15 @@ const PRIZES = [
 
 const config = {
     baseSpeed: 80,
-    deceleration: 120,
-    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3],
+    deceleration: 55,
+    moveOrder: [0,1,2,4,7,6,5,3],
     prizeMap: { 
-        1: 1,   // 体验券 → 位置1 (第二个元素)
-        2: 5,   // 店长特训 → 位置5 (第六个元素)
-        3: 7,   // 周会员 → 位置7 (第八个元素)
-        4: 3    // 专属球杆 → 位置3 (第四个元素)
+        1:1,  // 体验券 → 第2个元素
+        2:5,  // 店长特训 → 第6个元素
+        3:7,  // 周会员 → 第8个元素
+        4:3   // 专属球杆 → 第4个元素
     },
-    safeIndexes: new Set([1, 3, 5, 7])
+    safeIndexes: new Set([1,3,5,7])
 };
 
 class Lottery {
@@ -150,16 +150,13 @@ class Lottery {
     runAnimation(targetIndex) {
         return new Promise(resolve => {
             const targetStep = config.moveOrder.indexOf(targetIndex);
-            if (targetStep === -1) {
-                console.error('无效的目标位置:', targetIndex);
-                return resolve();
-            }
+            if (targetStep === -1) return resolve();
 
             let currentStep = 0;
             let speed = config.baseSpeed;
-            const randomCycles = Math.floor(Math.random() * 3) + 3;
+            const randomCycles = Math.floor(Math.random() * 3) + 3; // 3-5圈
             const totalSteps = (config.moveOrder.length * randomCycles) + targetStep;
-            let decelerationStart = totalSteps - config.moveOrder.length;
+            let decelerationStart = totalSteps - Math.floor(config.moveOrder.length * 0.8);
 
             const animate = () => {
                 if (currentStep >= totalSteps) {
@@ -178,9 +175,9 @@ class Lottery {
                 currentStep++;
 
                 if (currentStep >= decelerationStart) {
-                    const remainingSteps = totalSteps - currentStep;
-                    speed += config.deceleration * (remainingSteps / config.moveOrder.length);
-                    speed = Math.max(speed, 150);
+                    const remaining = totalSteps - currentStep;
+                    speed += config.deceleration * (remaining / config.moveOrder.length);
+                    speed = Math.min(Math.max(speed, 90), 180);
 
                     clearInterval(this.timer);
                     this.timer = setInterval(animate, speed);
