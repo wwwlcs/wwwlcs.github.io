@@ -25,13 +25,18 @@ body {
 .main-container {
     max-width: 600px;
     width: 100%;
+    padding: 2rem;
+    margin: 20px auto;
+}
+
+.glass-panel {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
     border-radius: 24px;
     border: 1px solid var(--glass-border);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    margin: 20px auto;
+    padding: 1.5rem;
+    margin-top: 20px;
 }
 
 .title {
@@ -41,9 +46,6 @@ body {
     background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-.title span {
-    color: var(--neon-purple);
 }
 
 .lottery-wrap {
@@ -76,18 +78,6 @@ body {
     overflow: hidden;
     font-size: 14px;
 }
-.grid-item::before {
-    content: '';
-    position: absolute;
-    width: 150%;
-    height: 150%;
-    background: linear-gradient(45deg,transparent 25%,rgba(0,243,255,0.1) 50%,transparent 75%);
-    animation: flow 3s linear infinite;
-}
-.grid-item.active {
-    animation: prizeGlow 1.2s ease-in-out infinite;
-    transform: scale(0.95);
-}
 
 .start-btn {
     position: absolute;
@@ -106,38 +96,12 @@ body {
     transition: var(--transition);
     box-shadow: 0 0 30px rgba(189, 0, 255, 0.3);
 }
-.start-btn:hover {
-    transform: translate(-50%, -50%) scale(1.05);
-    box-shadow: 0 0 50px rgba(189, 0, 255, 0.5);
-}
-
-.pulse {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: rgba(189, 0, 255, 0.2);
-    animation: pulseGlow 2s infinite;
-}
 
 .action-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     margin-bottom: 20px;
-}
-.action-btn {
-    padding: 12px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
-    text-align: center;
-    color: white;
-    text-decoration: none;
-    transition: var(--transition);
-}
-.action-btn:hover {
-    background: rgba(255,255,255,0.2);
 }
 
 .modal-wrapper {
@@ -165,79 +129,47 @@ body {
 }
 
 .card-input {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 15px 0;
+    width: 80%;
+    padding: 10px 15px;
+    margin: 15px auto;
     background: rgba(0,0,0,0.3);
-    border: 2px solid var(--glass-border);
+    border: 1px solid var(--glass-border);
     border-radius: 12px;
     color: white;
-    font-size: 16px;
-    text-align: center;
+    display: block;
+}
+
+.clear-history {
+    background: none;
+    border: none;
+    color: var(--danger-red);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
     transition: var(--transition);
-    backdrop-filter: blur(5px);
-}
-
-.qrcode-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.qrcode-body img {
-    width: 180px;
-    height: 180px;
-    margin: 15px 0;
-}
-
-.history-list {
-    max-height: 200px;
-    overflow-y: auto;
-}
-.history-item {
-    padding: 10px;
-    margin: 8px 0;
-    background: rgba(0,0,0,0.2);
-    border-radius: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em;
-    border-left: 3px solid var(--accent-purple);
 }
 
 .prize-items {
     display: grid;
     gap: 12px;
+    grid-template-columns: 1fr;
 }
+
 .prize-item {
-    padding: 12px;
+    padding: 10px;
+    max-width: 360px;
+    margin: 0 auto;
     background: rgba(0,0,0,0.2);
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: var(--transition);
-    cursor: pointer;
-}
-.prize-item:hover {
-    transform: translateX(8px);
-    background: rgba(255,255,255,0.05);
 }
 
-@keyframes flow {
-    0% { transform: translateX(-50%) rotate(45deg); }
-    100% { transform: translateX(50%) rotate(45deg); }
-}
-
-@keyframes prizeGlow {
-    0%,100% { box-shadow: 0 0 15px var(--neon-blue); }
-    50% { box-shadow: 0 0 30px var(--neon-blue); }
-}
-
-@keyframes pulseGlow {
-    0% { opacity: 0.6; transform: scale(0.98); }
-    50% { opacity: 1; transform: scale(1.05); }
-    100% { opacity: 0.6; transform: scale(0.98); }
+.qrcode-body img {
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 8px;
+    width: 160px;
+    height: 160px;
 }
 
 @keyframes modalBounce {
@@ -246,15 +178,6 @@ body {
 }
 
 @media (max-width: 768px) {
-    .combined-panel {
-        grid-template-columns: 1fr;
-    }
-    .grid-item {
-        font-size: 12px;
-    }
-    .start-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 14px;
-    }
+    .grid-item { font-size: 12px; }
+    .start-btn { width: 60px; height: 60px; }
 }
