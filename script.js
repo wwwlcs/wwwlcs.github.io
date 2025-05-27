@@ -8,9 +8,9 @@ const PRIZES = [
 ];
 
 const config = {
-    baseSpeed: 50,
-    acceleration: 50,
-    baseCycles: 3,
+    baseSpeed: 60,
+    acceleration: 45,
+    baseCycles: 2,
     moveOrder: [0, 1, 2, 4, 7, 6, 5, 3],
     prizeMap: { 1:1, 2:5, 3:7, 4:3 },
     safeIndexes: new Set([1,3,5,7])
@@ -146,53 +146,60 @@ class Lottery {
     runAnimation(targetIndex) {
         return new Promise(resolve => {
             const targetStep = config.moveOrder.indexOf(targetIndex);
-            if (targetStep === -1) {
-                console.error('无效的目标位置:', targetIndex);
-                return resolve();
-            }
+            if (targetStep === -1) return resolve();
 
+            // 动态圈数：2-4圈随机增加视觉效果
+            const dynamicCycles = config.baseCycles + Math.floor(Math.random() * 3);
             let currentStep = 0;
             let speed = config.baseSpeed;
-            const totalSteps = (config.moveOrder.length * config.baseCycles) + targetStep;
-            let finalLapSteps = 0;
+            const totalSteps = (config.moveOrder.length * dynamicCycles) + targetStep;
+            let accelerationPhase = false;
 
             const animate = () => {
                 if (currentStep >= totalSteps) {
-                    clearInterval(this.timer);
-                    this.$items.removeClass('active');
-                    this.$items.eq(targetIndex).addClass('active');
-                    this.isDrawing = false;
+                    this.finalizeAnimation(targetIndex);
                     resolve();
                     return;
                 }
 
-                const realPos = config.moveOrder[currentStep % config.moveOrder.length];
-                this.$items.removeClass('active');
-                this.$items.eq(realPos).addClass('active');
-                
-                currentStep++;
+                const currentPos = config.moveOrder[currentStep % config.moveOrder.length];
+                this.updateHighlight(currentPos);
 
-                // 最后阶段精确控制
-                if (currentStep > totalSteps - config.moveOrder.length) {
-                    finalLapSteps++;
-                    speed += config.acceleration;
-                    
-                    clearInterval(this.timer);
-                    this.timer = setInterval(animate, Math.min(speed, 300));
-                    
-                    // 强制对齐最终位置
-                    if (finalLapSteps === config.moveOrder.length) {
-                        currentStep = totalSteps;
-                        clearInterval(this.timer);
-                        this.$items.removeClass('active');
-                        this.$items.eq(targetIndex).addClass('active');
-                        resolve();
-                    }
+                if (!accelerationPhase && currentStep >= totalSteps - config.moveOrder.length * 2) {
+                    accelerationPhase = true;
+                    this.enterAccelerationPhase(animate);
                 }
+
+                currentStep++;
             };
 
             this.timer = setInterval(animate, speed);
         });
+    }
+
+    finalizeAnimation(targetIndex) {
+        clearInterval(this.timer);
+        this.$items.removeClass('active');
+        this.$items.eq(targetIndex).addClass('active');
+        this.isDrawing = false;
+    }
+
+    updateHighlight(position) {
+        this.$items.removeClass('active');
+        this.$items.eq(position).addClass('active');
+    }
+
+    enterAccelerationPhase(animate) {
+        let acceleration = 0;
+        const accelerationTimer = setInterval(() => {
+            acceleration += config.acceleration;
+            clearInterval(this.timer);
+            this.timer = setInterval(animate, Math.max(50, 300 - acceleration));
+            
+            if (acceleration >= 250) {
+                clearInterval(accelerationTimer);
+            }
+        }, 100);
     }
 
     showAlert(message) {
