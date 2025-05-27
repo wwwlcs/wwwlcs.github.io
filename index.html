@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -5,7 +6,7 @@
     <script>
         (function(){
             if(/micromessenger/i.test(navigator.userAgent)){
-                document.write('<style>body,html{background:#fff!important;margin:0!important;height:100%!important;overflow:hidden!important}</style>');
+                document.write('<style>body,html{background:#000!important;margin:0!important;height:100%!important;overflow:hidden!important}</style>');
                 document.write(`
                     <div style="
                         position:fixed;
@@ -25,65 +26,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LCS</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        #result {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 18px;
-            background: rgba(0,0,0,0.9);
-            padding: 12px 24px;
-            border-radius: 8px;
-            z-index: 1000;
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="main-container">
-        <div class="lottery-wrap2">
-            <div class="lot-grid">
-                <div class="lot-item">🍀 幸运格</div>
-                <div class="lot-item" data-prize="1">体验券</div>
-                <div class="lot-item">🍀 幸运格</div>
-                <div class="lot-item" data-prize="4">专属球杆</div>
-                <div class="lot-item center" id="startBtn">开始抽奖</div>
-                <div class="lot-item" data-prize="2">店长特训</div>
-                <div class="lot-item">🍀 幸运格</div>
-                <div class="lot-item" data-prize="3">周会员</div>
-                <div class="lot-item">🍀 幸运格</div>
-            </div>
+    <div class="neolux-container">
+        <div class="hologram-header">
+            <div class="cyber-glitch" data-text="量子抽奖系统">量子抽奖系统</div>
+            <div class="particle-canvas"></div>
         </div>
 
-        <div class="action-container">
-            <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
-            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏站长</a>
+        <div class="quantum-grid">
+            <div class="grid-cell hologram-effect"><span>🌀 量子态</span></div>
+            <div class="grid-cell prize-item" data-prize="1"><span>体验通行证</span></div>
+            <div class="grid-cell hologram-effect"><span>🌀 叠加态</span></div>
+            <div class="grid-cell prize-item" data-prize="4"><span>定制光刃</span></div>
+            <div class="grid-cell center-cell" id="startBtn">
+                <div class="quantum-core">
+                    <div class="core-animation"></div>
+                    <span>启动</span>
+                </div>
+            </div>
+            <div class="grid-cell prize-item" data-prize="2"><span>精英训练</span></div>
+            <div class="grid-cell hologram-effect"><span>🌀 纠缠态</span></div>
+            <div class="grid-cell prize-item" data-prize="3"><span>VIP周权</span></div>
+            <div class="grid-cell hologram-effect"><span>🌀 波动态</span></div>
         </div>
 
-        <div class="info-panels">
-            <div class="prize-panel">
-                <h3>奖项说明</h3>
-                <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
-                <div class="prize-item" data-prize="2">🏆 店长特训：与店长切磋一小时或加时1小时</div>
-                <div class="prize-item" data-prize="3">💎 周会员：获得一周内会员资格每日两小时</div>
-                <div class="prize-item" data-prize="4">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
-            </div>
+        <div class="cyber-controls">
+            <button class="cyber-button" onclick="showCardInfo()">
+                <i class="fas fa-key"></i>
+                <span>量子密钥</span>
+                <div class="button-glow"></div>
+            </button>
+            <button class="cyber-button" onclick="showQRCode()">
+                <i class="fas fa-qrcode"></i>
+                <span>能量注入</span>
+                <div class="button-glow"></div>
+            </button>
+        </div>
 
-            <div class="history-panel">
-                <div class="history-header">
-                    <h3>中奖记录</h3>
-                    <button class="clear-history">清空</button>
+        <div class="data-panels">
+            <div class="cyber-panel">
+                <h3><i class="fas fa-hdd"></i> 核心协议</h3>
+                <div class="prize-item" data-prize="1">
+                    <div class="protocol-line"></div>
+                    <span>基础通行证 - 时空穿梭体验</span>
+                </div>
+                <!-- 其他奖项项... -->
+            </div>
+            
+            <div class="cyber-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-database"></i> 记忆库</h3>
+                    <button class="cyber-button small" onclick="$('.clear-history').click()">
+                        <i class="fas fa-eraser"></i>
+                    </button>
                 </div>
                 <div class="history-list"></div>
             </div>
         </div>
     </div>
-
-    <div id="result"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
