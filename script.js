@@ -8,11 +8,15 @@ const PRIZES = [
 ];
 
 const config = {
-    baseSpeed: 60,
-    acceleration: 45,
-    baseCycles: 2,
-    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3],
-    prizeMap: { 1:1, 2:5, 3:7, 4:3 },
+    baseSpeed: 60,       // 调整基础速度
+    acceleration: 45,    // 调整加速度参数
+    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3],  // 保持顺时针旋转路径
+    prizeMap: { 
+        1:1,  // 体验券 → 位置1 (第2个元素)
+        2:5,  // 店长特训 → 位置5 (第6个元素)
+        3:7,  // 周会员 → 位置7 (第8个元素)
+        4:3   // 专属球杆 → 位置3 (第4个元素)
+    },
     safeIndexes: new Set([1,3,5,7])
 };
 
@@ -31,6 +35,7 @@ class Lottery {
         this.bindEvents();
     }
 
+    /* 保持原有初始化方法不变 */
     initStorage() {
         try {
             this.history = JSON.parse(localStorage.getItem('lotteryHistory') || '[]');
@@ -58,6 +63,65 @@ class Lottery {
         this.audioIndex = 0;
     }
 
+    /* 新增改进的动画逻辑 */
+    runAnimation(targetIndex) {
+        return new Promise(resolve => {
+            const targetStep = config.moveOrder.indexOf(targetIndex);
+            if (targetStep === -1) {
+                console.error('无效的目标位置:', targetIndex);
+                return resolve();
+            }
+
+            let currentStep = 0;
+            let speed = config.baseSpeed;
+            // 随机3-5圈 + 目标位置
+            const randomCycles = Math.floor(Math.random() * 3) + 3; 
+            const totalSteps = (config.moveOrder.length * randomCycles) + targetStep;
+            let finalLapSteps = 0;
+
+            const animate = () => {
+                if (currentStep >= totalSteps) {
+                    clearInterval(this.timer);
+                    this.$items.removeClass('active');
+                    this.$items.eq(targetIndex).addClass('active');
+                    this.isDrawing = false;
+                    resolve();
+                    return;
+                }
+
+                const realPos = config.moveOrder[currentStep % config.moveOrder.length];
+                this.$items.removeClass('active');
+                this.$items.eq(realPos).addClass('active');
+                
+                currentStep++;
+
+                // 最后1.5圈开始减速逻辑
+                if (currentStep >= totalSteps - config.moveOrder.length * 1.5) {
+                    finalLapSteps++;
+                    // 动态计算减速曲线
+                    const remaining = totalSteps - currentStep;
+                    speed += remaining > config.moveOrder.length ? 
+                        config.acceleration : 
+                        -Math.abs(config.acceleration * 0.8);
+                    
+                    clearInterval(this.timer);
+                    this.timer = setInterval(animate, Math.min(Math.max(speed, 80), 300));
+                    
+                    // 精确停靠检测
+                    if (currentStep === totalSteps) {
+                        clearInterval(this.timer);
+                        this.$items.removeClass('active');
+                        this.$items.eq(targetIndex).addClass('active');
+                        resolve();
+                    }
+                }
+            };
+
+            this.timer = setInterval(animate, speed);
+        });
+    }
+
+    /* 保持其他方法不变 */
     updateHistoryDisplay() {
         const $list = $('.history-list').empty();
         this.history.slice(-5).reverse().forEach(record => {
@@ -141,65 +205,6 @@ class Lottery {
             }
             resolve(PRIZES[0]);
         });
-    }
-
-    runAnimation(targetIndex) {
-        return new Promise(resolve => {
-            const targetStep = config.moveOrder.indexOf(targetIndex);
-            if (targetStep === -1) return resolve();
-
-            // 动态圈数：2-4圈随机增加视觉效果
-            const dynamicCycles = config.baseCycles + Math.floor(Math.random() * 3);
-            let currentStep = 0;
-            let speed = config.baseSpeed;
-            const totalSteps = (config.moveOrder.length * dynamicCycles) + targetStep;
-            let accelerationPhase = false;
-
-            const animate = () => {
-                if (currentStep >= totalSteps) {
-                    this.finalizeAnimation(targetIndex);
-                    resolve();
-                    return;
-                }
-
-                const currentPos = config.moveOrder[currentStep % config.moveOrder.length];
-                this.updateHighlight(currentPos);
-
-                if (!accelerationPhase && currentStep >= totalSteps - config.moveOrder.length * 2) {
-                    accelerationPhase = true;
-                    this.enterAccelerationPhase(animate);
-                }
-
-                currentStep++;
-            };
-
-            this.timer = setInterval(animate, speed);
-        });
-    }
-
-    finalizeAnimation(targetIndex) {
-        clearInterval(this.timer);
-        this.$items.removeClass('active');
-        this.$items.eq(targetIndex).addClass('active');
-        this.isDrawing = false;
-    }
-
-    updateHighlight(position) {
-        this.$items.removeClass('active');
-        this.$items.eq(position).addClass('active');
-    }
-
-    enterAccelerationPhase(animate) {
-        let acceleration = 0;
-        const accelerationTimer = setInterval(() => {
-            acceleration += config.acceleration;
-            clearInterval(this.timer);
-            this.timer = setInterval(animate, Math.max(50, 300 - acceleration));
-            
-            if (acceleration >= 250) {
-                clearInterval(accelerationTimer);
-            }
-        }, 100);
     }
 
     showAlert(message) {
