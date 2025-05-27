@@ -1,11 +1,12 @@
 /* style.css */
 :root {
-    --glass-bg: rgba(30, 30, 40, 0.95);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --neon-green: #2ecc71;
-    --accent-orange: #e67e22;
-    --prize-gold: #ffd700;
+    --frost-blue: #8ecae6;
+    --glass-white: rgba(255, 255, 255, 0.95);
     --deep-space: #1a1b26;
+    --accent-purple: #9d4edd;
+    --glass-bg: rgba(30, 30, 30, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --prize-color: #ffd700;
 }
 
 * {
@@ -16,156 +17,154 @@
 
 body {
     min-height: 100vh;
-    background: var(--deep-space) url('bg.jpg') fixed;
+    background: linear-gradient(45deg, var(--deep-space), #2d3250);
     font-family: 'Inter', sans-serif;
     padding: 20px;
-    color: #fff;
-    overflow-y: auto;
-    backdrop-filter: blur(10px);
+    overflow-x: hidden;
+    color: var(--glass-white);
 }
 
-.wechat-overlay {
+.particle-layer {
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 2147483647;
-    background: url(IMG.jpg) center/cover no-repeat;
-    display: none;
+    background: radial-gradient(
+        circle at 50% 50%, 
+        rgba(142, 202, 230, 0.1) 0%, 
+        transparent 60%
+    );
+    animation: particleMove 20s linear infinite;
+    z-index: -1;
 }
 
 .main-container {
     max-width: 600px;
-    margin: 0 auto;
-}
-
-.lottery-glass {
-    background: rgba(0,0,0,0.25);
-    border: 1px solid var(--glass-border);
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
     border-radius: 24px;
-    padding: 20px;
-    margin: 20px 0;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
 }
 
-.hologrid {
+.title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.5em;
+}
+.title span {
+    color: var(--accent-purple);
+}
+
+.lottery-wrap {
+    background: rgba(0,0,0,0.3);
+    border-radius: 20px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.lot-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    padding: 15px;
+    padding: 20px 0;
+    position: relative;
 }
 
-.glass-card {
+.lot-item {
     aspect-ratio: 1;
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(12px);
-    border: 2px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 500;
-    color: #fff;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    border: 1px solid var(--glass-border);
     position: relative;
     overflow: hidden;
 }
 
-.glass-card::before {
+.lot-item::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1));
+    background: linear-gradient(120deg, 
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
-.glass-card.center {
-    background: var(--accent-orange);
-    font-size: 1.2em;
+.lot-item:hover::before {
+    opacity: 1;
 }
 
-.glass-card.active {
-    background: var(--neon-green) !important;
-    transform: scale(0.95);
-    box-shadow: 0 0 25px var(--neon-green);
-    animation: glow 1s infinite alternate;
-}
-
-.action-bar {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.glow-btn {
-    padding: 12px 25px;
-    background: rgba(255,255,255,0.1);
+.center-btn {
+    background: rgba(157, 78, 221, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
     border: 1px solid var(--glass-border);
+    color: var(--glass-white);
+}
+
+.center-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 24px rgba(157, 78, 221, 0.4);
+}
+
+.action-container {
+    margin: 15px auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 12px 10px;
     border-radius: 8px;
-    color: #fff;
-    font-size: 14px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
     transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.glow-btn::before {
-    content: '';
-    position: absolute;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    transition: 0.6s;
-}
-
-.glow-btn:hover::before {
-    left: 100%;
+    color: var(--glass-white);
+    text-decoration: none;
 }
 
 .glass-panel {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
     border-radius: 16px;
-    padding: 20px;
-    margin: 15px 0;
-    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border: 1px solid var(--glass-border);
 }
 
-.prize-item {
-    padding: 12px;
-    margin: 8px 0;
-    border-left: 3px solid var(--prize-gold);
-    background: rgba(255,255,255,0.05);
-    border-radius: 6px;
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-.prize-item:hover {
-    transform: translateX(8px);
-    background: rgba(255,255,255,0.1);
-}
-
-.panel-header {
+.history-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-}
-
-.history-list {
-    display: grid;
-    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .history-item {
-    padding: 10px;
+    padding: 8px;
+    margin: 5px 0;
     background: rgba(0,0,0,0.2);
-    border-radius: 8px;
+    border-radius: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -188,16 +187,16 @@ body {
 .modal-content {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 25px;
-    min-width: 300px;
+    border-radius: 12px;
+    min-width: 280px;
     max-width: 90%;
-    animation: modalBounce 0.5s;
+    animation: modalBounce 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
-@keyframes glow {
-    from { box-shadow: 0 0 10px #2ecc71; }
-    to { box-shadow: 0 0 30px #2ecc71; }
+@keyframes particleMove {
+    0% { transform: translate(-25%, -25%); }
+    50% { transform: translate(25%, 25%); }
+    100% { transform: translate(-25%, -25%); }
 }
 
 @keyframes modalBounce {
@@ -206,7 +205,15 @@ body {
 }
 
 @media (max-width: 480px) {
-    .hologrid { gap: 8px; }
-    .glass-card { font-size: 13px; }
-    .glow-btn { padding: 10px 20px; }
+    .main-container {
+        padding: 1.5rem;
+        border-radius: 16px;
+    }
+    .lot-grid {
+        gap: 8px;
+    }
+    .action-btn {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
 }
