@@ -29,56 +29,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="neolux-container">
-        <div class="hologram-header">
-            <div class="cyber-glitch" data-text="量子抽奖系统">量子抽奖系统</div>
-            <div class="particle-canvas"></div>
+    <div class="cyber-container">
+        <div class="neon-header">
+            <h1 class="glitch-text" data-text="量子抽奖">量子抽奖</h1>
+            <div class="particle-layer"></div>
         </div>
 
-        <div class="quantum-grid">
-            <div class="grid-cell hologram-effect"><span>🌀 量子态</span></div>
-            <div class="grid-cell prize-item" data-prize="1"><span>体验通行证</span></div>
-            <div class="grid-cell hologram-effect"><span>🌀 叠加态</span></div>
-            <div class="grid-cell prize-item" data-prize="4"><span>定制光刃</span></div>
+        <div class="grid-system">
+            <div class="grid-cell hologram"><span>🌀 量子态</span></div>
+            <div class="grid-cell" data-prize="1"><div class="prize-glow"></div><span>体验券</span></div>
+            <div class="grid-cell hologram"><span>🌀 叠加态</span></div>
+            <div class="grid-cell" data-prize="4"><div class="prize-glow"></div><span>专属球杆</span></div>
             <div class="grid-cell center-cell" id="startBtn">
-                <div class="quantum-core">
-                    <div class="core-animation"></div>
+                <div class="core-animation">
+                    <div class="energy-pulse"></div>
                     <span>启动</span>
                 </div>
             </div>
-            <div class="grid-cell prize-item" data-prize="2"><span>精英训练</span></div>
-            <div class="grid-cell hologram-effect"><span>🌀 纠缠态</span></div>
-            <div class="grid-cell prize-item" data-prize="3"><span>VIP周权</span></div>
-            <div class="grid-cell hologram-effect"><span>🌀 波动态</span></div>
+            <div class="grid-cell" data-prize="2"><div class="prize-glow"></div><span>店长特训</span></div>
+            <div class="grid-cell hologram"><span>🌀 纠缠态</span></div>
+            <div class="grid-cell" data-prize="3"><div class="prize-glow"></div><span>周会员</span></div>
+            <div class="grid-cell hologram"><span>🌀 波动态</span></div>
         </div>
 
-        <div class="cyber-controls">
-            <button class="cyber-button" onclick="showCardInfo()">
+        <div class="control-panel">
+            <button class="neon-button" onclick="showCardInfo()">
                 <i class="fas fa-key"></i>
-                <span>量子密钥</span>
-                <div class="button-glow"></div>
+                <span>获取卡密</span>
+                <div class="button-stroke"></div>
             </button>
-            <button class="cyber-button" onclick="showQRCode()">
+            <button class="neon-button" onclick="showQRCode()">
                 <i class="fas fa-qrcode"></i>
-                <span>能量注入</span>
-                <div class="button-glow"></div>
+                <span>赞赏站长</span>
+                <div class="button-stroke"></div>
             </button>
         </div>
 
-        <div class="data-panels">
+        <div class="info-panels">
             <div class="cyber-panel">
-                <h3><i class="fas fa-hdd"></i> 核心协议</h3>
+                <h3><i class="fas fa-info-circle"></i> 奖项说明</h3>
                 <div class="prize-item" data-prize="1">
-                    <div class="protocol-line"></div>
-                    <span>基础通行证 - 时空穿梭体验</span>
+                    <div class="data-line"></div>
+                    <span>体验券：免费体验台球1小时</span>
                 </div>
-                <!-- 其他奖项项... -->
+                <!-- 其他奖项说明保持相同结构 -->
             </div>
             
-            <div class="cyber-panel">
+            <div class="cyber-panel history-panel">
                 <div class="panel-header">
-                    <h3><i class="fas fa-database"></i> 记忆库</h3>
-                    <button class="cyber-button small" onclick="$('.clear-history').click()">
+                    <h3><i class="fas fa-history"></i> 中奖记录</h3>
+                    <button class="neon-button small" onclick="$('.clear-history').click()">
                         <i class="fas fa-eraser"></i>
                     </button>
                 </div>
