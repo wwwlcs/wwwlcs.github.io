@@ -11,14 +11,9 @@ const config = {
     baseSpeed: 50,
     acceleration: 50,
     baseCycles: 3,
-    moveOrder: [0, 1, 2, 5, 8, 7, 6, 3], // 修正后的顺时针路径
-    prizeMap: { 
-        1: 1,   // 体验券 -> 路径索引1 (对应HTML元素索引1)
-        2: 3,   // 店长特训 -> 路径索引3 (对应HTML元素索引5)
-        3: 5,   // 周会员 -> 路径索引5 (对应HTML元素索引7)
-        4: 7    // 专属球杆 -> 路径索引7 (对应HTML元素索引3)
-    },
-    safeIndexes: new Set([1, 3, 5, 7])
+    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3],
+    prizeMap: { 1:1, 2:5, 3:7, 4:3 },
+    safeIndexes: new Set([1,3,5,7])
 };
 
 class Lottery {
@@ -164,7 +159,7 @@ class Lottery {
                 if (currentStep >= totalSteps) {
                     clearInterval(this.timer);
                     this.$items.removeClass('active');
-                    this.$items.eq(config.moveOrder[targetIndex]).addClass('active');
+                    this.$items.eq(targetIndex).addClass('active');
                     this.isDrawing = false;
                     resolve();
                     return;
@@ -176,6 +171,7 @@ class Lottery {
                 
                 currentStep++;
 
+                // 最后8步精确控制
                 if (currentStep > totalSteps - config.moveOrder.length) {
                     finalLapSteps++;
                     speed += config.acceleration;
@@ -183,10 +179,11 @@ class Lottery {
                     clearInterval(this.timer);
                     this.timer = setInterval(animate, Math.min(speed, 300));
                     
+                    // 强制对齐最终位置
                     if (finalLapSteps === config.moveOrder.length) {
                         currentStep = totalSteps;
                         this.$items.removeClass('active');
-                        this.$items.eq(config.moveOrder[targetIndex]).addClass('active');
+                        this.$items.eq(targetIndex).addClass('active');
                     }
                 }
             };
@@ -318,6 +315,7 @@ class Lottery {
     }
 }
 
+// 初始化抽奖系统
 $.fn.lottery = function() {
     return this.each(function() {
         if (!$.data(this, 'lottery')) new Lottery(this);
@@ -327,6 +325,7 @@ $.fn.lottery = function() {
 $(function() {
     $('.lot-grid').lottery();
 
+    // 卡密获取窗口
     window.showCardInfo = function() {
         const modal = $(`
             <div class="modal-wrapper">
@@ -351,6 +350,7 @@ $(function() {
         });
     };
 
+    // 赞赏二维码窗口
     window.showQRCode = function() {
         const modal = $(`
             <div class="modal-wrapper">
