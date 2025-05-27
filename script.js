@@ -145,14 +145,15 @@ class Lottery {
 
     runAnimation(targetIndex) {
         return new Promise(resolve => {
-            if(!config.safeIndexes.has(targetIndex)) {
+            const targetStep = config.moveOrder.indexOf(targetIndex);
+            if (targetStep === -1) {
                 console.error('无效的目标位置:', targetIndex);
                 return resolve();
             }
 
             let currentStep = 0;
             let speed = config.baseSpeed;
-            const totalSteps = (config.moveOrder.length * config.baseCycles) + targetIndex;
+            const totalSteps = (config.moveOrder.length * config.baseCycles) + targetStep;
             let finalLapSteps = 0;
 
             const animate = () => {
@@ -171,7 +172,7 @@ class Lottery {
                 
                 currentStep++;
 
-                // 最后8步精确控制
+                // 最后阶段精确控制
                 if (currentStep > totalSteps - config.moveOrder.length) {
                     finalLapSteps++;
                     speed += config.acceleration;
@@ -182,8 +183,10 @@ class Lottery {
                     // 强制对齐最终位置
                     if (finalLapSteps === config.moveOrder.length) {
                         currentStep = totalSteps;
+                        clearInterval(this.timer);
                         this.$items.removeClass('active');
                         this.$items.eq(targetIndex).addClass('active');
+                        resolve();
                     }
                 }
             };
