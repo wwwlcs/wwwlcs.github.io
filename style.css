@@ -8,7 +8,6 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 基础样式 */
 body {
     margin: 0;
     min-height: 100vh;
@@ -43,33 +42,33 @@ body {
     gap: 20px;
 }
 
-/* 九宫格布局 */
 .lottery-wrap {
     order: 1;
 }
 
+.action-container {
+    order: 2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.combined-panel {
+    order: 3;
+    background: var(--glass-bg);
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* 九宫格优化 */
 .lot-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     position: relative;
     aspect-ratio: 1;
-}
-
-.lot-item {
-    aspect-ratio: 1;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-    font-size: 14px;
 }
 
 .center-bg {
@@ -92,87 +91,46 @@ body {
     transform: translate(-50%, -50%);
     width: 70px;
     height: 70px;
+    z-index: 2;
     background: rgba(157, 78, 221, 0.9);
     border: 2px solid var(--glass-border);
-    border-radius: 50%;
-    color: white;
-    font-weight: 700;
-    cursor: pointer;
-    z-index: 2;
-    transition: var(--transition);
-}
-
-/* 操作按钮 */
-.action-container {
-    order: 2;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.action-btn {
-    padding: 12px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
-    text-align: center;
-    color: white;
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-/* 组合信息面板 */
-.combined-panel {
-    order: 3;
-    background: var(--glass-bg);
-    border-radius: 16px;
-    border: 1px solid var(--glass-border);
-    padding: 20px;
-    margin-top: 20px;
 }
 
 /* 弹窗优化 */
 .modal-content {
     width: min(90vw, 320px);
     padding: 20px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    animation: modalBounce 0.3s ease-out;
 }
 
 .card-input {
     width: 100%;
     padding: 10px 15px;
-    margin: 15px 0;
-    background: rgba(0,0,0,0.3);
-    border: 2px solid var(--glass-border);
-    border-radius: 8px;
-    color: white;
     font-size: 14px;
-    text-align: center;
+    margin: 15px 0;
+}
+
+.copy-btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.1);
     transition: var(--transition);
 }
-
-/* 动画效果 */
-@keyframes particleMove {
-    0% { transform: translate(-25%, -25%); }
-    50% { transform: translate(25%, 25%); }
-    100% { transform: translate(-25%, -25%); }
+.copy-btn:hover {
+    background: var(--accent-purple);
 }
 
-@keyframes pulseGlow {
-    0% { opacity: 0.6; transform: scale(0.98); }
-    50% { opacity: 1; transform: scale(1.05); }
-    100% { opacity: 0.6; transform: scale(0.98); }
+.qrcode-body img {
+    width: 180px;
+    height: 180px;
+    margin: 10px auto;
 }
 
-@keyframes prizeGlow {
-    0% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.6); }
-    50% { box-shadow: 0 0 30px rgba(46, 204, 113, 0.8); }
-    100% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.6); }
+/* 历史记录面板 */
+.history-section {
+    margin-bottom: 20px;
 }
 
+/* 响应式优化 */
 @media (max-width: 480px) {
     .lot-item {
         font-size: 13px;
@@ -181,5 +139,9 @@ body {
         width: 60px;
         height: 60px;
         font-size: 14px;
+    }
+    .qrcode-body img {
+        width: 160px;
+        height: 160px;
     }
 }
