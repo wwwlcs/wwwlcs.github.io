@@ -29,10 +29,31 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="particle-layer"></div>
-
     <div class="main-container">
         <h1 class="title"><span>GLOW</span>LOTTO</h1>
+
+        <div class="action-container">
+            <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
+            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏支持</a>
+        </div>
+
+        <div class="lottery-wrap">
+            <div class="grid-container">
+                <div class="grid-item">🍀</div>
+                <div class="grid-item" data-prize="1">体验券</div>
+                <div class="grid-item">✨</div>
+                <div class="grid-item" data-prize="4">专属球杆</div>
+                <button class="start-btn" id="startBtn">
+                    <div class="pulse"></div>
+                    START
+                </button>
+                <div class="grid-item">🎁</div>
+                <div class="grid-item" data-prize="2">店长特训</div>
+                <div class="grid-item">🔥</div>
+                <div class="grid-item" data-prize="3">周会员</div>
+                <div class="grid-item">🚀</div>
+            </div>
+        </div>
 
         <div class="combined-panel">
             <div class="history-section">
@@ -81,28 +102,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="lottery-wrap">
-            <div class="grid-container">
-                <div class="grid-item">🍀</div>
-                <div class="grid-item" data-prize="1">体验券</div>
-                <div class="grid-item">✨</div>
-                <div class="grid-item" data-prize="4">专属球杆</div>
-                <button class="start-btn" id="startBtn">
-                    <div class="pulse"></div>
-                    START
-                </button>
-                <div class="grid-item" data-prize="2">店长特训</div>
-                <div class="grid-item">🔥</div>
-                <div class="grid-item" data-prize="3">周会员</div>
-                <div class="grid-item">🚀</div>
-            </div>
-        </div>
-
-        <div class="action-container">
-            <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
-            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏支持</a>
         </div>
     </div>
 
