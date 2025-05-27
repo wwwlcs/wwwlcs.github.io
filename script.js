@@ -1,8 +1,7 @@
 // script.js
 "use strict";
 
-const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3];
-const prizeIndexMap = { 1:0, 2:2, 3:6, 4:8 };
+const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3]; // 修正为正确的顺时针路径
 
 class Lottery {
     constructor(element) {
@@ -117,9 +116,11 @@ class Lottery {
                     cycleCount++;
                     setTimeout(animate, this.speed);
                 } else {
+                    // 最终定位逻辑修正
+                    const finalIndex = clockwiseOrder[targetIndex % clockwiseOrder.length];
                     this.$items.removeClass('active');
-                    this.$items.eq(targetIndex).addClass('active');
-                    resolve(targetIndex);
+                    this.$items.eq(finalIndex).addClass('active');
+                    resolve(finalIndex);
                 }
             };
             animate();
@@ -213,10 +214,10 @@ class Lottery {
         this.$button.addClass('disabled');
 
         const randomPrize = Math.floor(Math.random() * clockwiseOrder.length);
-        const targetIndex = clockwiseOrder[randomPrize];
-        await this.runAnimation(targetIndex);
-        this.showResult(targetIndex);
-        this.recordHistory(targetIndex);
+        const targetIndex = randomPrize % clockwiseOrder.length;
+        const finalIndex = await this.runAnimation(targetIndex);
+        this.showResult(finalIndex);
+        this.recordHistory(finalIndex);
 
         this.isDrawing = false;
         this.$button.removeClass('disabled');
