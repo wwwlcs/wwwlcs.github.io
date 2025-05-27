@@ -9,18 +9,18 @@ const PRIZES = [
 ];
 
 const config = {
-    baseSpeed: 50,
-    acceleration: 50,
+    baseSpeed: 80,
+    acceleration: 3,
     totalCycles: 3,
-    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3], // 顺时针移动顺序
-    prizeMap: { 1:1, 2:5, 3:7, 4:3 }      // 奖项对应moveOrder索引
+    moveOrder: [0, 1, 2, 5, 8, 7, 6, 3], // 顺时针移动顺序
+    prizeMap: { 1:1, 2:5, 3:7, 4:3 }      // 奖项对应格子索引
 };
 
 class Lottery {
     constructor(element) {
         this.$element = $(element);
-        this.$items = this.$element.find('.lot-item').not('.lot-btn');
-        this.$button = this.$element.find('.lot-btn');
+        this.$items = this.$element.find('.lot-item').not('#startBtn');
+        this.$button = $('#startBtn');
         this.historyLimit = 50;
         this.usedCards = new Set();
         this.currentCard = null;
@@ -77,7 +77,7 @@ class Lottery {
         
         $(document).on('click', [
             '.lot-item',
-            '.lot-btn',
+            '#startBtn',
             '.confirm-card',
             '.clear-history',
             '.copy-btn',
@@ -97,6 +97,27 @@ class Lottery {
             localStorage.removeItem('lotteryHistory');
             this.updateHistoryDisplay();
             this.showAlert('记录已清空');
+        });
+
+        $(document).on('click', '.prize-item', (e) => {
+            const prizeId = $(e.currentTarget).data('prize');
+            const prize = PRIZES.find(p => p.id == prizeId);
+            if(prize) {
+                this.showAlert(`奖项说明：${prize.desc}`);
+            }
+        });
+
+        $('.action-btn').on({
+            mouseenter: function() {
+                $(this).css('transform', 'translateY(-2px)');
+            },
+            mouseleave: function() {
+                $(this).css('transform', 'translateY(0)');
+            },
+            click: function(e) {
+                $(e.currentTarget).css('transform', 'scale(0.95)');
+                setTimeout(() => $(e.currentTarget).css('transform', 'scale(1)'), 200);
+            }
         });
     }
 
@@ -160,15 +181,17 @@ class Lottery {
             const animate = () => {
                 if (steps >= totalSteps) {
                     clearInterval(this.timer);
+                    this.$items.removeClass('active');
+                    this.$items.eq(targetIndex).addClass('active');
                     this.isDrawing = false;
                     resolve();
                     return;
                 }
 
                 this.$items.removeClass('active');
-                const realIndex = config.moveOrder[this.currentIndex];
+                const realIndex = config.moveOrder[this.currentIndex % config.moveOrder.length];
                 this.$items.eq(realIndex).addClass('active');
-                this.currentIndex = (this.currentIndex + 1) % config.moveOrder.length;
+                this.currentIndex++;
                 steps++;
 
                 if (steps > totalSteps - config.moveOrder.length) {
@@ -186,7 +209,7 @@ class Lottery {
         $('<div class="alert-message">'+message+'</div>')
             .appendTo('body')
             .delay(2000)
-            .fadeOut(300, () => $(this).remove());
+            .fadeOut(300, function() { $(this).remove(); });
     }
 
     showCardModal() {
@@ -265,6 +288,7 @@ class Lottery {
     }
 
     async start() {
+        if(this.isDrawing) return;
         this.isDrawing = true;
         this.$button.addClass('disabled');
 
@@ -341,7 +365,7 @@ $.fn.lottery = function() {
 $(function() {
     $('.lot-grid').lottery();
 
-    // 原有模态框功能
+    // 获取卡密模态框
     window.showCardInfo = function() {
         const modal = $(`
             <div class="modal-wrapper">
@@ -358,6 +382,12 @@ $(function() {
             </div>
         `).appendTo('body');
 
+        modal.on('click', function(e) {
+            if ($(e.target).hasClass('modal-wrapper')) {
+                $(this).fadeOut(200, () => $(this).remove());
+            }
+        });
+
         modal.find('.copy-btn').on('click', (e) => {
             e.stopPropagation();
             navigator.clipboard.writeText('LIVE-CS2025')
@@ -369,6 +399,7 @@ $(function() {
         });
     };
 
+    // 赞赏二维码模态框
     window.showQRCode = function() {
         const modal = $(`
             <div class="modal-wrapper">
@@ -381,5 +412,11 @@ $(function() {
                 </div>
             </div>
         `).appendTo('body');
+
+        modal.on('click', function(e) {
+            if ($(e.target).hasClass('modal-wrapper')) {
+                $(this).fadeOut(200, () => $(this).remove());
+            }
+        });
     };
 });
