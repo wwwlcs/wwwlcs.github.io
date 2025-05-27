@@ -11,7 +11,7 @@ const config = {
     baseSpeed: 80,
     deceleration: 55,
     moveOrder: [0,1,2,5,8,7,6,3], // 九宫格移动顺序
-    prizeMap: {1:1, 2:4, 3:7, 4:3}, // 奖项对应格子索引
+    prizeMap: {1:1, 2:5, 3:8, 4:3}, // 奖项对应格子索引
     safeIndexes: new Set([1,3,5,7])
 };
 
@@ -69,7 +69,7 @@ class Lottery {
         const playClick = () => !this.isDrawing && this.playSound('click');
         
         $(document).on('click', [
-            '.lot-item',
+            '.grid-item',
             '#startBtn',
             '.confirm-card',
             '.clear-history',
@@ -191,10 +191,10 @@ class Lottery {
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <h3 style="margin-bottom:15px;text-align:center">请输入卡密</h3>
-                        <input type="text" class="card-input" placeholder="输入卡密开始抽奖" maxlength="18">
-                        <div style="margin-top:20px;text-align:center">
-                            <button class="confirm-card action-btn">确认抽奖</button>
+                        <h3 style="margin-bottom:15px">请输入卡密</h3>
+                        <input type="text" class="card-input" placeholder="输入18位卡密" maxlength="18">
+                        <div style="margin-top:20px">
+                            <button class="action-btn confirm-card">确认抽奖</button>
                         </div>
                     </div>
                 </div>
@@ -274,7 +274,7 @@ class Lottery {
         const $modal = $(`
             <div class="modal-wrapper">
                 <div class="modal-content">
-                    <div class="result-body" style="padding:25px;text-align:center">
+                    <div class="result-body" style="padding:25px">
                         <h2 style="margin:0 0 15px;font-size:24px">🎉 恭喜中奖！</h2>
                         <div style="padding:15px;background:rgba(255,255,255,0.1);border-radius:8px">
                             <p style="font-size:18px;margin:10px 0"><strong>${prize.name}</strong></p>
@@ -311,11 +311,12 @@ $(function() {
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="modal-body">
+                        <h3>获取卡密</h3>
                         <p>此活动只针对站长好友开放</p>
                         <p>需赞赏后获取卡密：中奖率100%</p>
-                        <div class="wechat-row">
-                            <span>复制站长微信</span>
-                            <button class="copy-btn">📋 复制</button>
+                        <div class="wechat-row" style="margin:20px 0">
+                            <input type="text" class="card-input" value="LIVE-CS2025" readonly>
+                            <button class="action-btn copy-btn" style="margin-top:15px">📋 复制微信号</button>
                         </div>
                     </div>
                 </div>
@@ -335,8 +336,8 @@ $(function() {
                 <div class="modal-content">
                     <div class="qrcode-body">
                         <h3>赞赏支持</h3>
-                        <img src="qrcode.jpg" alt="赞赏二维码" style="max-width:100%">
-                        <p>扫码赞赏后联系站长核验</p>
+                        <img src="qrcode.jpg" alt="赞赏二维码" style="width:180px;height:180px">
+                        <p style="margin-top:15px">扫码赞赏后联系站长核验</p>
                     </div>
                 </div>
             </div>
