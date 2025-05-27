@@ -1,3 +1,4 @@
+// script.js
 "use strict";
 
 const PRIZES = [
@@ -11,18 +12,13 @@ const config = {
     baseSpeed: 80,
     deceleration: 55,
     moveOrder: [0,1,2,4,7,6,5,3],
-prizeMap: { 
-    1:1,  // 体验券 → $items[1]
-    2:4,  // 店长特训 → $items[4]
-    3:6,  // 周会员 → $items[6]
-    4:3   // 专属球杆 → $items[3]
-},
+    prizeMap: {1:1, 2:4, 3:6, 4:3},
     safeIndexes: new Set([1,3,5,7])
 };
 
 class Lottery {
-    constructor(element) {
-        this.$element = $(element);
+    constructor() {
+        this.$element = $('.lot-grid');
         this.$items = this.$element.find('.lot-item').not('#startBtn');
         this.$button = $('#startBtn');
         this.historyLimit = 50;
@@ -31,7 +27,6 @@ class Lottery {
         this.audioPool = [];
         this.initStorage();
         this.initAudio();
-        this.init();
         this.bindEvents();
     }
 
@@ -54,12 +49,6 @@ class Lottery {
             this.audioPool.push(clickAudio);
         }
         this.winAudio = new Audio('./win.mp3');
-    }
-
-    init() {
-        this.isDrawing = false;
-        this.currentIndex = 0;
-        this.audioIndex = 0;
     }
 
     updateHistoryDisplay() {
@@ -150,35 +139,34 @@ class Lottery {
     runAnimation(targetIndex) {
         return new Promise(resolve => {
             const targetStep = config.moveOrder.indexOf(targetIndex);
-            if (targetStep === -1) return resolve();
-
             let currentStep = 0;
             let speed = config.baseSpeed;
-            const randomCycles = Math.floor(Math.random() * 3) + 3; // 3-5圈
+            const randomCycles = Math.floor(Math.random() * 3) + 3;
             const totalSteps = (config.moveOrder.length * randomCycles) + targetStep;
-            let decelerationStart = totalSteps - Math.floor(config.moveOrder.length * 0.8);
+            let decelerationStart = totalSteps - Math.floor(config.moveOrder.length * 1.5);
 
             const animate = () => {
                 if (currentStep >= totalSteps) {
-                    clearInterval(this.timer);
                     this.$items.removeClass('active');
                     this.$items.eq(targetIndex).addClass('active');
+                    clearInterval(this.timer);
                     this.isDrawing = false;
                     resolve();
                     return;
                 }
 
                 const realPos = config.moveOrder[currentStep % config.moveOrder.length];
-                this.$items.removeClass('active');
-                this.$items.eq(realPos).addClass('active');
+                this.$items.removeClass('active')
+                    .css('transform', 'scale(1)')
+                    .eq(realPos)
+                    .addClass('active')
+                    .css('transform', 'scale(1.05)');
                 
                 currentStep++;
 
-                if (currentStep >= decelerationStart) {
-                    const remaining = totalSteps - currentStep;
-                    speed += config.deceleration * (remaining / config.moveOrder.length);
-                    speed = Math.min(Math.max(speed, 90), 180);
-
+                if (currentStep > decelerationStart) {
+                    speed += config.deceleration;
+                    speed = Math.min(speed, 180);
                     clearInterval(this.timer);
                     this.timer = setInterval(animate, speed);
                 }
@@ -190,7 +178,7 @@ class Lottery {
 
     showAlert(message) {
         $('<div class="alert-message">'+message+'</div>')
-            .appendTo('body').delay(2000).fadeOut(300, () => $(this).remove());
+            .appendTo('body').delay(2000).fadeOut(300, function() { $(this).remove(); });
     }
 
     showCardModal() {
@@ -200,11 +188,9 @@ class Lottery {
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <h3 style="margin-bottom:15px;text-align:center">请输入卡密</h3>
-                        <input type="text" class="card-input" placeholder="输入卡密开始抽奖" maxlength="18">
-                        <div style="margin-top:20px;text-align:center">
-                            <button class="confirm-card action-btn">确认抽奖</button>
-                        </div>
+                        <h3>请输入卡密</h3>
+                        <input type="text" class="card-input" placeholder="输入18位卡密" maxlength="18">
+                        <button class="action-btn confirm-card">立即抽奖</button>
                     </div>
                 </div>
             </div>
@@ -224,7 +210,10 @@ class Lottery {
 
     validateCard(card) {
         const regex = /^\d{12}[A-Z]{6}$/;
-        if(!regex.test(card)) return this.showAlert('卡密格式错误'), false;
+        if(!regex.test(card)) {
+            this.showAlert('卡密格式错误');
+            return false;
+        }
         
         const now = new Date();
         const cardDate = new Date(
@@ -239,11 +228,20 @@ class Lottery {
             cardDate.getFullYear() !== now.getFullYear() ||
             cardDate.getMonth() !== now.getMonth() ||
             cardDate.getDate() !== now.getDate()
-        ) return this.showAlert('卡密已过期'), false;
+        ) {
+            this.showAlert('卡密已过期');
+            return false;
+        }
 
         const timeDiff = now - cardDate;
-        if (timeDiff < 0 || timeDiff > 300000) return this.showAlert('卡密已失效'), false;
-        if(this.usedCards.has(card)) return this.showAlert('卡密已使用'), false;
+        if (timeDiff < 0 || timeDiff > 300000) {
+            this.showAlert('卡密已失效');
+            return false;
+        }
+        if(this.usedCards.has(card)) {
+            this.showAlert('卡密已使用');
+            return false;
+        }
         
         this.usedCards.add(card);
         localStorage.setItem('usedCards', JSON.stringify([...this.usedCards]));
@@ -283,11 +281,12 @@ class Lottery {
         const $modal = $(`
             <div class="modal-wrapper">
                 <div class="modal-content">
-                    <div class="result-body" style="padding:25px;text-align:center">
-                        <h2 style="margin:0 0 15px;font-size:24px">🎉 恭喜中奖！</h2>
-                        <div style="padding:15px;background:rgba(255,255,255,0.1);border-radius:8px">
-                            <p style="font-size:18px;margin:10px 0"><strong>${prize.name}</strong></p>
-                            <p style="color:#ccc;margin:0">${prize.desc}</p>
+                    <div class="result-body">
+                        <h2>🎉 恭喜中奖！</h2>
+                        <div class="prize-card prize-${prize.id}">
+                            <div class="prize-icon">${this.getPrizeIcon(prize.id)}</div>
+                            <h3>${prize.name}</h3>
+                            <p>${prize.desc}</p>
                         </div>
                     </div>
                 </div>
@@ -295,6 +294,11 @@ class Lottery {
         `).appendTo('body');
 
         $modal.on('click', e => $(e.target).hasClass('modal-wrapper') && $modal.remove());
+    }
+
+    getPrizeIcon(id) {
+        const icons = {1: '⏳', 2: '🎓', 3: '💎', 4: '🎁'};
+        return icons[id] || '🎁';
     }
 
     recordHistory(prize) {
@@ -311,52 +315,42 @@ class Lottery {
     }
 }
 
-$.fn.lottery = function() {
-    return this.each(function() {
-        if (!$.data(this, 'lottery')) new Lottery(this);
-    });
-};
-
+// 初始化
 $(function() {
-    $('.lot-grid').lottery();
+    new Lottery();
 
     window.showCardInfo = function() {
         const modal = $(`
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <p>此活动只针对站长好友开放</p>
-                        <p>需赞赏后获取卡密：中奖率100%</p>
+                        <p>需赞赏后获取卡密</p>
                         <div class="wechat-row">
-                            <span>复制站长微信</span>
-                            <button class="copy-btn">📋 复制</button>
+                            <button class="action-btn copy-btn">📋 复制微信</button>
                         </div>
                     </div>
                 </div>
             </div>
         `).appendTo('body');
 
-        modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
-        modal.find('.copy-btn').on('click', e => {
+        modal.find('.copy-btn').on('click', () => {
             navigator.clipboard.writeText('LIVE-CS2025')
-                .then(() => this.showAlert('微信号已复制'))
-                .catch(e => console.error('复制失败:', e));
+                .then(() => $('<div class="alert-message">微信号已复制</div>')
+                    .appendTo('body').delay(2000).fadeOut());
         });
     };
 
     window.showQRCode = function() {
-        const modal = $(`
+        $(`
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="qrcode-body">
-                        <h3>赞赏支持</h3>
-                        <img src="qrcode.jpg" alt="赞赏二维码" style="max-width:100%">
-                        <p>扫码赞赏后联系站长核验</p>
+                        <h3>扫码赞赏</h3>
+                        <img src="qrcode.jpg" alt="赞赏二维码">
+                        <p>扫码后联系站长核验</p>
                     </div>
                 </div>
             </div>
-        `).appendTo('body');
-
-        modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
+        `).appendTo('body').on('click', e => $(e.target).hasClass('modal-wrapper') && $(e.target).remove());
     };
 });
