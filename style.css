@@ -1,8 +1,9 @@
-/* style.css */
 :root {
     --glass-bg: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.15);
     --accent-purple: #9d4edd;
+    --neon-blue: #00f3ff;
+    --neon-purple: #bd00ff;
     --danger-red: #ff4757;
     --text-primary: rgba(255, 255, 255, 0.95);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -11,7 +12,7 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: linear-gradient(45deg, #1a1b26, #2d3250);
+    background: linear-gradient(135deg, #1a1b26, #2d3250);
     font-family: 'Inter', sans-serif;
     padding: 20px;
     overflow-x: hidden;
@@ -43,9 +44,12 @@ body {
     text-align: center;
     margin-bottom: 1.5rem;
     font-size: 2.5em;
+    background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 .title span {
-    color: var(--accent-purple);
+    color: var(--neon-purple);
 }
 
 .combined-panel {
@@ -142,7 +146,7 @@ body {
     margin: 20px 0;
 }
 
-.lot-grid {
+.grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
@@ -150,10 +154,10 @@ body {
     aspect-ratio: 1;
 }
 
-.lot-item {
+.grid-item {
     aspect-ratio: 1;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.2);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -165,19 +169,27 @@ body {
     overflow: hidden;
     font-size: 14px;
 }
-.lot-item.active {
+.grid-item::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: linear-gradient(45deg,transparent 25%,rgba(0,243,255,0.1) 50%,transparent 75%);
+    animation: flow 3s linear infinite;
+}
+.grid-item.active {
     animation: prizeGlow 1.2s ease-in-out infinite;
     transform: scale(0.95);
 }
 
-.center-btn {
+.start-btn {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     width: 80px;
     height: 80px;
-    background: rgba(157, 78, 221, 0.9);
+    background: rgba(189, 0, 255, 0.9);
     border: 1px solid var(--glass-border);
     border-radius: 50%;
     color: white;
@@ -185,10 +197,11 @@ body {
     cursor: pointer;
     z-index: 2;
     transition: var(--transition);
+    box-shadow: 0 0 30px rgba(189, 0, 255, 0.3);
 }
-.center-btn:hover {
+.start-btn:hover {
     transform: translate(-50%, -50%) scale(1.05);
-    box-shadow: 0 0 24px rgba(157, 78, 221, 0.4);
+    box-shadow: 0 0 50px rgba(189, 0, 255, 0.5);
 }
 
 .pulse {
@@ -196,7 +209,7 @@ body {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: rgba(157, 78, 221, 0.2);
+    background: rgba(189, 0, 255, 0.2);
     animation: pulseGlow 2s infinite;
 }
 
@@ -243,28 +256,15 @@ body {
     animation: modalBounce 0.3s ease-out;
 }
 
-.card-input {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 15px 0;
-    background: rgba(0,0,0,0.3);
-    border: 2px solid var(--glass-border);
-    border-radius: 12px;
-    color: white;
-    font-size: 16px;
-    text-align: center;
-    transition: var(--transition);
-}
-.card-input:focus {
-    border-color: var(--accent-purple);
-    box-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
-    outline: none;
-}
-
 @keyframes particleMove {
     0% { transform: translate(-25%, -25%); }
     50% { transform: translate(25%, 25%); }
     100% { transform: translate(-25%, -25%); }
+}
+
+@keyframes flow {
+    0% { transform: translateX(-50%) rotate(45deg); }
+    100% { transform: translateX(50%) rotate(45deg); }
 }
 
 @keyframes pulseGlow {
@@ -274,9 +274,8 @@ body {
 }
 
 @keyframes prizeGlow {
-    0% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.6); }
-    50% { box-shadow: 0 0 30px rgba(46, 204, 113, 0.8); }
-    100% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.6); }
+    0%,100% { box-shadow: 0 0 15px var(--neon-blue); }
+    50% { box-shadow: 0 0 30px var(--neon-blue); }
 }
 
 @keyframes modalBounce {
@@ -288,10 +287,10 @@ body {
     .combined-panel {
         grid-template-columns: 1fr;
     }
-    .lot-item {
+    .grid-item {
         font-size: 12px;
     }
-    .center-btn {
+    .start-btn {
         width: 60px;
         height: 60px;
         font-size: 14px;
