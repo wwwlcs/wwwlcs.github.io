@@ -1,219 +1,116 @@
 /* style.css */
+/* 基础变量 */
 :root {
-    --frost-blue: #8ecae6;
-    --glass-white: rgba(255, 255, 255, 0.95);
-    --deep-space: #1a1b26;
-    --accent-purple: #9d4edd;
-    --glass-bg: rgba(30, 30, 30, 0.95);
+    --glass-bg: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.15);
-    --prize-color: #ffd700;
+    --accent-purple: #9d4edd;
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --transition-speed: 0.3s;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* 全局样式 */
 body {
-    min-height: 100vh;
-    background: linear-gradient(45deg, var(--deep-space), #2d3250);
+    background: linear-gradient(45deg, #1a1b26, #2d3250);
     font-family: 'Inter', sans-serif;
-    padding: 20px;
-    overflow-x: hidden;
-    color: var(--glass-white);
+    line-height: 1.6;
 }
 
-.particle-layer {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(
-        circle at 50% 50%, 
-        rgba(142, 202, 230, 0.1) 0%, 
-        transparent 60%
-    );
-    animation: particleMove 20s linear infinite;
-    z-index: -1;
-}
-
-.main-container {
-    max-width: 600px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    border-radius: 24px;
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.title {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 2.5em;
-}
-.title span {
-    color: var(--accent-purple);
-}
-
-.lottery-wrap {
-    background: rgba(0,0,0,0.3);
-    border-radius: 20px;
-    padding: 15px;
-    margin: 20px 0;
-}
-
+/* 九宫格布局优化 */
 .lot-grid {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    padding: 20px 0;
+    gap: 10px;
+    padding: 15px;
     position: relative;
-}
-
-.lot-item {
-    aspect-ratio: 1;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid var(--glass-border);
-    position: relative;
-    overflow: hidden;
-}
-
-.lot-item::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, 
-        rgba(255, 255, 255, 0.1) 0%,
-        transparent 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.lot-item:hover::before {
-    opacity: 1;
 }
 
 .center-btn {
-    background: rgba(157, 78, 221, 0.9);
-    border: none;
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
-    border: 1px solid var(--glass-border);
-    color: var(--glass-white);
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+    font-size: 16px;
 }
 
-.center-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 24px rgba(157, 78, 221, 0.4);
+.pulse {
+    animation: pulseGlow 2s infinite;
 }
 
-.action-container {
-    margin: 15px auto;
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-.action-btn {
-    flex: 1;
-    padding: 12px 10px;
-    border-radius: 8px;
+/* 弹窗优化 */
+.modal-content {
+    width: 320px;
+    padding: 25px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(8px);
-    transition: all 0.3s;
-    color: var(--glass-white);
-    text-decoration: none;
 }
 
-.glass-panel {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
-    padding: 1.5rem;
+.card-input {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
     border: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
+    margin: 20px 0;
 }
 
-.history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+/* 历史记录面板 */
+.history-panel {
+    margin-bottom: 20px;
+    background: var(--glass-bg);
+    border-radius: 12px;
+    padding: 15px;
 }
 
 .history-item {
-    padding: 8px;
-    margin: 5px 0;
+    padding: 10px;
+    font-size: 13px;
+    margin: 8px 0;
     background: rgba(0,0,0,0.2);
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-left: 3px solid var(--accent-purple);
 }
 
-.modal-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    backdrop-filter: blur(20px);
+/* 奖项说明联动 */
+.prize-item {
+    padding: 12px;
+    margin: 10px 0;
+    transition: transform var(--transition-speed);
+}
+.prize-item:hover {
+    transform: translateX(8px);
+    background: rgba(255,255,255,0.05);
 }
 
-.modal-content {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
+/* 赞赏二维码优化 */
+.qrcode-body img {
+    width: 220px;
+    height: 220px;
+    border: 2px solid var(--glass-border);
     border-radius: 12px;
-    min-width: 280px;
-    max-width: 90%;
-    animation: modalBounce 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    margin: 15px auto;
 }
 
-@keyframes particleMove {
-    0% { transform: translate(-25%, -25%); }
-    50% { transform: translate(25%, 25%); }
-    100% { transform: translate(-25%, -25%); }
+/* 动画优化 */
+@keyframes pulseGlow {
+    0% { opacity: 0.6; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0.6; transform: scale(0.98); }
 }
 
-@keyframes modalBounce {
-    0% { transform: scale(0.8) translateY(50px); opacity: 0; }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
+.lot-item.active {
+    animation: prizeGlow 1s infinite alternate;
 }
 
+@keyframes prizeGlow {
+    from { box-shadow: 0 0 10px #2ecc70be; }
+    to { box-shadow: 0 0 30px #2ecc70be; }
+}
+
+/* 移动端优化 */
 @media (max-width: 480px) {
-    .main-container {
-        padding: 1.5rem;
-        border-radius: 16px;
-    }
-    .lot-grid {
-        gap: 8px;
-    }
-    .action-btn {
-        padding: 10px 8px;
-        font-size: 13px;
-    }
+    .lot-item { font-size: 13px; }
+    .center-btn { width: 60px; height: 60px; }
+    .history-item { font-size: 12px; }
 }
