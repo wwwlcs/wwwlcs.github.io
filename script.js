@@ -8,12 +8,12 @@ const PRIZES = [
 ];
 
 const config = {
-    baseSpeed: 100,
-    acceleration: 5,
-    totalCycles: 4,
-    moveOrder: [0, 1, 2, 5, 8, 7, 6, 3], // 顺时针移动路径
-    prizeMap: { 1:1, 2:5, 3:7, 4:3 },    // 奖项对应格子索引
-    safeIndexes: new Set([1, 3, 5, 7])   // 有效停止位置
+    baseSpeed: 50,
+    acceleration: 50,
+    totalCycles: 3,
+    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3], // 修正后的移动顺序
+    prizeMap: { 1:1, 2:5, 3:7, 4:3 },
+    safeIndexes: new Set([1, 3, 5, 7])
 };
 
 class Lottery {
@@ -104,15 +104,6 @@ class Lottery {
             const prize = PRIZES.find(p => p.id == prizeId);
             if(prize) this.showAlert(`奖项说明：${prize.desc}`);
         });
-
-        $('.action-btn').on({
-            mouseenter: function() { $(this).css('transform', 'translateY(-2px)') },
-            mouseleave: function() { $(this).css('transform', 'translateY(0)') },
-            click: function(e) {
-                $(e.currentTarget).css('transform', 'scale(0.95)');
-                setTimeout(() => $(e.currentTarget).css('transform', 'scale(1)'), 200);
-            }
-        });
     }
 
     checkPrizeLimit(prize) {
@@ -176,13 +167,13 @@ class Lottery {
                 this.$items.removeClass('active');
                 const realIndex = config.moveOrder[this.currentIndex % config.moveOrder.length];
                 this.$items.eq(realIndex).addClass('active');
-                this.currentIndex++;
+                this.currentIndex = (this.currentIndex + 1) % config.moveOrder.length;
                 steps++;
 
-                if (steps > totalSteps - config.moveOrder.length * 1.5) {
+                if (steps > totalSteps - config.moveOrder.length) {
                     speed += config.acceleration;
                     clearInterval(this.timer);
-                    this.timer = setInterval(animate, Math.max(speed, 30));
+                    this.timer = setInterval(animate, speed);
                 }
             };
 
@@ -218,7 +209,11 @@ class Lottery {
 
         $('.confirm-card').on('click', () => {
             const card = $('.card-input').val().trim().toUpperCase();
-            this.validateCard(card) && (this.currentCard = card, modal.remove(), this.start());
+            if(this.validateCard(card)) {
+                this.currentCard = card;
+                modal.remove();
+                this.start();
+            }
         });
     }
 
@@ -313,7 +308,6 @@ class Lottery {
     }
 }
 
-// 初始化抽奖系统
 $.fn.lottery = function() {
     return this.each(function() {
         if (!$.data(this, 'lottery')) new Lottery(this);
@@ -323,7 +317,6 @@ $.fn.lottery = function() {
 $(function() {
     $('.lot-grid').lottery();
 
-    // 获取卡密模态框
     window.showCardInfo = function() {
         const modal = $(`
             <div class="modal-wrapper">
@@ -353,7 +346,6 @@ $(function() {
         });
     };
 
-    // 赞赏二维码模态框
     window.showQRCode = function() {
         const modal = $(`
             <div class="modal-wrapper">
