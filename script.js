@@ -28,9 +28,6 @@ class Lottery {
         this.initStorage();
         this.initAudio();
         this.bindEvents();
-        this.audioIndex = 0;
-        this.isDrawing = false;
-        this.timer = null;
     }
 
     initStorage() {
@@ -318,6 +315,7 @@ class Lottery {
     }
 }
 
+// 初始化
 $(function() {
     new Lottery();
 
@@ -326,12 +324,9 @@ $(function() {
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <div class="info-box">
-                            <p>需赞赏后获取卡密</p>
-                            <button class="action-btn copy-btn">
-                                <span>复制微信</span>
-                                <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 10h-3v3c0 .55-.45 1-1 1s-1-.45-1-1v-3H8c-.55 0-1-.45-1-1s.45-1 1-1h3V8c0-.55.45-1 1-1s1 .45 1 1v3h3c.55 0 1 .45 1 1s-.45 1-1 1z"/></svg>
-                            </button>
+                        <p>需赞赏后获取卡密</p>
+                        <div class="wechat-row">
+                            <button class="action-btn copy-btn">📋 复制微信</button>
                         </div>
                     </div>
                 </div>
@@ -351,9 +346,7 @@ $(function() {
                 <div class="modal-content">
                     <div class="qrcode-body">
                         <h3>扫码赞赏</h3>
-                        <div class="qrcode-box">
-                            <img src="qrcode.jpg" alt="赞赏二维码">
-                        </div>
+                        <img src="qrcode.jpg" alt="赞赏二维码">
                         <p>扫码后联系站长核验</p>
                     </div>
                 </div>
