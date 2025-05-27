@@ -24,7 +24,7 @@
         })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LumiLotto - 光感抽奖系统</title>
+    <title>LumiLotto Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -35,13 +35,24 @@
     <div class="main-container">
         <h1 class="title"><span>Lumi</span>Lotto</h1>
 
+        <div class="history-panel">
+            <div class="panel-header">
+                <h3>📜 中奖记录</h3>
+                <button class="clear-history">清空记录</button>
+            </div>
+            <div class="history-list"></div>
+        </div>
+
         <div class="lottery-wrap">
             <div class="lot-grid">
                 <div class="lot-item">🍀</div>
                 <div class="lot-item" data-prize="1">体验券</div>
                 <div class="lot-item">🍀</div>
                 <div class="lot-item" data-prize="4">专属球杆</div>
-                <button class="center-btn" id="startBtn">START</button>
+                <button class="center-btn" id="startBtn">
+                    <div class="pulse"></div>
+                    START
+                </button>
                 <div class="lot-item" data-prize="2">店长特训</div>
                 <div class="lot-item">🍀</div>
                 <div class="lot-item" data-prize="3">周会员</div>
@@ -51,24 +62,22 @@
 
         <div class="action-container">
             <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
-            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏站长</a>
+            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏支持</a>
         </div>
 
-        <div class="info-panels">
-            <div class="glass-panel">
-                <h3>奖项说明</h3>
-                <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷</div>
-                <div class="prize-item" data-prize="2">🏆 店长特训：专业指导服务</div>
-                <div class="prize-item" data-prize="3">💎 周会员：尊享会员特权</div>
-                <div class="prize-item" data-prize="4">🎁 专属球杆：定制精品球杆</div>
+        <div class="prize-panel">
+            <div class="panel-header">
+                <h3>🎯 奖项说明</h3>
             </div>
-            
-            <div class="glass-panel">
-                <div class="history-header">
-                    <h3>中奖记录</h3>
-                    <button class="clear-history">清空</button>
+            <div class="prize-items">
+                <div class="prize-item" data-prize="1">
+                    <div class="prize-icon">⏳</div>
+                    <div class="prize-info">
+                        <h4>体验券</h4>
+                        <p>免费体验台球1小时</p>
+                    </div>
                 </div>
-                <div class="history-list"></div>
+                <!-- 其他奖项类似结构 -->
             </div>
         </div>
     </div>
