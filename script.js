@@ -10,10 +10,10 @@ const PRIZES = [
 const config = {
     baseSpeed: 50,
     acceleration: 50,
-    totalCycles: 3,
-    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3], // 修正后的移动顺序
+    baseCycles: 3,
+    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3],
     prizeMap: { 1:1, 2:5, 3:7, 4:3 },
-    safeIndexes: new Set([1, 3, 5, 7])
+    safeIndexes: new Set([1,3,5,7])
 };
 
 class Lottery {
@@ -71,9 +71,7 @@ class Lottery {
     }
 
     bindEvents() {
-        const playClick = () => {
-            if(!this.isDrawing) this.playSound('click');
-        };
+        const playClick = () => !this.isDrawing && this.playSound('click');
         
         $(document).on('click', [
             '.lot-item',
@@ -102,7 +100,7 @@ class Lottery {
         $(document).on('click', '.prize-item', (e) => {
             const prizeId = $(e.currentTarget).data('prize');
             const prize = PRIZES.find(p => p.id == prizeId);
-            if(prize) this.showAlert(`奖项说明：${prize.desc}`);
+            prize && this.showAlert(`奖项说明：${prize.desc}`);
         });
     }
 
@@ -111,19 +109,21 @@ class Lottery {
         const history = this.history.filter(r => r.id === prize.id);
         
         switch(prize.id) {
-            case 2: {
-                const todayStart = new Date(now.setHours(0,0,0,0));
-                return history.filter(r => new Date(r.timestamp) >= todayStart).length < prize.dailyLimit;
-            }
-            case 3: {
+            case 2: 
+                return history.filter(r => 
+                    new Date(r.timestamp).toDateString() === now.toDateString()
+                ).length < prize.dailyLimit;
+            case 3:
                 const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
-                return history.filter(r => new Date(r.timestamp) >= weekStart).length < prize.weeklyLimit;
-            }
-            case 4: {
-                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-                return history.filter(r => new Date(r.timestamp) >= monthStart).length < prize.monthlyLimit;
-            }
-            default: return true;
+                return history.filter(r => 
+                    new Date(r.timestamp) >= weekStart
+                ).length < prize.weeklyLimit;
+            case 4:
+                return history.filter(r => 
+                    new Date(r.timestamp).getMonth() === now.getMonth()
+                ).length < prize.monthlyLimit;
+            default: 
+                return true;
         }
     }
 
@@ -150,12 +150,13 @@ class Lottery {
                 return resolve();
             }
 
-            let steps = 0;
+            let currentStep = 0;
             let speed = config.baseSpeed;
-            const totalSteps = (config.moveOrder.length * config.totalCycles) + targetIndex;
+            const totalSteps = (config.moveOrder.length * config.baseCycles) + targetIndex;
+            let finalLapSteps = 0;
 
             const animate = () => {
-                if (steps >= totalSteps) {
+                if (currentStep >= totalSteps) {
                     clearInterval(this.timer);
                     this.$items.removeClass('active');
                     this.$items.eq(targetIndex).addClass('active');
@@ -164,16 +165,26 @@ class Lottery {
                     return;
                 }
 
+                const realPos = config.moveOrder[currentStep % config.moveOrder.length];
                 this.$items.removeClass('active');
-                const realIndex = config.moveOrder[this.currentIndex % config.moveOrder.length];
-                this.$items.eq(realIndex).addClass('active');
-                this.currentIndex = (this.currentIndex + 1) % config.moveOrder.length;
-                steps++;
+                this.$items.eq(realPos).addClass('active');
+                
+                currentStep++;
 
-                if (steps > totalSteps - config.moveOrder.length) {
+                // 最后8步精确控制
+                if (currentStep > totalSteps - config.moveOrder.length) {
+                    finalLapSteps++;
                     speed += config.acceleration;
+                    
                     clearInterval(this.timer);
-                    this.timer = setInterval(animate, speed);
+                    this.timer = setInterval(animate, Math.min(speed, 300));
+                    
+                    // 强制对齐最终位置
+                    if (finalLapSteps === config.moveOrder.length) {
+                        currentStep = totalSteps;
+                        this.$items.removeClass('active');
+                        this.$items.eq(targetIndex).addClass('active');
+                    }
                 }
             };
 
@@ -203,12 +214,10 @@ class Lottery {
             </div>
         `).appendTo('body');
 
-        modal.on('click', e => {
-            if ($(e.target).hasClass('modal-wrapper')) modal.remove();
-        });
+        modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
 
-        $('.confirm-card').on('click', () => {
-            const card = $('.card-input').val().trim().toUpperCase();
+        modal.find('.confirm-card').on('click', () => {
+            const card = modal.find('.card-input').val().trim().toUpperCase();
             if(this.validateCard(card)) {
                 this.currentCard = card;
                 modal.remove();
@@ -221,14 +230,13 @@ class Lottery {
         const regex = /^\d{12}[A-Z]{6}$/;
         if(!regex.test(card)) return this.showAlert('卡密格式错误'), false;
         
-        const timePart = card.slice(0, 12);
         const now = new Date();
         const cardDate = new Date(
-            parseInt(timePart.slice(0,4)),
-            parseInt(timePart.slice(4,6)) - 1,
-            parseInt(timePart.slice(6,8)),
-            parseInt(timePart.slice(8,10)),
-            parseInt(timePart.slice(10,12))
+            parseInt(card.slice(0,4)),
+            parseInt(card.slice(4,6)) - 1,
+            parseInt(card.slice(6,8)),
+            parseInt(card.slice(8,10)),
+            parseInt(card.slice(10,12))
         );
 
         if (
@@ -251,26 +259,27 @@ class Lottery {
         this.isDrawing = true;
         this.$button.addClass('disabled');
 
-        const prize = await this.getPrize();
-        const targetIndex = config.prizeMap[prize.id];
-        await this.runAnimation(targetIndex);
-        this.showResult(prize);
-        this.recordHistory(prize);
-
-        this.isDrawing = false;
-        this.$button.removeClass('disabled');
+        try {
+            const prize = await this.getPrize();
+            const targetIndex = config.prizeMap[prize.id];
+            await this.runAnimation(targetIndex);
+            this.showResult(prize);
+            this.recordHistory(prize);
+        } catch(e) {
+            console.error('抽奖出错:', e);
+        } finally {
+            this.isDrawing = false;
+            this.$button.removeClass('disabled');
+        }
     }
 
     playSound(type) {
-        if(type === 'click') {
-            const audio = this.audioPool[this.audioIndex];
-            this.audioIndex = (this.audioIndex + 1) % this.audioPool.length;
-            audio.currentTime = 0;
-            audio.play().catch(e => console.log('点击音效失败:', e));
-        } else {
-            this.winAudio.currentTime = 0;
-            this.winAudio.play().catch(e => console.log('中奖音效失败:', e));
-        }
+        const audio = type === 'click' 
+            ? this.audioPool[(this.audioIndex++ % this.audioPool.length)]
+            : this.winAudio;
+            
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log(`${type}音效播放失败:`, e));
     }
 
     showResult(prize) {
@@ -289,25 +298,24 @@ class Lottery {
             </div>
         `).appendTo('body');
 
-        $modal.on('click', e => {
-            if ($(e.target).hasClass('modal-wrapper')) $modal.remove();
-        });
+        $modal.on('click', e => $(e.target).hasClass('modal-wrapper') && $modal.remove());
     }
 
     recordHistory(prize) {
         try {
-            this.history = [...this.history, { 
+            this.history = [...this.history.slice(-this.historyLimit), { 
                 card: this.currentCard,
                 name: prize.name,
                 id: prize.id,
                 timestamp: Date.now()
-            }].slice(-this.historyLimit);
+            }];
             localStorage.setItem('lotteryHistory', JSON.stringify(this.history));
             this.updateHistoryDisplay();
-        } catch(e) { console.error('存储失败:', e) }
+        } catch(e) { console.error('历史记录保存失败:', e) }
     }
 }
 
+// 初始化抽奖系统
 $.fn.lottery = function() {
     return this.each(function() {
         if (!$.data(this, 'lottery')) new Lottery(this);
@@ -317,6 +325,7 @@ $.fn.lottery = function() {
 $(function() {
     $('.lot-grid').lottery();
 
+    // 卡密获取窗口
     window.showCardInfo = function() {
         const modal = $(`
             <div class="modal-wrapper">
@@ -333,19 +342,15 @@ $(function() {
             </div>
         `).appendTo('body');
 
-        modal.on('click', e => {
-            if ($(e.target).hasClass('modal-wrapper')) modal.remove();
-        });
-
+        modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
         modal.find('.copy-btn').on('click', e => {
-            e.stopPropagation();
             navigator.clipboard.writeText('LIVE-CS2025')
-                .then(() => $('<div class="alert-message">微信号已复制</div>')
-                    .appendTo('body').delay(2000).fadeOut(300, () => $(this).remove()))
-                .catch(err => console.error('复制失败:', err));
+                .then(() => this.showAlert('微信号已复制'))
+                .catch(e => console.error('复制失败:', e));
         });
     };
 
+    // 赞赏二维码窗口
     window.showQRCode = function() {
         const modal = $(`
             <div class="modal-wrapper">
@@ -359,8 +364,6 @@ $(function() {
             </div>
         `).appendTo('body');
 
-        modal.on('click', e => {
-            if ($(e.target).hasClass('modal-wrapper')) modal.remove();
-        });
+        modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
     };
 });
