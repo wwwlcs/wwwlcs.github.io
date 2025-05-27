@@ -1,21 +1,14 @@
 // script.js
 "use strict";
 
-const PRIZES = [
-    { id: 1, name: '体验券', prob: 78.0, desc: '免费体验台球1小时' },
-    { id: 2, name: '店长特训', prob: 18.0, desc: '店长一对一指导1小时', dailyLimit: 2 },
-    { id: 3, name: '周会员', prob: 3.9,  desc: '一周会员资格', weeklyLimit: 1 },
-    { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
-];
-
 const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3];
 const prizeIndexMap = { 1:0, 2:2, 3:6, 4:8 };
 
 class Lottery {
     constructor(element) {
         this.$element = $(element);
-        this.$items = this.$element.find('.lot-item').not('.center');
-        this.$button = this.$element.find('.center');
+        this.$items = this.$element.find('.lot-item').not('.lot-btn');
+        this.$button = this.$element.find('.lot-btn');
         this.historyLimit = 50;
         this.usedCards = new Set();
         this.currentCard = null;
@@ -59,7 +52,7 @@ class Lottery {
         this.history.slice(-5).reverse().forEach(record => {
             $list.append(`
                 <div class="history-item">
-                    <span>${record.card} - ${record.name}</span>
+                    <span>${record.card} - 获得编号${record.prizeId}奖品</span>
                     <button class="copy-btn">📋</button>
                 </div>
             `);
@@ -73,11 +66,10 @@ class Lottery {
         
         $(document).on('click', [
             '.lot-item',
-            '.center',
+            '.lot-btn',
             '.confirm-card',
             '.clear-history',
             '.copy-btn',
-            '.prize-item',
             '.action-btn'
         ].join(','), playClick);
 
@@ -107,70 +99,10 @@ class Lottery {
             this.updateHistoryDisplay();
             this.showAlert('记录已清空');
         });
-
-        $(document).on('click', '.prize-item', (e) => {
-            const prizeId = $(e.currentTarget).data('prize');
-            const prize = PRIZES.find(p => p.id == prizeId);
-            if(prize) {
-                this.showAlert(`奖项说明：${prize.desc}`);
-            }
-        });
     }
 
-    checkPrizeLimit(prize) {
-        const now = new Date();
-        const history = this.history.filter(r => r.id === prize.id);
-        
-        switch(prize.id) {
-            case 2: {
-                const todayStart = new Date(now);
-                todayStart.setHours(0,0,0,0);
-                return history.filter(r => 
-                    new Date(r.timestamp) >= todayStart
-                ).length < prize.dailyLimit;
-            }
-            case 3: {
-                const nowCopy = new Date(now);
-                const weekStart = new Date(nowCopy.setDate(nowCopy.getDate() - nowCopy.getDay()));
-                weekStart.setHours(0,0,0,0);
-                return history.filter(r => 
-                    new Date(r.timestamp) >= weekStart
-                ).length < prize.weeklyLimit;
-            }
-            case 4: {
-                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-                return history.filter(r => 
-                    new Date(r.timestamp) >= monthStart
-                ).length < prize.monthlyLimit;
-            }
-            default:
-                return true;
-        }
-    }
-
-    async getPrize() {
+    runAnimation(targetIndex) {
         return new Promise(resolve => {
-            const random = Math.random() * 100;
-            let accum = 0;
-            
-            for (const p of PRIZES) {
-                accum += p.prob;
-                if (random <= accum) {
-                    if(this.checkPrizeLimit(p)) {
-                        resolve(p);
-                    } else {
-                        resolve(PRIZES[0]);
-                    }
-                    return;
-                }
-            }
-            resolve(PRIZES[0]);
-        });
-    }
-
-    runAnimation(prize) {
-        return new Promise(resolve => {
-            const targetIndex = prizeIndexMap[prize.id];
             const totalSteps = 32 + Math.floor(8 * Math.random());
             let currentStep = 0;
             let cycleCount = 0;
@@ -187,7 +119,7 @@ class Lottery {
                 } else {
                     this.$items.removeClass('active');
                     this.$items.eq(targetIndex).addClass('active');
-                    resolve();
+                    resolve(targetIndex);
                 }
             };
             animate();
@@ -280,10 +212,11 @@ class Lottery {
         this.isDrawing = true;
         this.$button.addClass('disabled');
 
-        const prize = await this.getPrize();
-        await this.runAnimation(prize);
-        this.showResult(prize);
-        this.recordHistory(prize);
+        const randomPrize = Math.floor(Math.random() * clockwiseOrder.length);
+        const targetIndex = clockwiseOrder[randomPrize];
+        await this.runAnimation(targetIndex);
+        this.showResult(targetIndex);
+        this.recordHistory(targetIndex);
 
         this.isDrawing = false;
         this.$button.removeClass('disabled');
@@ -301,7 +234,7 @@ class Lottery {
         }
     }
 
-    showResult(prize) {
+    showResult(targetIndex) {
         this.playSound('win');
         const $modal = $(`
             <div class="modal-wrapper">
@@ -309,8 +242,7 @@ class Lottery {
                     <div class="result-body" style="padding:25px;text-align:center">
                         <h2 style="margin:0 0 15px;font-size:24px">🎉 恭喜中奖！</h2>
                         <div style="padding:15px;background:rgba(255,255,255,0.1);border-radius:8px">
-                            <p style="font-size:18px;margin:10px 0"><strong>${prize.name}</strong></p>
-                            <p style="color:#ccc;margin:0">${prize.desc}</p>
+                            <p style="font-size:18px;margin:10px 0"><strong>获得编号${targetIndex + 1}奖品</strong></p>
                         </div>
                     </div>
                 </div>
@@ -324,12 +256,11 @@ class Lottery {
         });
     }
 
-    recordHistory(prize) {
+    recordHistory(targetIndex) {
         try {
             this.history = [...this.history, { 
                 card: this.currentCard,
-                name: prize.name,
-                id: prize.id,
+                prizeId: targetIndex + 1,
                 timestamp: Date.now()
             }].slice(-this.historyLimit);
             localStorage.setItem('lotteryHistory', JSON.stringify(this.history));
