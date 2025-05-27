@@ -3,84 +3,59 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <script>
-        (function(){
-            if(/micromessenger/i.test(navigator.userAgent)){
-                document.write('<style>body,html{background:#000!important;margin:0!important;height:100%!important;overflow:hidden!important}</style>');
-                document.write(`
-                    <div style="
-                        position:fixed;
-                        top:0;
-                        left:0;
-                        width:100vw;
-                        height:100vh;
-                        z-index:2147483647;
-                        background:url(IMG.jpg?t=${Date.now()}) center/cover no-repeat;
-                    "></div>
-                `);
-                document.close();
-                window.stop();
-            }
-        })();
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LCS</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>LCS Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 微信环境检测样式 */
+        .wechat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2147483647;
+            background: url(IMG.jpg) center/cover no-repeat;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="cyber-container">
-        <div class="neon-header">
-            <h1 class="glitch-text" data-text="量子抽奖">量子抽奖</h1>
-            <div class="particle-layer"></div>
-        </div>
-
-        <div class="grid-system">
-            <div class="grid-cell hologram"><span>🌀 量子态</span></div>
-            <div class="grid-cell" data-prize="1"><div class="prize-glow"></div><span>体验券</span></div>
-            <div class="grid-cell hologram"><span>🌀 叠加态</span></div>
-            <div class="grid-cell" data-prize="4"><div class="prize-glow"></div><span>专属球杆</span></div>
-            <div class="grid-cell center-cell" id="startBtn">
-                <div class="core-animation">
-                    <div class="energy-pulse"></div>
-                    <span>启动</span>
-                </div>
+    <div class="wechat-overlay"></div>
+    
+    <div class="main-container">
+        <div class="lottery-glass">
+            <div class="hologrid">
+                <div class="glass-card">🍀 幸运格</div>
+                <div class="glass-card" data-prize="1">体验券</div>
+                <div class="glass-card">🍀 幸运格</div>
+                <div class="glass-card" data-prize="4">专属球杆</div>
+                <div class="glass-card center" id="startBtn">开始抽奖</div>
+                <div class="glass-card" data-prize="2">店长特训</div>
+                <div class="glass-card">🍀 幸运格</div>
+                <div class="glass-card" data-prize="3">周会员</div>
+                <div class="glass-card">🍀 幸运格</div>
             </div>
-            <div class="grid-cell" data-prize="2"><div class="prize-glow"></div><span>店长特训</span></div>
-            <div class="grid-cell hologram"><span>🌀 纠缠态</span></div>
-            <div class="grid-cell" data-prize="3"><div class="prize-glow"></div><span>周会员</span></div>
-            <div class="grid-cell hologram"><span>🌀 波动态</span></div>
         </div>
 
-        <div class="control-panel">
-            <button class="neon-button" onclick="showCardInfo()">
-                <i class="fas fa-key"></i>
-                <span>获取卡密</span>
-                <div class="button-stroke"></div>
-            </button>
-            <button class="neon-button" onclick="showQRCode()">
-                <i class="fas fa-qrcode"></i>
-                <span>赞赏站长</span>
-                <div class="button-stroke"></div>
-            </button>
+        <div class="action-bar">
+            <button class="glow-btn" onclick="showCardInfo()">🎫 获取卡密</button>
+            <button class="glow-btn" onclick="showQRCode()">🦊 赞赏站长</button>
         </div>
 
         <div class="info-panels">
-            <div class="cyber-panel">
-                <h3><i class="fas fa-info-circle"></i> 奖项说明</h3>
-                <div class="prize-item" data-prize="1">
-                    <div class="data-line"></div>
-                    <span>体验券：免费体验台球1小时</span>
-                </div>
-                <!-- 其他奖项说明保持相同结构 -->
+            <div class="glass-panel">
+                <h3>🎯 奖项说明</h3>
+                <div class="prize-item" data-prize="1">免费体验1小时</div>
+                <div class="prize-item" data-prize="2">专业指导服务</div>
+                <div class="prize-item" data-prize="3">周会员特权</div>
+                <div class="prize-item" data-prize="4">定制球杆套装</div>
             </div>
-            
-            <div class="cyber-panel history-panel">
+
+            <div class="glass-panel">
                 <div class="panel-header">
-                    <h3><i class="fas fa-history"></i> 中奖记录</h3>
-                    <button class="neon-button small" onclick="$('.clear-history').click()">
-                        <i class="fas fa-eraser"></i>
-                    </button>
+                    <h3>📜 中奖记录</h3>
+                    <button class="clear-btn">清空</button>
                 </div>
                 <div class="history-list"></div>
             </div>
@@ -89,5 +64,12 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        // 微信环境检测
+        if(/micromessenger/i.test(navigator.userAgent)){
+            document.querySelector('body').style.cssText = 'background:#fff!important;margin:0!important;height:100%!important;overflow:hidden!important';
+            document.querySelector('.wechat-overlay').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
