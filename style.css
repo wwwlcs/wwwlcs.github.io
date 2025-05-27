@@ -4,11 +4,11 @@
     --glass-border: rgba(255, 255, 255, 0.15);
     --accent-purple: #9d4edd;
     --danger-red: #ff4757;
+    --golden-ratio: 1.618;
     --text-primary: rgba(255, 255, 255, 0.95);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 基础样式 */
 body {
     margin: 0;
     min-height: 100vh;
@@ -37,15 +37,26 @@ body {
     border-radius: 24px;
     border: 1px solid var(--glass-border);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
+    padding: calc(2rem * var(--golden-ratio));
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: calc(2rem * var(--golden-ratio));
 }
 
-/* 九宫格布局 */
+.title {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: calc(2.5em * var(--golden-ratio));
+}
+.title span {
+    color: var(--accent-purple);
+}
+
 .lottery-wrap {
     order: 1;
+    background: rgba(0,0,0,0.3);
+    border-radius: 20px;
+    padding: 15px;
 }
 
 .lot-grid {
@@ -67,15 +78,13 @@ body {
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-    font-size: 14px;
+    font-size: calc(14px * var(--golden-ratio));
 }
 
 .center-bg {
     position: absolute;
-    width: calc(100% / 3);
-    height: calc(100% / 3);
+    width: 33.33%;
+    height: 33.33%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -90,8 +99,8 @@ body {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 70px;
-    height: 70px;
+    width: calc(70px * var(--golden-ratio));
+    height: calc(70px * var(--golden-ratio));
     background: rgba(157, 78, 221, 0.9);
     border: 2px solid var(--glass-border);
     border-radius: 50%;
@@ -102,16 +111,15 @@ body {
     transition: var(--transition);
 }
 
-/* 操作按钮 */
 .action-container {
     order: 2;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: calc(15px * var(--golden-ratio));
 }
 
 .action-btn {
-    padding: 12px;
+    padding: calc(12px * var(--golden-ratio));
     background: rgba(255,255,255,0.1);
     border: 1px solid var(--glass-border);
     border-radius: 8px;
@@ -119,22 +127,87 @@ body {
     color: white;
     text-decoration: none;
     transition: var(--transition);
+    font-size: calc(14px * var(--golden-ratio));
 }
 
-/* 组合信息面板 */
 .combined-panel {
     order: 3;
     background: var(--glass-bg);
     border-radius: 16px;
     border: 1px solid var(--glass-border);
     padding: 20px;
-    margin-top: 20px;
 }
 
-/* 弹窗优化 */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.clear-history {
+    background: rgba(255,71,87,0.15);
+    border: 1px solid var(--danger-red);
+    color: var(--danger-red);
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.history-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 10px;
+    margin: 8px 0;
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: calc(12px * var(--golden-ratio));
+    border-left: 3px solid var(--accent-purple);
+}
+
+.prize-items {
+    display: grid;
+    gap: 12px;
+}
+
+.prize-item {
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(20px);
+}
+
 .modal-content {
-    width: min(90vw, 320px);
-    padding: 20px;
+    width: min(90vw, calc(320px * var(--golden-ratio)));
+    padding: calc(20px * var(--golden-ratio));
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: 16px;
@@ -149,12 +222,19 @@ body {
     border: 2px solid var(--glass-border);
     border-radius: 8px;
     color: white;
-    font-size: 14px;
+    font-size: calc(14px * var(--golden-ratio));
     text-align: center;
     transition: var(--transition);
 }
 
-/* 动画效果 */
+.qrcode-body img {
+    width: calc(180px * var(--golden-ratio));
+    height: calc(180px * var(--golden-ratio));
+    border: 2px solid var(--glass-border);
+    border-radius: 12px;
+    margin: 15px auto;
+}
+
 @keyframes particleMove {
     0% { transform: translate(-25%, -25%); }
     50% { transform: translate(25%, 25%); }
@@ -173,13 +253,28 @@ body {
     100% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.6); }
 }
 
+@keyframes modalBounce {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
 @media (max-width: 480px) {
+    .main-container {
+        padding: 1.5rem;
+        gap: 1.5rem;
+    }
+    
     .lot-item {
         font-size: 13px;
     }
+    
     .center-btn {
         width: 60px;
         height: 60px;
         font-size: 14px;
+    }
+    
+    .action-btn {
+        font-size: 12px;
     }
 }
