@@ -28,6 +28,9 @@ class Lottery {
         this.initStorage();
         this.initAudio();
         this.bindEvents();
+        this.audioIndex = 0;
+        this.isDrawing = false;
+        this.timer = null;
     }
 
     initStorage() {
@@ -315,7 +318,6 @@ class Lottery {
     }
 }
 
-// 初始化
 $(function() {
     new Lottery();
 
