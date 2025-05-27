@@ -8,12 +8,17 @@ const PRIZES = [
 ];
 
 const config = {
-    baseSpeed: 50,
-    acceleration: 50,
-    baseCycles: 3,
-    moveOrder: [0, 1, 2, 4, 7, 6, 5, 3],
-    prizeMap: { 1:1, 2:5, 3:7, 4:3 },
-    safeIndexes: new Set([1,3,5,7])
+    baseSpeed: 50,          // 基础速度(ms)
+    acceleration: 50,       // 加速度(ms)
+    baseCycles: 3,          // 基础圈数
+    moveOrder: [0,1,2,5,8,7,6,3],  // 正确顺时针路径
+    prizeMap: { 
+        1:1,   // 体验券 -> 索引1
+        2:5,   // 店长特训 -> 索引5
+        3:7,   // 周会员 -> 索引7
+        4:3    // 专属球杆 -> 索引3
+    },
+    safeIndexes: new Set([1,3,5,7]) // 有效停止位置
 };
 
 class Lottery {
@@ -45,9 +50,10 @@ class Lottery {
     }
 
     initAudio() {
-        for(let i = 0; i < 5; i++) {
-            const clickAudio = new Audio('./click.mp3');
-            this.audioPool.push(clickAudio);
+        // 初始化音效池（点击音效+动画音效）
+        for(let i=0; i<10; i++) {
+            const audio = new Audio('./click.mp3');
+            this.audioPool.push(audio);
         }
         this.winAudio = new Audio('./win.mp3');
     }
@@ -112,16 +118,16 @@ class Lottery {
             case 2: 
                 return history.filter(r => 
                     new Date(r.timestamp).toDateString() === now.toDateString()
-                ).length < prize.dailyLimit;
+                ).length < 2;
             case 3:
                 const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
                 return history.filter(r => 
                     new Date(r.timestamp) >= weekStart
-                ).length < prize.weeklyLimit;
+                ).length < 1;
             case 4:
                 return history.filter(r => 
                     new Date(r.timestamp).getMonth() === now.getMonth()
-                ).length < prize.monthlyLimit;
+                ).length < 1;
             default: 
                 return true;
         }
@@ -165,10 +171,17 @@ class Lottery {
                     return;
                 }
 
-                const realPos = config.moveOrder[currentStep % config.moveOrder.length];
+                // 计算当前实际位置
+                const pathIndex = currentStep % config.moveOrder.length;
+                const realPos = config.moveOrder[pathIndex];
+                
+                // 更新激活状态
                 this.$items.removeClass('active');
                 this.$items.eq(realPos).addClass('active');
                 
+                // 播放格子经过音效
+                this.playSound('tick');
+
                 currentStep++;
 
                 // 最后8步精确控制
@@ -274,12 +287,16 @@ class Lottery {
     }
 
     playSound(type) {
-        const audio = type === 'click' 
-            ? this.audioPool[(this.audioIndex++ % this.audioPool.length)]
-            : this.winAudio;
-            
-        audio.currentTime = 0;
-        audio.play().catch(e => console.log(`${type}音效播放失败:`, e));
+        if(type === 'tick') {
+            // 使用音效池播放点击音效
+            const audio = this.audioPool[this.audioIndex % this.audioPool.length];
+            this.audioIndex++;
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
+        } else if(type === 'win') {
+            this.winAudio.currentTime = 0;
+            this.winAudio.play().catch(() => {});
+        }
     }
 
     showResult(prize) {
