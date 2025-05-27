@@ -1,13 +1,13 @@
 // script.js
 "use strict";
 
-const clockwiseOrder = [0, 1, 2, 5, 8, 7, 6, 3]; // 修正为正确的顺时针路径
+const clockwiseOrder = [0, 1, 2, 4, 7, 6, 5, 3]; // 修正为HTML示例中的正确路径
 
 class Lottery {
     constructor(element) {
         this.$element = $(element);
-        this.$items = this.$element.find('.lot-item').not('.lot-btn');
-        this.$button = this.$element.find('.lot-btn');
+        this.$items = this.$element.find('.grid-item').not('.center');
+        this.$button = this.$element.find('.center');
         this.historyLimit = 50;
         this.usedCards = new Set();
         this.currentCard = null;
@@ -64,8 +64,8 @@ class Lottery {
         };
         
         $(document).on('click', [
-            '.lot-item',
-            '.lot-btn',
+            '.grid-item',
+            '.center',
             '.confirm-card',
             '.clear-history',
             '.copy-btn',
@@ -116,7 +116,6 @@ class Lottery {
                     cycleCount++;
                     setTimeout(animate, this.speed);
                 } else {
-                    // 最终定位逻辑修正
                     const finalIndex = clockwiseOrder[targetIndex % clockwiseOrder.length];
                     this.$items.removeClass('active');
                     this.$items.eq(finalIndex).addClass('active');
@@ -281,7 +280,7 @@ $.fn.lottery = function() {
 };
 
 $(function() {
-    $('.lot-grid').lottery();
+    $('.grid-container').lottery();
 
     window.showCardInfo = function() {
         const modal = $(`
