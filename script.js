@@ -64,23 +64,14 @@ class Lottery {
 
     updateHistoryDisplay() {
         const $list = $('.history-list').empty();
-        const $placeholder = $('.history-placeholder');
-        
-        if (this.history.length === 0) {
-            $list.hide();
-            $placeholder.show();
-        } else {
-            $placeholder.hide();
-            $list.show();
-            this.history.slice(-5).reverse().forEach(record => {
-                $list.append(`
-                    <div class="history-item">
-                        <span>${record.card} - ${record.name}</span>
-                        <button class="copy-btn">📋</button>
-                    </div>
-                `);
-            });
-        }
+        this.history.slice(-5).reverse().forEach(record => {
+            $list.append(`
+                <div class="history-item">
+                    <span>${record.card} - ${record.name}</span>
+                    <button class="copy-btn">📋</button>
+                </div>
+            `);
+        });
     }
 
     bindEvents() {
@@ -491,24 +482,15 @@ $(function() {
     function loadHistory() {
         try {
             const history = JSON.parse(localStorage.getItem('lotteryHistory') || '[]');
-            const $list = $('.history-list');
-            const $placeholder = $('.history-placeholder');
-            
-            if (history.length === 0) {
-                $list.hide();
-                $placeholder.show();
-            } else {
-                $placeholder.hide();
-                $list.show().empty();
-                history.slice(-5).reverse().forEach(record => {
-                    $list.append(`
-                        <div class="history-item">
-                            <span>${record.card} - ${record.name}</span>
-                            <button class="copy-btn">📋</button>
-                        </div>
-                    `);
-                });
-            }
+            $('.history-list').empty();
+            history.slice(-10).reverse().forEach(record => {
+                $('.history-list').append(`
+                    <div class="history-item">
+                        <span>${record.card} - ${record.name}</span>
+                        <button class="copy-btn">📋</button>
+                    </div>
+                `);
+            });
         } catch(e) {
             console.error('记录加载失败:', e);
         }
