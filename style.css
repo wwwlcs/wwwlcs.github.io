@@ -250,6 +250,20 @@ body {
     border: 1px solid rgba(255,255,255,0.15);
 }
 
+/* 添加历史记录占位样式 */
+.history-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 14px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
 .modal-wrapper {
     position: fixed;
     top: 0;
