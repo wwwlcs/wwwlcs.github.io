@@ -1,4 +1,3 @@
-// script.js
 "use strict";
 
 const PRIZES = [
@@ -358,7 +357,6 @@ $(function() {
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
     };
 
-    // 初始化加载历史记录
     function loadHistory() {
         try {
             const history = JSON.parse(localStorage.getItem('lotteryHistory') || []);
@@ -376,4 +374,9 @@ $(function() {
         }
     }
     loadHistory();
+
+    window.showAlert = function(msg) {
+        $('<div class="alert-message">'+msg+'</div>')
+            .appendTo('body').delay(2000).fadeOut(300, function() { $(this).remove() });
+    };
 });
