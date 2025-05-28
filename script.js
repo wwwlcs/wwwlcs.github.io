@@ -1,3 +1,4 @@
+// script.js
 "use strict";
 
 const PRIZES = [
@@ -11,12 +12,9 @@ const config = {
     baseSpeed: 80,
     deceleration: 55,
     moveOrder: [0,1,2,4,7,6,5,3],
-prizeMap: { 
-    1:1,  // 体验券 → $items[1]
-    2:4,  // 店长特训 → $items[4]
-    3:6,  // 周会员 → $items[6]
-    4:3   // 专属球杆 → $items[3]
-},
+    prizeMap: { 
+        1:1, 2:4, 3:6, 4:3
+    },
     safeIndexes: new Set([1,3,5,7])
 };
 
@@ -154,7 +152,7 @@ class Lottery {
 
             let currentStep = 0;
             let speed = config.baseSpeed;
-            const randomCycles = Math.floor(Math.random() * 3) + 3; // 3-5圈
+            const randomCycles = Math.floor(Math.random() * 3) + 3;
             const totalSteps = (config.moveOrder.length * randomCycles) + targetStep;
             let decelerationStart = totalSteps - Math.floor(config.moveOrder.length * 0.8);
 
@@ -339,7 +337,7 @@ $(function() {
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
         modal.find('.copy-btn').on('click', e => {
             navigator.clipboard.writeText('LIVE-CS2025')
-                .then(() => this.showAlert('微信号已复制'))
+                .then(() => showAlert('微信号已复制'))
                 .catch(e => console.error('复制失败:', e));
         });
     };
@@ -359,4 +357,23 @@ $(function() {
 
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
     };
+
+    // 初始化加载历史记录
+    function loadHistory() {
+        try {
+            const history = JSON.parse(localStorage.getItem('lotteryHistory') || []);
+            $('.history-list').empty();
+            history.slice(-10).reverse().forEach(record => {
+                $('.history-list').append(`
+                    <div class="history-item">
+                        <span>${record.card} - ${record.name}</span>
+                        <button class="copy-btn">📋</button>
+                    </div>
+                `);
+            });
+        } catch(e) {
+            console.error('记录加载失败:', e);
+        }
+    }
+    loadHistory();
 });
