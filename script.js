@@ -366,6 +366,79 @@ $(function() {
         });
     };
 
+    // 卡密生成函数（12位时间+6位随机大写字母）
+    function generateVerificationCode() {
+        const now = new Date();
+        
+        // 格式化年月日时分
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        
+        // 生成六位随机大写字母
+        let randomLetters = '';
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for (let i = 0; i < 6; i++) {
+            randomLetters += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+        }
+        
+        // 组合成完整验证码 (12位数字 + 6位字母)
+        return `${year}${month}${day}${hours}${minutes}${randomLetters}`;
+    }
+
+    // 显示支付成功后的卡密弹窗
+    function showPaymentCodeModal(code) {
+        const $modal = $(`
+            <div class="modal-wrapper">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h3 style="margin-bottom:15px;text-align:center">🎉 支付成功</h3>
+                        <div style="text-align:center">
+                            <p>您的卡密已生成，请复制保存</p>
+                            <div class="verification-code">${code}</div>
+                            <button class="copy-payment-btn">
+                                <i class="fas fa-copy"></i> 复制卡密
+                            </button>
+                            <p class="info-text" style="margin-top:15px;color:#aaa;font-size:12px">
+                                格式：年月日时分(12位) + 六位随机大写字母<br>
+                                有效期：5分钟
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).appendTo('body');
+
+        $modal.on('click', e => $(e.target).hasClass('modal-wrapper') && $modal.remove());
+        
+        const $copyBtn = $modal.find('.copy-payment-btn');
+        $copyBtn.on('click', function() {
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    // 更新按钮状态
+                    $(this).addClass('copy-success').html('<i class="fas fa-check"></i> 已复制');
+                    window.showAlert('卡密已复制到剪贴板');
+                    
+                    // 播放音效
+                    if (window.lotteryInstance) {
+                        window.lotteryInstance.playSound('click');
+                    } else {
+                        const clickAudio = new Audio('./click.mp3');
+                        clickAudio.currentTime = 0;
+                        clickAudio.play().catch(e => console.log('点击音效播放失败:', e));
+                    }
+                    
+                    // 3秒后恢复按钮状态
+                    setTimeout(() => {
+                        $copyBtn.removeClass('copy-success').html('<i class="fas fa-copy"></i> 复制卡密');
+                    }, 3000);
+                })
+                .catch(e => console.error('复制失败:', e));
+        });
+    }
+
     window.showQRCode = function() {
         const modal = $(`
             <div class="modal-wrapper">
@@ -373,13 +446,38 @@ $(function() {
                     <div class="qrcode-body">
                         <h3>赞赏支持</h3>
                         <img src="qrcode.jpg" alt="赞赏二维码" style="max-width:100%">
-                        <p>扫码赞赏后联系站长核验</p>
+                        <button class="payment-btn" id="paymentSuccessBtn">
+                            <i class="fas fa-check-circle"></i> 我已支付
+                        </button>
+                        <p style="margin-top:15px;color:#aaa">支付完成后点击上方按钮获取卡密</p>
                     </div>
                 </div>
             </div>
         `).appendTo('body');
 
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
+        
+        // 绑定支付成功按钮事件
+        modal.find('#paymentSuccessBtn').on('click', function() {
+            // 播放音效
+            if (window.lotteryInstance) {
+                window.lotteryInstance.playSound('click');
+            } else {
+                const clickAudio = new Audio('./click.mp3');
+                clickAudio.currentTime = 0;
+                clickAudio.play().catch(e => console.log('点击音效播放失败:', e));
+            }
+            
+            // 更新按钮状态
+            $(this).addClass('payment-success').html('<i class="fas fa-check-circle"></i> 卡密生成中...');
+            
+            // 生成卡密并显示弹窗
+            setTimeout(() => {
+                const code = generateVerificationCode();
+                modal.remove();
+                showPaymentCodeModal(code);
+            }, 1000);
+        });
     };
 
     function loadHistory() {
@@ -407,4 +505,9 @@ $(function() {
             $alert.fadeOut(300, function() { $(this).remove() });
         }, 2000);
     };
+    
+    // 动态加载 Font Awesome 图标库
+    const faScript = document.createElement('script');
+    faScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js';
+    document.head.appendChild(faScript);
 });
