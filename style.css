@@ -1,3 +1,4 @@
+/* style.css */
 :root {
     --glass-bg: rgba(58, 58, 74, 0.95);
     --glass-border: rgba(255, 255, 255, 0.15);
@@ -241,6 +242,49 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     overflow: hidden;
     backdrop-filter: blur(var(--blur-intensity));
+    padding: 25px;
+}
+
+.card-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 20px 0;
+    background: rgba(255,255,255,0.1) !important;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.card-input:focus {
+    outline: none;
+    border-color: var(--prize-color);
+    box-shadow: 0 0 10px rgba(177,156,217,0.3);
+}
+
+.wechat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 12px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+}
+
+.qrcode-body {
+    text-align: center;
+    padding: 20px;
+}
+
+.qrcode-body img {
+    width: 200px;
+    height: 200px;
+    border: 2px solid var(--glass-border);
+    border-radius: 12px;
+    margin: 15px 0;
 }
 
 @keyframes modalBounce {
@@ -281,5 +325,6 @@ body {
     }
     .modal-content {
         min-width: 85%;
+        padding: 15px;
     }
 }
