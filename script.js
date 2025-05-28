@@ -1,3 +1,4 @@
+// script.js
 "use strict";
 
 const PRIZES = [
@@ -51,10 +52,6 @@ class Lottery {
             this.audioPool.push(clickAudio);
         }
         this.winAudio = new Audio('./win.mp3');
-        
-        // 添加新的音频对象
-        this.buttonClickAudio = new Audio('./button-click.mp3');
-        this.copySoundAudio = new Audio('./copy-sound.mp3');
     }
 
     init() {
@@ -88,18 +85,14 @@ class Lottery {
             '.action-btn'
         ].join(','), playClick);
 
-        // 为开始抽奖按钮添加声音反馈
-        this.$button.on('click', () => {
-            this.playSound('button');
-            this.showCardModal();
-        });
+        this.$button.on('click', () => this.showCardModal());
         
-        // 为复制按钮添加声音反馈
         $(document).on('click', '.copy-btn', (e) => {
             const text = $(e.target).prev().text().split(' - ')[0];
             navigator.clipboard.writeText(text);
             window.showAlert('卡密已复制');
-            this.playSound('copy');
+            // 播放复制按钮反馈音效
+            this.playSound('click');
         });
 
         $('.clear-history').on('click', () => {
@@ -215,10 +208,9 @@ class Lottery {
 
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
 
-        // 为确认抽奖按钮添加声音反馈
         modal.find('.confirm-card').on('click', () => {
-            // 播放按钮声音
-            this.playSound('button');
+            // 播放确认按钮反馈音效
+            this.playSound('click');
             
             const card = modal.find('.card-input').val().trim().toUpperCase();
             if(this.validateCard(card)) {
@@ -289,25 +281,10 @@ class Lottery {
     }
 
     playSound(type) {
-        let audio;
-        
-        switch(type) {
-            case 'click':
-                audio = this.audioPool[(this.audioIndex++ % this.audioPool.length)];
-                break;
-            case 'win':
-                audio = this.winAudio;
-                break;
-            case 'button':
-                audio = this.buttonClickAudio;
-                break;
-            case 'copy':
-                audio = this.copySoundAudio;
-                break;
-            default:
-                audio = this.audioPool[0];
-        }
-        
+        const audio = type === 'click' 
+            ? this.audioPool[(this.audioIndex++ % this.audioPool.length)]
+            : this.winAudio;
+            
         audio.currentTime = 0;
         audio.play().catch(e => console.log(`${type}音效播放失败:`, e));
     }
@@ -347,9 +324,7 @@ class Lottery {
 
 $.fn.lottery = function() {
     return this.each(function() {
-        if (!$.data(this, 'lottery')) {
-            $.data(this, 'lottery', new Lottery(this));
-        }
+        if (!$.data(this, 'lottery')) new Lottery(this);
     });
 };
 
@@ -375,14 +350,13 @@ $(function() {
         `).appendTo('body');
 
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
+        
         modal.find('.copy-btn').on('click', e => {
+            // 播放复制按钮反馈音效
+            $('.lot-grid').data('lottery').playSound('click');
+            
             navigator.clipboard.writeText('LIVE-CS2025')
-                .then(() => {
-                    window.showAlert('微信号已复制');
-                    // 获取 lottery 实例并播放复制声音
-                    const lottery = $('.lot-grid').data('lottery');
-                    if (lottery) lottery.playSound('copy');
-                })
+                .then(() => window.showAlert('微信号已复制'))
                 .catch(e => console.error('复制失败:', e));
         });
     };
