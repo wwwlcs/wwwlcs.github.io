@@ -402,8 +402,7 @@ $(function() {
                                 <i class="fas fa-copy"></i> 复制卡密
                             </button>
                             <p class="info-text" style="margin-top:15px;color:#aaa;font-size:12px">
-                                格式：年月日时分(12位) + 六位随机大写字母<br>
-                                有效期：5分钟
+                                注意：赞赏后请截图确保兑奖能够顺利完成<br>
                             </p>
                         </div>
                     </div>
