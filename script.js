@@ -10,25 +10,28 @@ const PRIZES = [
 const config = {
     baseSpeed: 80,
     deceleration: 55,
-    moveOrder: [0,1,2,5,8,7,6,3], // 九宫格移动顺序
-    prizeMap: {1:1, 2:5, 3:8, 4:3}, // 奖项对应格子索引
+    moveOrder: [0,1,2,4,7,6,5,3],
+prizeMap: { 
+    1:1,  // 体验券 → $items[1]
+    2:4,  // 店长特训 → $items[4]
+    3:6,  // 周会员 → $items[6]
+    4:3   // 专属球杆 → $items[3]
+},
     safeIndexes: new Set([1,3,5,7])
 };
 
 class Lottery {
-    constructor() {
-        this.$element = $('.grid-container');
-        this.$items = this.$element.find('.grid-item');
+    constructor(element) {
+        this.$element = $(element);
+        this.$items = this.$element.find('.lot-item').not('#startBtn');
         this.$button = $('#startBtn');
         this.historyLimit = 50;
         this.usedCards = new Set();
         this.currentCard = null;
         this.audioPool = [];
-        this.audioIndex = 0;
-        this.isDrawing = false;
-        this.timer = null;
         this.initStorage();
         this.initAudio();
+        this.init();
         this.bindEvents();
     }
 
@@ -53,6 +56,12 @@ class Lottery {
         this.winAudio = new Audio('./win.mp3');
     }
 
+    init() {
+        this.isDrawing = false;
+        this.currentIndex = 0;
+        this.audioIndex = 0;
+    }
+
     updateHistoryDisplay() {
         const $list = $('.history-list').empty();
         this.history.slice(-5).reverse().forEach(record => {
@@ -69,7 +78,7 @@ class Lottery {
         const playClick = () => !this.isDrawing && this.playSound('click');
         
         $(document).on('click', [
-            '.grid-item',
+            '.lot-item',
             '#startBtn',
             '.confirm-card',
             '.clear-history',
@@ -145,7 +154,7 @@ class Lottery {
 
             let currentStep = 0;
             let speed = config.baseSpeed;
-            const randomCycles = Math.floor(Math.random() * 3) + 3;
+            const randomCycles = Math.floor(Math.random() * 3) + 3; // 3-5圈
             const totalSteps = (config.moveOrder.length * randomCycles) + targetStep;
             let decelerationStart = totalSteps - Math.floor(config.moveOrder.length * 0.8);
 
@@ -191,10 +200,10 @@ class Lottery {
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <h3 style="margin-bottom:15px">请输入卡密</h3>
-                        <input type="text" class="card-input" placeholder="输入18位卡密" maxlength="18">
-                        <div style="margin-top:20px">
-                            <button class="action-btn confirm-card">确认抽奖</button>
+                        <h3 style="margin-bottom:15px;text-align:center">请输入卡密</h3>
+                        <input type="text" class="card-input" placeholder="输入卡密开始抽奖" maxlength="18">
+                        <div style="margin-top:20px;text-align:center">
+                            <button class="confirm-card action-btn">确认抽奖</button>
                         </div>
                     </div>
                 </div>
@@ -274,7 +283,7 @@ class Lottery {
         const $modal = $(`
             <div class="modal-wrapper">
                 <div class="modal-content">
-                    <div class="result-body" style="padding:25px">
+                    <div class="result-body" style="padding:25px;text-align:center">
                         <h2 style="margin:0 0 15px;font-size:24px">🎉 恭喜中奖！</h2>
                         <div style="padding:15px;background:rgba(255,255,255,0.1);border-radius:8px">
                             <p style="font-size:18px;margin:10px 0"><strong>${prize.name}</strong></p>
@@ -302,45 +311,52 @@ class Lottery {
     }
 }
 
-// 初始化
+$.fn.lottery = function() {
+    return this.each(function() {
+        if (!$.data(this, 'lottery')) new Lottery(this);
+    });
+};
+
 $(function() {
-    new Lottery();
+    $('.lot-grid').lottery();
 
     window.showCardInfo = function() {
         const modal = $(`
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <h3>获取卡密</h3>
                         <p>此活动只针对站长好友开放</p>
                         <p>需赞赏后获取卡密：中奖率100%</p>
-                        <div class="wechat-row" style="margin:20px 0">
-                            <input type="text" class="card-input" value="LIVE-CS2025" readonly>
-                            <button class="action-btn copy-btn" style="margin-top:15px">📋 复制微信号</button>
+                        <div class="wechat-row">
+                            <span>复制站长微信</span>
+                            <button class="copy-btn">📋 复制</button>
                         </div>
                     </div>
                 </div>
             </div>
         `).appendTo('body');
 
-        modal.find('.copy-btn').on('click', () => {
+        modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
+        modal.find('.copy-btn').on('click', e => {
             navigator.clipboard.writeText('LIVE-CS2025')
-                .then(() => $('<div class="alert-message">微信号已复制</div>')
-                    .appendTo('body').delay(2000).fadeOut());
+                .then(() => this.showAlert('微信号已复制'))
+                .catch(e => console.error('复制失败:', e));
         });
     };
 
     window.showQRCode = function() {
-        $(`
+        const modal = $(`
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="qrcode-body">
                         <h3>赞赏支持</h3>
-                        <img src="qrcode.jpg" alt="赞赏二维码" style="width:180px;height:180px">
-                        <p style="margin-top:15px">扫码赞赏后联系站长核验</p>
+                        <img src="qrcode.jpg" alt="赞赏二维码" style="max-width:100%">
+                        <p>扫码赞赏后联系站长核验</p>
                     </div>
                 </div>
             </div>
-        `).appendTo('body').on('click', e => $(e.target).hasClass('modal-wrapper') && $(e.target).remove());
+        `).appendTo('body');
+
+        modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
     };
 });
