@@ -31,6 +31,8 @@ class Lottery {
         this.initAudio();
         this.init();
         this.bindEvents();
+        // 保存实例到全局以便访问
+        window.lotteryInstance = this;
     }
 
     initStorage() {
@@ -91,7 +93,6 @@ class Lottery {
             const text = $(e.target).prev().text().split(' - ')[0];
             navigator.clipboard.writeText(text);
             window.showAlert('卡密已复制');
-            // 播放复制按钮反馈音效
             this.playSound('click');
         });
 
@@ -209,9 +210,7 @@ class Lottery {
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
 
         modal.find('.confirm-card').on('click', () => {
-            // 播放确认按钮反馈音效
             this.playSound('click');
-            
             const card = modal.find('.card-input').val().trim().toUpperCase();
             if(this.validateCard(card)) {
                 this.currentCard = card;
@@ -352,8 +351,14 @@ $(function() {
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
         
         modal.find('.copy-btn').on('click', e => {
-            // 播放复制按钮反馈音效
-            $('.lot-grid').data('lottery').playSound('click');
+            // 确保播放音效
+            if (window.lotteryInstance) {
+                window.lotteryInstance.playSound('click');
+            } else {
+                const clickAudio = new Audio('./click.mp3');
+                clickAudio.currentTime = 0;
+                clickAudio.play().catch(e => console.log('点击音效播放失败:', e));
+            }
             
             navigator.clipboard.writeText('LIVE-CS2025')
                 .then(() => window.showAlert('微信号已复制'))
