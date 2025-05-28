@@ -1,3 +1,4 @@
+// script.js
 "use strict";
 
 const PRIZES = [
@@ -89,19 +90,20 @@ class Lottery {
         $(document).on('click', '.copy-btn', (e) => {
             const text = $(e.target).prev().text().split(' - ')[0];
             navigator.clipboard.writeText(text);
+            window.showAlert('卡密已复制');
         });
 
         $('.clear-history').on('click', () => {
             this.history = [];
             localStorage.removeItem('lotteryHistory');
             this.updateHistoryDisplay();
-            this.showAlert('记录已清空');
+            window.showAlert('记录已清空');
         });
 
         $(document).on('click', '.prize-item', (e) => {
             const prizeId = $(e.currentTarget).data('prize');
             const prize = PRIZES.find(p => p.id == prizeId);
-            prize && this.showAlert(`奖项说明：${prize.desc}`);
+            prize && window.showAlert(`奖项说明：${prize.desc}`);
         });
     }
 
@@ -185,11 +187,6 @@ class Lottery {
         });
     }
 
-    showAlert(message) {
-        $('<div class="alert-message">'+message+'</div>')
-            .appendTo('body').delay(2000).fadeOut(300, () => $(this).remove());
-    }
-
     showCardModal() {
         if(this.isDrawing) return;
         
@@ -221,7 +218,10 @@ class Lottery {
 
     validateCard(card) {
         const regex = /^\d{12}[A-Z]{6}$/;
-        if(!regex.test(card)) return this.showAlert('卡密格式错误'), false;
+        if(!regex.test(card)) {
+            window.showAlert('卡密格式错误');
+            return false;
+        }
         
         const now = new Date();
         const cardDate = new Date(
@@ -236,11 +236,20 @@ class Lottery {
             cardDate.getFullYear() !== now.getFullYear() ||
             cardDate.getMonth() !== now.getMonth() ||
             cardDate.getDate() !== now.getDate()
-        ) return this.showAlert('卡密已过期'), false;
+        ) {
+            window.showAlert('卡密已过期');
+            return false;
+        }
 
         const timeDiff = now - cardDate;
-        if (timeDiff < 0 || timeDiff > 300000) return this.showAlert('卡密已失效'), false;
-        if(this.usedCards.has(card)) return this.showAlert('卡密已使用'), false;
+        if (timeDiff < 0 || timeDiff > 300000) {
+            window.showAlert('卡密已失效');
+            return false;
+        }
+        if(this.usedCards.has(card)) {
+            window.showAlert('卡密已使用');
+            return false;
+        }
         
         this.usedCards.add(card);
         localStorage.setItem('usedCards', JSON.stringify([...this.usedCards]));
@@ -322,11 +331,13 @@ $(function() {
             <div class="modal-wrapper">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <p>此活动只针对站长好友开放</p>
-                        <p>需赞赏后获取卡密：中奖率100%</p>
+                        <div class="card-info-text">
+                            <p>此活动只针对站长好友开放</p>
+                            <p>需赞赏后获取卡密：中奖率100%</p>
+                        </div>
                         <div class="wechat-row">
                             <span>复制站长微信</span>
-                            <button class="copy-btn">📋 复制</button>
+                            <button class="copy-btn purple-btn">📋 复制</button>
                         </div>
                     </div>
                 </div>
@@ -336,7 +347,7 @@ $(function() {
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
         modal.find('.copy-btn').on('click', e => {
             navigator.clipboard.writeText('LIVE-CS2025')
-                .then(() => showAlert('微信号已复制'))
+                .then(() => window.showAlert('微信号已复制'))
                 .catch(e => console.error('复制失败:', e));
         });
     };
@@ -359,7 +370,7 @@ $(function() {
 
     function loadHistory() {
         try {
-            const history = JSON.parse(localStorage.getItem('lotteryHistory') || []);
+            const history = JSON.parse(localStorage.getItem('lotteryHistory') || '[]');
             $('.history-list').empty();
             history.slice(-10).reverse().forEach(record => {
                 $('.history-list').append(`
@@ -376,7 +387,10 @@ $(function() {
     loadHistory();
 
     window.showAlert = function(msg) {
-        $('<div class="alert-message">'+msg+'</div>')
-            .appendTo('body').delay(2000).fadeOut(300, function() { $(this).remove() });
+        const $alert = $('<div class="alert-message">'+msg+'</div>');
+        $('#alert-container').append($alert);
+        setTimeout(() => {
+            $alert.fadeOut(300, function() { $(this).remove() });
+        }, 2000);
     };
 });
