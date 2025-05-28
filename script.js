@@ -1,4 +1,3 @@
-// script.js
 "use strict";
 
 const PRIZES = [
@@ -52,6 +51,10 @@ class Lottery {
             this.audioPool.push(clickAudio);
         }
         this.winAudio = new Audio('./win.mp3');
+        
+        // 添加新的音频对象
+        this.buttonClickAudio = new Audio('./button-click.mp3');
+        this.copySoundAudio = new Audio('./copy-sound.mp3');
     }
 
     init() {
@@ -85,12 +88,18 @@ class Lottery {
             '.action-btn'
         ].join(','), playClick);
 
-        this.$button.on('click', () => this.showCardModal());
+        // 为开始抽奖按钮添加声音反馈
+        this.$button.on('click', () => {
+            this.playSound('button');
+            this.showCardModal();
+        });
         
+        // 为复制按钮添加声音反馈
         $(document).on('click', '.copy-btn', (e) => {
             const text = $(e.target).prev().text().split(' - ')[0];
             navigator.clipboard.writeText(text);
             window.showAlert('卡密已复制');
+            this.playSound('copy');
         });
 
         $('.clear-history').on('click', () => {
@@ -211,7 +220,10 @@ class Lottery {
             if(this.validateCard(card)) {
                 this.currentCard = card;
                 modal.remove();
+                this.playSound('button'); // 添加按钮反馈声音
                 this.start();
+            } else {
+                this.playSound('button'); // 即使验证失败也播放声音
             }
         });
     }
@@ -276,10 +288,25 @@ class Lottery {
     }
 
     playSound(type) {
-        const audio = type === 'click' 
-            ? this.audioPool[(this.audioIndex++ % this.audioPool.length)]
-            : this.winAudio;
-            
+        let audio;
+        
+        switch(type) {
+            case 'click':
+                audio = this.audioPool[(this.audioIndex++ % this.audioPool.length)];
+                break;
+            case 'win':
+                audio = this.winAudio;
+                break;
+            case 'button':
+                audio = this.buttonClickAudio;
+                break;
+            case 'copy':
+                audio = this.copySoundAudio;
+                break;
+            default:
+                audio = this.audioPool[0];
+        }
+        
         audio.currentTime = 0;
         audio.play().catch(e => console.log(`${type}音效播放失败:`, e));
     }
@@ -319,7 +346,9 @@ class Lottery {
 
 $.fn.lottery = function() {
     return this.each(function() {
-        if (!$.data(this, 'lottery')) new Lottery(this);
+        if (!$.data(this, 'lottery')) {
+            $.data(this, 'lottery', new Lottery(this));
+        }
     });
 };
 
@@ -347,7 +376,12 @@ $(function() {
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
         modal.find('.copy-btn').on('click', e => {
             navigator.clipboard.writeText('LIVE-CS2025')
-                .then(() => window.showAlert('微信号已复制'))
+                .then(() => {
+                    window.showAlert('微信号已复制');
+                    // 获取 lottery 实例并播放复制声音
+                    const lottery = $('.lot-grid').data('lottery');
+                    if (lottery) lottery.playSound('copy');
+                })
                 .catch(e => console.error('复制失败:', e));
         });
     };
