@@ -28,20 +28,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        #result {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 18px;
-            background: rgba(0,0,0,0.9);
-            padding: 12px 24px;
-            border-radius: 8px;
-            z-index: 1000;
-            display: none;
-        }
+        #result { display: none; }
     </style>
 </head>
 <body>
@@ -65,33 +52,27 @@
             <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏站长</a>
         </div>
 
-        <div class="info-panels">
-            <div class="merged-panel">
-                <div class="history-panel">
-                    <div class="history-header">
-                        <h3>中奖记录</h3>
-                        <button class="danger-btn clear-history">
-                            <span>清空记录</span>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="history-list"></div>
-                </div>
-                
-                <div class="prize-panel">
-                    <h3>奖项说明</h3>
-                    <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
-                    <div class="prize-item" data-prize="2">🏆 店长特训：与店长切磋一小时或加时1小时</div>
-                    <div class="prize-item" data-prize="3">💎 周会员：获得一周内会员资格每日两小时</div>
-                    <div class="prize-item" data-prize="4">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
-                </div>
+        <div class="combined-panel">
+            <div class="combined-panel-header">
+                <h3>🎯 奖项说明 & 中奖记录</h3>
+                <button class="clear-history">
+                    <span>清空记录</span>
+                    <svg viewBox="0 0 24 24" width="14" height="14">
+                        <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="prize-section">
+                <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
+                <div class="prize-item" data-prize="2">🏆 店长特训：与店长切磋一小时或加时1小时</div>
+                <div class="prize-item" data-prize="3">💎 周会员：获得一周内会员资格每日两小时</div>
+                <div class="prize-item" data-prize="4">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
+            </div>
+            <div class="history-section">
+                <div class="history-list"></div>
             </div>
         </div>
     </div>
-
-    <div id="result"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
