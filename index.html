@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -27,18 +28,20 @@
     <link rel="stylesheet" href="style.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        #result {
+        .global-alert {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
             color: white;
-            font-size: 18px;
+            font-size: 16px;
             background: rgba(0,0,0,0.9);
             padding: 12px 24px;
             border-radius: 8px;
             z-index: 1000;
-            display: none;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -65,13 +68,16 @@
 
         <div class="combined-panel">
             <div class="combined-panel-header">
-                <h3>🎯 奖项说明 & 中奖记录</h3>
-                <button class="clear-history">
-                    <span>清空记录</span>
-                    <svg viewBox="0 0 24 24" width="14" height="14">
-                        <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                    </svg>
-                </button>
+                <h3>🎯 奖项说明</h3>
+                <div>
+                    <h3 style="display:inline">中奖记录</h3>
+                    <button class="clear-history">
+                        <span>清空记录</span>
+                        <svg viewBox="0 0 24 24" width="14" height="14">
+                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="prize-section">
                 <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
@@ -84,8 +90,6 @@
             </div>
         </div>
     </div>
-
-    <div id="result"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
