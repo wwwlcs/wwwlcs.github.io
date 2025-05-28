@@ -215,15 +215,16 @@ class Lottery {
 
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
 
+        // 为确认抽奖按钮添加声音反馈
         modal.find('.confirm-card').on('click', () => {
+            // 播放按钮声音
+            this.playSound('button');
+            
             const card = modal.find('.card-input').val().trim().toUpperCase();
             if(this.validateCard(card)) {
                 this.currentCard = card;
                 modal.remove();
-                this.playSound('button'); // 添加按钮反馈声音
                 this.start();
-            } else {
-                this.playSound('button'); // 即使验证失败也播放声音
             }
         });
     }
