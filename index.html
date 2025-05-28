@@ -23,88 +23,69 @@
         })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GlowLotto Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>LCS</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        #result {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 18px;
+            background: rgba(0,0,0,0.9);
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="main-container">
-        <h1 class="title"><span>GLOW</span>LOTTO</h1>
+        <div class="lottery-wrap2">
+            <div class="lot-grid">
+                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item" data-prize="1">体验券</div>
+                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item" data-prize="4">专属球杆</div>
+                <div class="lot-item center" id="startBtn">开始抽奖</div>
+                <div class="lot-item" data-prize="2">店长特训</div>
+                <div class="lot-item">🍀 幸运格</div>
+                <div class="lot-item" data-prize="3">周会员</div>
+                <div class="lot-item">🍀 幸运格</div>
+            </div>
+        </div>
 
         <div class="action-container">
             <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
-            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏支持</a>
+            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏站长</a>
         </div>
 
-        <div class="lottery-wrap">
-            <div class="grid-container">
-                <div class="grid-item">🍀</div>
-                <div class="grid-item" data-prize="1">体验券</div>
-                <div class="grid-item">✨</div>
-                <div class="grid-item" data-prize="4">专属球杆</div>
-                <button class="start-btn" id="startBtn">
-                    <div class="pulse"></div>
-                    START
-                </button>
-                <div class="grid-item">🎁</div>
-                <div class="grid-item" data-prize="2">店长特训</div>
-                <div class="grid-item">🔥</div>
-                <div class="grid-item" data-prize="3">周会员</div>
-                <div class="grid-item">🚀</div>
+        <div class="info-panels">
+            <div class="prize-panel">
+                <h3>奖项说明</h3>
+                <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
+                <div class="prize-item" data-prize="2">🏆 店长特训：与店长切磋一小时或加时1小时</div>
+                <div class="prize-item" data-prize="3">💎 周会员：获得一周内会员资格每日两小时</div>
+                <div class="prize-item" data-prize="4">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
             </div>
-        </div>
 
-        <div class="combined-panel">
-            <div class="history-section">
-                <div class="panel-header">
-                    <h3>🏆 中奖记录</h3>
-                    <button class="clear-history">
-                        <span>清空记录</span>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                    </button>
+            <div class="history-panel">
+                <div class="history-header">
+                    <h3>中奖记录</h3>
+                    <button class="clear-history">清空</button>
                 </div>
                 <div class="history-list"></div>
-            </div>
-
-            <div class="prize-section">
-                <div class="panel-header">
-                    <h3>🎯 奖项说明</h3>
-                </div>
-                <div class="prize-items">
-                    <div class="prize-item" data-prize="1">
-                        <div class="prize-icon">⏳</div>
-                        <div class="prize-content">
-                            <h4>体验券</h4>
-                            <p>免费体验台球1小时</p>
-                        </div>
-                    </div>
-                    <div class="prize-item" data-prize="2">
-                        <div class="prize-icon">🎓</div>
-                        <div class="prize-content">
-                            <h4>店长特训</h4>
-                            <p>一对一专业指导服务</p>
-                        </div>
-                    </div>
-                    <div class="prize-item" data-prize="3">
-                        <div class="prize-icon">💎</div>
-                        <div class="prize-content">
-                            <h4>周会员</h4>
-                            <p>尊享一周会员特权</p>
-                        </div>
-                    </div>
-                    <div class="prize-item" data-prize="4">
-                        <div class="prize-icon">🎁</div>
-                        <div class="prize-content">
-                            <h4>专属球杆</h4>
-                            <p>定制精品台球杆</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
+    <div id="result"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
