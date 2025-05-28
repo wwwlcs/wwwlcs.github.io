@@ -25,50 +25,33 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GlowLotto Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="main-container">
-        <h1 class="title"><span>GLOW</span>LOTTO</h1>
+        <div class="lottery-wrap">
+            <div class="lot-grid">
+                <div class="lot-item">🍀</div>
+                <div class="lot-item" data-prize="1">体验券</div>
+                <div class="lot-item">✨</div>
+                <div class="lot-item" data-prize="4">专属球杆</div>
+                <div class="lot-item center" id="startBtn">START</div>
+                <div class="lot-item">🎁</div>
+                <div class="lot-item" data-prize="2">店长特训</div>
+                <div class="lot-item">🔥</div>
+                <div class="lot-item" data-prize="3">周会员</div>
+                <div class="lot-item">🚀</div>
+            </div>
+        </div>
 
         <div class="action-container">
             <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取卡密</a>
             <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 赞赏支持</a>
         </div>
 
-        <div class="lottery-wrap">
-            <div class="grid-container">
-                <div class="grid-item">🍀</div>
-                <div class="grid-item" data-prize="1">体验券</div>
-                <div class="grid-item">✨</div>
-                <div class="grid-item" data-prize="4">专属球杆</div>
-                <button class="start-btn" id="startBtn">
-                    <div class="pulse"></div>
-                    START
-                </button>
-                <div class="grid-item">🎁</div>
-                <div class="grid-item" data-prize="2">店长特训</div>
-                <div class="grid-item">🔥</div>
-                <div class="grid-item" data-prize="3">周会员</div>
-                <div class="grid-item">🚀</div>
-            </div>
-        </div>
-
-        <div class="combined-panel">
-            <div class="history-section glass-panel">
-                <div class="panel-header">
-                    <h3>🏆 中奖记录</h3>
-                    <button class="clear-history">
-                        <span>清空记录</span>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ff4757" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                    </button>
-                </div>
-                <div class="history-list"></div>
-            </div>
-
-            <div class="prize-section glass-panel">
+        <div class="info-panels">
+            <div class="glass-panel">
                 <div class="panel-header">
                     <h3>🎯 奖项说明</h3>
                 </div>
@@ -102,6 +85,17 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <h3>🏆 中奖记录</h3>
+                    <button class="clear-history">
+                        <span>清空记录</span>
+                        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ff4757" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    </button>
+                </div>
+                <div class="history-list"></div>
             </div>
         </div>
     </div>
