@@ -144,10 +144,10 @@ body {
     left: 100%;
 }
 
-/* 修改点1：组合面板背景调整为与九宫格相同 */
+/* 组合面板 - 与九宫格相同样式 */
 .combined-panel {
-    background: rgba(0,0,0,0.15); /* 与.lottery-wrap2相同 */
-    border: 1px solid rgba(255,255,255,0.15); /* 与九宫格相同的边框 */
+    background: rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 15px;
     padding: 15px;
     margin-top: 20px;
@@ -155,7 +155,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3); /* 与九宫格相同的阴影 */
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
 }
 
 .combined-panel-header {
@@ -165,11 +165,11 @@ body {
     margin-bottom: 15px;
 }
 
-/* 修改点2：历史记录和奖项区域背景透明 */
+/* 历史记录和奖项区域 - 透明背景 */
 .history-section, .prize-section {
     overflow-y: auto;
     padding-right: 10px;
-    background: transparent; /* 改为透明 */
+    background: transparent;
     border-radius: 8px;
     padding: 12px;
 }
@@ -180,6 +180,14 @@ body {
 
 .prize-section {
     height: 190px;
+}
+
+/* 修复点：恢复历史记录列表容器样式 */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 5px;
 }
 
 .clear-history {
@@ -201,12 +209,12 @@ body {
     transform: translateY(-1px);
 }
 
-/* 修改点3：奖项项背景调整为与九宫格项目相同 */
+/* 奖项项 - 与九宫格相同样式 */
 .prize-item {
     padding: 8px 10px;
     margin: 5px 0;
     border-left: 3px solid var(--prize-color);
-    background: rgba(255,255,255,0.05); /* 与.lot-item相同 */
+    background: rgba(255,255,255,0.05);
     border-radius: 5px;
     transition: 0.2s;
     cursor: pointer;
@@ -216,7 +224,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border: 1px solid rgba(255,255,255,0.15); /* 添加相同边框 */
+    border: 1px solid rgba(255,255,255,0.15);
 }
 
 .prize-item:hover {
@@ -229,17 +237,17 @@ body {
 .prize-item-3 { border-left-color: #3498db; }
 .prize-item-4 { border-left-color: #e74c3c; }
 
-/* 修改点4：历史记录项背景调整为与九宫格项目相同 */
+/* 历史记录项 - 与九宫格相同样式 */
 .history-item {
     padding: 8px;
     margin: 5px 0;
-    background: rgba(255,255,255,0.05); /* 与.lot-item相同 */
+    background: rgba(255,255,255,0.05);
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
-    border: 1px solid rgba(255,255,255,0.15); /* 添加相同边框 */
+    border: 1px solid rgba(255,255,255,0.15);
 }
 
 .modal-wrapper {
