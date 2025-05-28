@@ -10,8 +10,8 @@ const PRIZES = [
 const config = {
     baseSpeed: 80,
     deceleration: 55,
-    moveOrder: [0,1,2,5,8,7,6,3],
-    prizeMap: {1:1, 2:5, 3:8, 4:3},
+    moveOrder: [0,1,2,5,8,7,6,3], // 九宫格移动顺序
+    prizeMap: {1:1, 2:5, 3:8, 4:3}, // 奖项对应格子索引
     safeIndexes: new Set([1,3,5,7])
 };
 
@@ -302,6 +302,7 @@ class Lottery {
     }
 }
 
+// 初始化
 $(function() {
     new Lottery();
 
@@ -322,7 +323,6 @@ $(function() {
             </div>
         `).appendTo('body');
 
-        modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
         modal.find('.copy-btn').on('click', () => {
             navigator.clipboard.writeText('LIVE-CS2025')
                 .then(() => $('<div class="alert-message">微信号已复制</div>')
