@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -65,20 +66,27 @@
         </div>
 
         <div class="info-panels">
-            <div class="prize-panel">
-                <h3>奖项说明</h3>
-                <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
-                <div class="prize-item" data-prize="2">🏆 店长特训：与店长切磋一小时或加时1小时</div>
-                <div class="prize-item" data-prize="3">💎 周会员：获得一周内会员资格每日两小时</div>
-                <div class="prize-item" data-prize="4">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
-            </div>
-
-            <div class="history-panel">
-                <div class="history-header">
-                    <h3>中奖记录</h3>
-                    <button class="clear-history">清空</button>
+            <div class="merged-panel">
+                <div class="history-panel">
+                    <div class="history-header">
+                        <h3>中奖记录</h3>
+                        <button class="danger-btn clear-history">
+                            <span>清空记录</span>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="history-list"></div>
                 </div>
-                <div class="history-list"></div>
+                
+                <div class="prize-panel">
+                    <h3>奖项说明</h3>
+                    <div class="prize-item" data-prize="1">🎯 体验券：获得一小时体验卷一张次日生效</div>
+                    <div class="prize-item" data-prize="2">🏆 店长特训：与店长切磋一小时或加时1小时</div>
+                    <div class="prize-item" data-prize="3">💎 周会员：获得一周内会员资格每日两小时</div>
+                    <div class="prize-item" data-prize="4">🎁 专属球杆：获得王炸奖项精美定制球杆一套</div>
+                </div>
             </div>
         </div>
     </div>
