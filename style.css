@@ -1,43 +1,27 @@
 /* style.css */
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(30, 30, 30, 0.95);
     --glass-border: rgba(255, 255, 255, 0.15);
-    --accent-purple: #9d4edd;
-    --neon-blue: #00f3ff;
-    --neon-purple: #bd00ff;
+    --prize-color: #ffd700;
     --danger-red: #ff4757;
-    --text-primary: rgba(255, 255, 255, 0.95);
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
     margin: 0;
     min-height: 100vh;
-    background: #1a1b26;
-    font-family: 'Inter', sans-serif;
+    background: #1a1a1a url('bg.jpg') center/cover fixed;
+    font-family: 'Microsoft Yahei', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    overflow-x: hidden;
-    color: var(--text-primary);
+    color: #fff;
 }
 
 .main-container {
     max-width: 640px;
     width: 100%;
-    border-radius: 24px;
-    padding: 2rem;
-    margin: 20px auto;
-}
-
-.title {
-    text-align: center;
-    margin: 0 0 1.5rem;
-    font-size: 2.5em;
-    background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    margin: 0 auto;
 }
 
 .lottery-wrap {
@@ -47,7 +31,7 @@ body {
     margin: 25px 0;
 }
 
-.grid-container {
+.lot-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
@@ -55,55 +39,58 @@ body {
     aspect-ratio: 1;
 }
 
-.glass-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 20px;
-    margin-top: 20px;
+.lot-item {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.lot-item.center {
+    background: rgba(189, 0, 255, 0.9);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
 }
 
 .action-container {
     display: flex;
-    justify-content: space-between;
     gap: 15px;
-    margin-bottom: 25px;
+    margin: 20px 0;
 }
 
 .action-btn {
     flex: 1;
     padding: 14px;
     background: var(--glass-bg);
-    backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
     text-align: center;
-    transition: var(--transition);
-}
-
-.start-btn {
-    width: 100px;
-    height: 100px;
-    background: rgba(189, 0, 255, 0.9);
     backdrop-filter: blur(10px);
+    transition: 0.3s;
 }
 
-.modal-body {
+.glass-panel {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
     padding: 20px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 12px;
-    margin: 15px 0;
+    margin-top: 20px;
 }
 
-.card-input {
-    width: 80%;
-    margin: 10px auto;
-    padding: 12px;
-}
-
-.qrcode-body img {
-    border: 2px solid var(--glass-border);
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
 .clear-history {
@@ -111,24 +98,49 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    background: transparent;
+    border: none;
 }
 
-.prize-items {
-    grid-template-columns: 1fr;
-    gap: 10px;
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
 }
 
-.prize-item {
-    padding: 10px;
-    min-height: 60px;
+.modal-content {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    width: min(90vw, 400px);
+    padding: 25px;
 }
 
-@media (max-width: 768px) {
-    .main-container {
-        padding: 1rem;
-    }
-    .start-btn {
-        width: 80px;
-        height: 80px;
-    }
+.card-input {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    background: rgba(0,0,0,0.3);
+    border: 2px solid var(--glass-border);
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+}
+
+.qrcode-body img {
+    width: 180px;
+    height: 180px;
+    border: 1px solid var(--glass-border);
+}
+
+@media (max-width: 480px) {
+    .action-btn { padding: 12px; }
+    .lot-item { font-size: 12px; }
 }
