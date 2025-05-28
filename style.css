@@ -10,7 +10,7 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: #545454 url('bg.jpg') center/cover fixed;
+    background: #3a3a4a url('bg.jpg') center/cover fixed;
     font-family: 'Microsoft Yahei', sans-serif;
     backdrop-filter: blur(var(--blur-intensity));
     padding: 20px;
@@ -144,8 +144,9 @@ body {
     left: 100%;
 }
 
+/* 修改点1：组合面板背景调整为与九宫格相同 */
 .combined-panel {
-    background: var(--glass-bg);
+    background: rgba(0,0,0,0.15); /* 与.lottery-wrap2相同 */
     border: 1px solid var(--glass-border);
     border-radius: 15px;
     padding: 15px;
@@ -154,6 +155,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3); /* 与九宫格相同的阴影 */
 }
 
 .combined-panel-header {
@@ -163,16 +165,13 @@ body {
     margin-bottom: 15px;
 }
 
-/* 修改历史记录和奖项说明背景 - 开始 */
+/* 修改点2：历史记录和奖项说明区域背景透明 */
 .history-section, .prize-section {
     overflow-y: auto;
     padding-right: 10px;
-    background: rgba(0,0,0,0.15); /* 与九宫格背景一致 */
-    border: 1px solid rgba(255,255,255,0.15); /* 与九宫格边框一致 */
-    border-radius: 12px; /* 与九宫格圆角一致 */
+    background: transparent; /* 改为透明 */
+    border-radius: 8px;
     padding: 12px;
-    backdrop-filter: blur(8px); /* 与九宫格模糊效果一致 */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* 添加轻微阴影增强层次感 */
 }
 
 .history-section {
@@ -182,7 +181,6 @@ body {
 .prize-section {
     height: 190px;
 }
-/* 修改历史记录和奖项说明背景 - 结束 */
 
 .clear-history {
     padding: 6px 12px;
@@ -203,11 +201,12 @@ body {
     transform: translateY(-1px);
 }
 
+/* 修改点3：奖项项背景调整为与九宫格项目相同 */
 .prize-item {
     padding: 8px 10px;
     margin: 5px 0;
     border-left: 3px solid var(--prize-color);
-    background: rgba(255,255,255,0.05); /* 与九宫格格子背景一致 */
+    background: rgba(255,255,255,0.05); /* 与.lot-item相同 */
     border-radius: 5px;
     transition: 0.2s;
     cursor: pointer;
@@ -217,6 +216,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border: 1px solid rgba(255,255,255,0.15); /* 添加与九宫格相同的边框 */
 }
 
 .prize-item:hover {
@@ -229,17 +229,17 @@ body {
 .prize-item-3 { border-left-color: #3498db; }
 .prize-item-4 { border-left-color: #e74c3c; }
 
+/* 修改点4：历史记录项背景调整为与九宫格项目相同 */
 .history-item {
     padding: 8px;
     margin: 5px 0;
-    background: rgba(255,255,255,0.05); /* 与九宫格格子背景一致 */
-    border: 1px solid rgba(255,255,255,0.15); /* 与九宫格格子的边框一致 */
-    border-radius: 8px; /* 与九宫格格子的圆角一致 */
+    background: rgba(255,255,255,0.05); /* 与.lot-item相同 */
+    border-radius: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
-    backdrop-filter: blur(4px); /* 添加轻微模糊效果 */
+    border: 1px solid rgba(255,255,255,0.15); /* 添加与九宫格相同的边框 */
 }
 
 .modal-wrapper {
