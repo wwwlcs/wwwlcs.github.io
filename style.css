@@ -1,6 +1,6 @@
 /* style.css */
 :root {
-    --glass-bg: rgba(58, 58, 74, 0.95);
+    --glass-bg: rgba(58, 58, 74, 0.15);
     --glass-border: rgba(255, 255, 255, 0.15);
     --prize-color: #b19cd9;
     --danger-red: #ff4757;
