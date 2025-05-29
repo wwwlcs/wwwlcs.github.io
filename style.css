@@ -10,7 +10,7 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: #600030 url('bg.jpg') center/cover fixed;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c) fixed;
     font-family: 'Microsoft Yahei', sans-serif;
     backdrop-filter: blur(var(--blur-intensity));
     padding: 20px;
