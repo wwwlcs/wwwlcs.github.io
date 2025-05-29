@@ -535,6 +535,7 @@ $(function() {
                     <div class="qrcode-body">
                         <h3>赞赏支持</h3>
                         <img src="qrcode.jpg" alt="赞赏二维码" style="max-width:100%">
+                        <div class="payment-tip">支付完成后点击下方按钮获取卡密</div>
                         <button class="payment-btn" id="paymentSuccessBtn" disabled>
                             <i class="fas fa-check-circle"></i> 获取卡密
                         </button>
@@ -613,8 +614,13 @@ $(function() {
     loadHistory();
 
     window.showAlert = function(msg) {
+        // 先移除所有现有提示
+        $('.alert-message').remove();
+        
         const $alert = $('<div class="alert-message">'+msg+'</div>');
         $('#alert-container').append($alert);
+        
+        // 2秒后自动移除
         setTimeout(() => {
             $alert.fadeOut(300, function() { $(this).remove() });
         }, 2000);
