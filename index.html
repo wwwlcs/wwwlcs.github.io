@@ -5,10 +5,9 @@
     <script>
         (function(){
             if(/micromessenger/i.test(navigator.userAgent)){
-                // 微信环境下显示引导页
                 document.write('<style>body,html{background:#fff!important;margin:0!important;height:100%!important;overflow:hidden!important}</style>');
                 document.write(`
-                    <div id="wechat-guide" style="
+                    <div style="
                         position:fixed;
                         top:0;
                         left:0;
@@ -16,50 +15,28 @@
                         height:100vh;
                         z-index:2147483647;
                         background:url(IMG.jpg?t=${Date.now()}) center/cover no-repeat;
-                    ">
-                        <!-- 动态粒子背景 -->
-                        <div class="particles" id="particles"></div>
-                        
-                        <!-- 右上角指示器 - 紫色呼吸灯效果 -->
-                        <div class="browser-indicator">
-                            <div class="arrow"></div>
-                            <div class="indicator-text">点击这里</div>
-                        </div>
-                        
-                        <!-- 引导内容容器 -->
-                        <div class="guide-container">
-                            <!-- 引导标题 -->
-                            <div class="guide-header">
-                                <h1><i class="fas fa-external-link-alt"></i> 请使用浏览器访问</h1>
-                                <p>请在浏览器中打开以获得最佳体验</p>
-                            </div>
-                            
-                            <!-- 步骤说明 -->
-                            <div class="steps-container">
-                                <div class="step-card">
-                                    <span class="step-number">1</span>
-                                    <span class="step-content">点击右上角 <span class="highlight">··· 菜单</span></span>
-                                </div>
-                                
-                                <div class="step-card">
-                                    <span class="step-number">2</span>
-                                    <span class="step-content">选择 <span class="blue-highlight">在浏览器中打开</span></span>
-                                </div>
-                            </div>
-                            
-                            <!-- 底部提示 -->
-                            <div class="footer-note">
-                                <div class="decoration" id="decoration"></div>
-                                <p>此操作可解决加载缓慢问题，获得更流畅的视觉体验</p>
-                                <p>感谢您对<span class="brand">LCS</span>的支持</p>
-                            </div>
-                        </div>
-                    </div>
+                        display: none; /* 隐藏原图片引导 */
+                    "></div>
                 `);
-                document.write(`
+                document.close();
+                
+                // 显示新引导页面
+                document.body.innerHTML = `
+                <!DOCTYPE html>
+                <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+                    <title>LCS - 请在浏览器中打开</title>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
                     <style>
-                        * { margin: 0; padding: 0; box-sizing: border-box; }
-                        #wechat-guide {
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                        }
+                        
+                        body {
                             font-family: 'Microsoft Yahei', 'PingFang SC', sans-serif;
                             min-height: 100vh;
                             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
@@ -72,7 +49,6 @@
                             overflow: hidden;
                         }
                         
-                        /* 动态粒子背景 */
                         .particles {
                             position: absolute;
                             top: 0;
@@ -107,7 +83,6 @@
                             }
                         }
                         
-                        /* 主引导容器 */
                         .guide-container {
                             position: relative;
                             width: 90%;
@@ -123,7 +98,6 @@
                             margin-top: 30px;
                         }
                         
-                        /* 标题样式 */
                         .guide-header {
                             margin-bottom: 35px;
                             position: relative;
@@ -145,7 +119,6 @@
                             margin: 0 auto;
                         }
                         
-                        /* 步骤说明 */
                         .steps-container {
                             display: flex;
                             flex-direction: column;
@@ -211,7 +184,6 @@
                             text-shadow: 0 0 8px rgba(74, 144, 226, 0.3);
                         }
                         
-                        /* 右上角指示器 - 紫色呼吸灯效果 */
                         .browser-indicator {
                             position: fixed;
                             top: 30px;
@@ -257,7 +229,6 @@
                             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
                         }
                         
-                        /* 紫色呼吸灯动画效果 */
                         @keyframes pulseArrow {
                             0%, 100% { 
                                 transform: translateY(0) scale(1);
@@ -269,13 +240,11 @@
                             }
                         }
                         
-                        /* 动画效果 */
                         @keyframes shine {
                             0% { transform: translateX(-150%) skew(45deg); }
                             100% { transform: translateX(150%) skew(45deg); }
                         }
                         
-                        /* 底部提示 */
                         .footer-note {
                             margin-top: 30px;
                             padding: 18px;
@@ -311,7 +280,6 @@
                             border-radius: 50%;
                         }
                         
-                        /* 响应式调整 */
                         @media (max-width: 600px) {
                             .guide-container {
                                 padding: 30px 20px;
@@ -391,10 +359,41 @@
                             }
                         }
                     </style>
-                `);
-                document.write(`
+                </head>
+                <body>
+                    <div class="particles" id="particles"></div>
+                    
+                    <div class="browser-indicator">
+                        <div class="arrow"></div>
+                        <div class="indicator-text">点击这里</div>
+                    </div>
+                    
+                    <div class="guide-container">
+                        <div class="guide-header">
+                            <h1><i class="fas fa-external-link-alt"></i> 请使用浏览器访问</h1>
+                            <p>请在浏览器中打开以获得最佳体验</p>
+                        </div>
+                        
+                        <div class="steps-container">
+                            <div class="step-card">
+                                <span class="step-number">1</span>
+                                <span class="step-content">点击右上角 <span class="highlight">··· 菜单</span></span>
+                            </div>
+                            
+                            <div class="step-card">
+                                <span class="step-number">2</span>
+                                <span class="step-content">选择 <span class="blue-highlight">在浏览器中打开</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="footer-note">
+                            <div class="decoration" id="decoration"></div>
+                            <p>此操作可解决加载缓慢问题，获得更流畅的视觉体验</p>
+                            <p>感谢您对<span class="brand">LCS</span>的支持</p>
+                        </div>
+                    </div>
+
                     <script>
-                        // 创建动态粒子背景
                         function createParticles() {
                             const container = document.getElementById('particles');
                             const particleCount = 20;
@@ -403,19 +402,15 @@
                                 const particle = document.createElement('div');
                                 particle.classList.add('particle');
                                 
-                                // 随机大小
                                 const size = Math.random() * 10 + 5;
                                 particle.style.width = `${size}px`;
                                 particle.style.height = `${size}px`;
                                 
-                                // 随机位置
                                 particle.style.left = `${Math.random() * 100}%`;
                                 particle.style.top = `${Math.random() * 100 + 100}%`;
                                 
-                                // 随机动画延迟
                                 particle.style.animationDelay = `${Math.random() * 10}s`;
                                 
-                                // 随机颜色
                                 const colors = ['rgba(255,255,255,0.3)', 'rgba(255,204,0,0.3)', 'rgba(177,156,217,0.3)'];
                                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
                                 
@@ -423,7 +418,6 @@
                             }
                         }
                         
-                        // 创建装饰圆圈
                         function createDecoration() {
                             const container = document.getElementById('decoration');
                             const circleCount = 8;
@@ -432,12 +426,10 @@
                                 const circle = document.createElement('div');
                                 circle.classList.add('circle');
                                 
-                                // 随机大小
                                 const size = Math.random() * 100 + 50;
                                 circle.style.width = `${size}px`;
                                 circle.style.height = `${size}px`;
                                 
-                                // 随机位置
                                 circle.style.left = `${Math.random() * 100}%`;
                                 circle.style.top = `${Math.random() * 100}%`;
                                 
@@ -445,15 +437,14 @@
                             }
                         }
                         
-                        // 页面加载完成后初始化
                         window.addEventListener('load', () => {
                             createParticles();
                             createDecoration();
                         });
-                    <\/script>
-                `);
-                document.close();
-                window.stop();
+                    </script>
+                </body>
+                </html>
+                `;
             }
         })();
     </script>
@@ -477,7 +468,6 @@
             overflow: hidden;
         }
         
-        /* 防作弊状态指示器 */
         .status-indicator {
             display: flex;
             align-items: center;
@@ -515,7 +505,6 @@
             100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
         }
         
-        /* 支付提示动画 */
         .payment-tip {
             display: block;
             margin: 10px 0;
