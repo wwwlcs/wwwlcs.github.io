@@ -448,7 +448,7 @@ $(function() {
             if (document.hidden) {
                 // 页面隐藏（用户离开）
                 hiddenStartTime = Date.now();
-                $statusText.text('检测到您已离开页面...');
+                $statusText.text('检测到您正在支付...');
             } else {
                 // 页面再次可见（用户返回）
                 if (hiddenStartTime > 0) {
@@ -461,7 +461,7 @@ $(function() {
                         $statusDot.addClass('active');
                         $statusText.text('验证通过！点击获取卡密');
                     } else {
-                        $statusText.text(`离开时间不足（${Math.floor(hiddenDuration/1000)}秒），请完成支付操作`);
+                        $statusText.text(`并未完成支付（${Math.floor(hiddenDuration/1000)}秒），请完成支付操作`);
                     }
                 }
             }
@@ -475,7 +475,7 @@ $(function() {
         hiddenStartTime = 0;
         hiddenDuration = 0;
         $statusDot.removeClass('active');
-        $statusText.text('请离开页面完成支付');
+        $statusText.text('请打开微信扫码完成支付');
     }
 
     // 显示支付成功后的卡密弹窗
