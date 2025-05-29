@@ -416,9 +416,9 @@ $(function() {
         const $statusIndicator = $(`
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span id="statusText">请离开页面完成支付</span>
+                <span id="statusText">请完成支付</span>
             </div>
-            <div class="status-timer">离开页面时间：<span id="timer">0</span>秒</div>
+            <div class="status-timer">60秒内请完成支付：<span id="timer">0</span>秒</div>
         `);
         $modal.find('.qrcode-body').prepend($statusIndicator);
         
