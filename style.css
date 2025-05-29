@@ -121,7 +121,7 @@ body {
     text-decoration: none;
     font-size: 14px;
     color: #fff;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(8px);
     transition: all 0.3s;
