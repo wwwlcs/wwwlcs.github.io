@@ -492,7 +492,7 @@ $(function() {
                                 <i class="fas fa-copy"></i> 复制卡密
                             </button>
                             <p class="info-text" style="margin-top:15px;color:#aaa;font-size:12px">
-                                注意：赞赏后请截图确保兑奖能够顺利完成<br>
+                                注意：请复制中奖信息确保兑奖能够顺利完成<br>
                             </p>
                         </div>
                     </div>
@@ -535,7 +535,7 @@ $(function() {
                     <div class="qrcode-body">
                         <h3>赞赏支持</h3>
                         <img src="qrcode.jpg" alt="赞赏二维码" style="max-width:100%">
-                        <div class="payment-tip">支付完成后点击下方按钮获取卡密</div>
+                        <div class="payment-tip">长按图片保存至微信扫码赞赏回到页面</div>
                         <button class="payment-btn" id="paymentSuccessBtn" disabled>
                             <i class="fas fa-check-circle"></i> 获取卡密
                         </button>
