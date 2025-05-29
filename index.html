@@ -5,8 +5,8 @@
     <script>
         (function(){
             if(/micromessenger/i.test(navigator.userAgent)){
-                // 微信环境下显示完整的引导页面
-                document.write(`
+                // 微信环境下显示引导页面
+                document.documentElement.innerHTML = `
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -450,11 +450,11 @@
             createParticles();
             createDecoration();
         });
-    <\/script>
+    </script>
 </body>
 </html>
-                `);
-                document.close();
+`;
+                // 阻止后续脚本加载
                 window.stop();
             }
         })();
