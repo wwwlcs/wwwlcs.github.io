@@ -10,7 +10,7 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: #470024 url('bg.jpg') center/cover fixed;
+    background: #e71585 url('bg.jpg') center/cover fixed;
     font-family: 'Microsoft Yahei', sans-serif;
     backdrop-filter: blur(var(--blur-intensity));
     padding: 20px;
