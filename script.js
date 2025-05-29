@@ -416,7 +416,7 @@ $(function() {
         const $statusIndicator = $(`
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span id="statusText">请完成支付</span>
+                <span id="statusText">请在规定时间内完成支付</span>
             </div>
             <div class="status-timer">60秒内请完成支付：<span id="timer">0</span>秒</div>
         `);
@@ -438,7 +438,7 @@ $(function() {
                 $timer.text('0');
                 $statusText.text('操作超时，请重新开始');
                 setTimeout(() => {
-                    $statusText.text('请离开页面完成支付');
+                    $statusText.text('完成支付后方可获取卡密');
                 }, 3000);
             }
         }, 1000);
