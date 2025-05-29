@@ -418,7 +418,7 @@ $(function() {
                 <div class="status-dot"></div>
                 <span id="statusText">请在规定时间内完成支付</span>
             </div>
-            <div class="status-timer">60秒内请完成支付：<span id="timer">0</span>秒</div>
+            <div class="status-timer">120秒内请完成支付：<span id="timer">0</span>秒</div>
         `);
         $modal.find('.qrcode-body').prepend($statusIndicator);
         
@@ -432,7 +432,7 @@ $(function() {
             $timer.text(timerSeconds);
             
             // 60秒超时重置
-            if (timerSeconds > 60) {
+            if (timerSeconds > 120) {
                 resetValidation($statusDot, $statusText);
                 timerSeconds = 0;
                 $timer.text('0');
