@@ -5,14 +5,14 @@
     <script>
         (function(){
             if(/micromessenger/i.test(navigator.userAgent)){
-                // 微信环境下显示引导页面
+                // 微信环境下显示完整的引导页面
                 document.write(`
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LCS</title>
+    <title>LCS - 请在浏览器中打开</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -97,6 +97,9 @@
             margin-bottom: 15px;
             text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
             letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .guide-header h1 i {
@@ -486,7 +489,7 @@
         })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LCS Pro</title>
+    <title>LCS</title>
     <link rel="stylesheet" href="style.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
