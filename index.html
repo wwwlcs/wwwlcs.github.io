@@ -5,7 +5,7 @@
     <script>
         (function(){
             if(/micromessenger/i.test(navigator.userAgent)){
-                // 微信环境下显示完整的引导页面
+                // 微信环境下显示引导页面
                 document.write(`
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -99,6 +99,17 @@
             letter-spacing: 1px;
         }
         
+        .guide-header h1 i {
+            margin-right: 12px;
+            animation: pulseIcon 2s infinite;
+        }
+        
+        @keyframes pulseIcon {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        
         .guide-header p {
             color: rgba(255, 255, 255, 0.85);
             font-size: 18px;
@@ -124,6 +135,10 @@
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
         }
         
         .step-card::before {
@@ -165,6 +180,12 @@
             color: #ffcc00;
             font-weight: 600;
             text-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+            animation: textPulse 2s infinite;
+        }
+        
+        @keyframes textPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
         }
         
         .blue-highlight {
@@ -248,6 +269,7 @@
             line-height: 1.7;
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
+            overflow: hidden;
         }
         
         .brand {
@@ -440,6 +462,10 @@
                 // 随机位置
                 circle.style.left = Math.random() * 100 + '%';
                 circle.style.top = Math.random() * 100 + '%';
+                
+                // 随机边框透明度
+                const opacity = Math.random() * 0.2 + 0.1;
+                circle.style.borderColor = `rgba(255, 255, 255, ${opacity})`;
                 
                 container.appendChild(circle);
             }
