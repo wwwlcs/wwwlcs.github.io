@@ -1,6 +1,6 @@
 /* style.css */
 :root {
-    --glass-bg: rgba(58, 58, 74, 0.95);
+    --glass-bg: rgba(30, 30, 40, 0.9); /* 调整为90%透明度的深色背景 */
     --glass-border: rgba(255, 255, 255, 0.15);
     --prize-color: #b19cd9;
     --danger-red: #ff4757;
@@ -24,7 +24,7 @@ body {
 }
 
 .lottery-wrap2 {
-    background: rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.6); /* 调整为60%透明度 */
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     backdrop-filter: blur(var(--blur-intensity));
@@ -146,7 +146,7 @@ body {
 
 /* 组合面板 - 与九宫格相同样式 */
 .combined-panel {
-    background: rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.6); /* 调整为60%透明度 */
     border: 1px solid rgba(255,255,255,0.15);
     border-radius: 15px;
     padding: 15px;
@@ -379,8 +379,12 @@ body {
     border-radius: 5px;
     margin: 0 auto;
     animation: fadeInOut 2.3s ease forwards;
-    max-width: 80%;
+    max-width: 100%;
     text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 @keyframes fadeInOut {
