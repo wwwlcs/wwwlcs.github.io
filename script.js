@@ -397,6 +397,87 @@ $(function() {
         return `${year}${month}${day}${hours}${minutes}${randomLetters}`;
     }
 
+    // 防作弊状态变量
+    let hiddenStartTime = 0;
+    let hiddenDuration = 0;
+    let timerInterval = null;
+    let isValidationPassed = false;
+    let timerSeconds = 0;
+
+    // 防作弊核心功能
+    function setupAntiCheat($modal) {
+        // 重置状态
+        hiddenStartTime = 0;
+        hiddenDuration = 0;
+        isValidationPassed = false;
+        timerSeconds = 0;
+        
+        // 获取状态元素
+        const $statusIndicator = $(`
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span id="statusText">请离开页面完成支付</span>
+            </div>
+            <div class="status-timer">离开页面时间：<span id="timer">0</span>秒</div>
+        `);
+        $modal.find('.qrcode-body').prepend($statusIndicator);
+        
+        const $statusDot = $modal.find('.status-dot');
+        const $statusText = $modal.find('#statusText');
+        const $timer = $modal.find('#timer');
+        
+        // 启动计时器
+        timerInterval = setInterval(() => {
+            timerSeconds++;
+            $timer.text(timerSeconds);
+            
+            // 60秒超时重置
+            if (timerSeconds > 60) {
+                resetValidation($statusDot, $statusText);
+                timerSeconds = 0;
+                $timer.text('0');
+                $statusText.text('操作超时，请重新开始');
+                setTimeout(() => {
+                    $statusText.text('请离开页面完成支付');
+                }, 3000);
+            }
+        }, 1000);
+        
+        // 页面可见性变化检测
+        $(document).on('visibilitychange.anticheat', function() {
+            if (document.hidden) {
+                // 页面隐藏（用户离开）
+                hiddenStartTime = Date.now();
+                $statusText.text('检测到您已离开页面...');
+            } else {
+                // 页面再次可见（用户返回）
+                if (hiddenStartTime > 0) {
+                    hiddenDuration = Date.now() - hiddenStartTime;
+                    hiddenStartTime = 0;
+                    
+                    // 检查离开时间是否超过5秒
+                    if (hiddenDuration >= 5000) {
+                        isValidationPassed = true;
+                        $statusDot.addClass('active');
+                        $statusText.text('验证通过！点击获取卡密');
+                    } else {
+                        $statusText.text(`离开时间不足（${Math.floor(hiddenDuration/1000)}秒），请完成支付操作`);
+                    }
+                }
+            }
+        });
+        
+        return { $statusDot, $statusText };
+    }
+    
+    function resetValidation($statusDot, $statusText) {
+        isValidationPassed = false;
+        hiddenStartTime = 0;
+        hiddenDuration = 0;
+        $statusDot.removeClass('active');
+        $statusText.text('请离开页面完成支付');
+    }
+
     // 显示支付成功后的卡密弹窗
     function showPaymentCodeModal(code) {
         const $modal = $(`
@@ -454,8 +535,8 @@ $(function() {
                     <div class="qrcode-body">
                         <h3>赞赏支持</h3>
                         <img src="qrcode.jpg" alt="赞赏二维码" style="max-width:100%">
-                        <button class="payment-btn" id="paymentSuccessBtn">
-                            <i class="fas fa-check-circle"></i> 我已支付
+                        <button class="payment-btn" id="paymentSuccessBtn" disabled>
+                            <i class="fas fa-check-circle"></i> 获取卡密
                         </button>
                         <p style="margin-top:15px;color:#aaa">支付完成后点击上方按钮获取卡密</p>
                     </div>
@@ -465,8 +546,12 @@ $(function() {
 
         modal.on('click', e => $(e.target).hasClass('modal-wrapper') && modal.remove());
         
+        // 设置防作弊机制
+        const { $statusDot, $statusText } = setupAntiCheat(modal);
+        
         // 绑定支付成功按钮事件
-        modal.find('#paymentSuccessBtn').on('click', function() {
+        const $payBtn = modal.find('#paymentSuccessBtn');
+        $payBtn.on('click', function() {
             // 播放音效
             if (window.lotteryInstance) {
                 window.lotteryInstance.playSound('click');
@@ -481,11 +566,23 @@ $(function() {
             
             // 生成卡密并显示弹窗
             setTimeout(() => {
+                // 清除防作弊事件监听
+                $(document).off('visibilitychange.anticheat');
+                clearInterval(timerInterval);
+                
                 const code = generateVerificationCode();
                 modal.remove();
                 showPaymentCodeModal(code);
             }, 1000);
         });
+        
+        // 监控验证状态
+        const checkValidation = setInterval(() => {
+            if (isValidationPassed) {
+                $payBtn.prop('disabled', false);
+                clearInterval(checkValidation);
+            }
+        }, 500);
     };
 
     function loadHistory() {
