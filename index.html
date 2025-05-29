@@ -12,7 +12,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LCS请在浏览器中打开</title>
+    <title>LCS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -96,31 +97,6 @@
             margin-bottom: 15px;
             text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
             letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .guide-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            margin-right: 15px;
-            animation: pulseIcon 2s infinite;
-        }
-        
-        .guide-icon svg {
-            width: 100%;
-            height: 100%;
-            fill: #ffcc00;
-        }
-        
-        @keyframes pulseIcon {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
         }
         
         .guide-header p {
@@ -148,10 +124,6 @@
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease;
-        }
-        
-        .step-card:hover {
-            transform: translateY(-5px);
         }
         
         .step-card::before {
@@ -193,12 +165,6 @@
             color: #ffcc00;
             font-weight: 600;
             text-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
-            animation: textPulse 2s infinite;
-        }
-        
-        @keyframes textPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.85; }
         }
         
         .blue-highlight {
@@ -282,7 +248,6 @@
             line-height: 1.7;
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
-            overflow: hidden;
         }
         
         .brand {
@@ -317,12 +282,6 @@
             
             .guide-header h1 {
                 font-size: 26px;
-            }
-            
-            .guide-icon {
-                width: 35px;
-                height: 35px;
-                margin-right: 10px;
             }
             
             .guide-header p {
@@ -392,11 +351,6 @@
             .arrow::before {
                 font-size: 26px;
             }
-            
-            .guide-icon {
-                width: 30px;
-                height: 30px;
-            }
         }
     </style>
 </head>
@@ -414,14 +368,7 @@
     <div class="guide-container">
         <!-- 引导标题 -->
         <div class="guide-header">
-            <h1>
-                <div class="guide-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"/>
-                    </svg>
-                </div>
-                请使用浏览器访问
-            </h1>
+            <h1><i class="fas fa-external-link-alt"></i> 请使用浏览器访问</h1>
             <p>请在浏览器中打开以获得最佳体验</p>
         </div>
         
@@ -450,32 +397,26 @@
         // 创建动态粒子背景
         function createParticles() {
             const container = document.getElementById('particles');
-            const particleCount = 30;
+            const particleCount = 20;
             
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 
                 // 随机大小
-                const size = Math.random() * 15 + 5;
+                const size = Math.random() * 10 + 5;
                 particle.style.width = size + 'px';
                 particle.style.height = size + 'px';
                 
                 // 随机位置
                 particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + 100 + '%';
                 
                 // 随机动画延迟
                 particle.style.animationDelay = Math.random() * 10 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
                 
                 // 随机颜色
-                const colors = [
-                    'rgba(255,255,255,0.4)',
-                    'rgba(255,204,0,0.4)',
-                    'rgba(177,156,217,0.4)',
-                    'rgba(74,144,226,0.4)'
-                ];
+                const colors = ['rgba(255,255,255,0.3)', 'rgba(255,204,0,0.3)', 'rgba(177,156,217,0.3)'];
                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
                 
                 container.appendChild(particle);
@@ -485,14 +426,14 @@
         // 创建装饰圆圈
         function createDecoration() {
             const container = document.getElementById('decoration');
-            const circleCount = 10;
+            const circleCount = 8;
             
             for (let i = 0; i < circleCount; i++) {
                 const circle = document.createElement('div');
                 circle.classList.add('circle');
                 
                 // 随机大小
-                const size = Math.random() * 150 + 50;
+                const size = Math.random() * 100 + 50;
                 circle.style.width = size + 'px';
                 circle.style.height = size + 'px';
                 
@@ -500,26 +441,8 @@
                 circle.style.left = Math.random() * 100 + '%';
                 circle.style.top = Math.random() * 100 + '%';
                 
-                // 随机边框透明度
-                const opacity = Math.random() * 0.2 + 0.1;
-                circle.style.borderColor = `rgba(255, 255, 255, ${opacity})`;
-                
-                // 随机动画
-                circle.style.animation = `pulseCircle ${Math.random() * 10 + 10}s infinite linear`;
-                
                 container.appendChild(circle);
             }
-            
-            // 添加圆圈动画
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes pulseCircle {
-                    0% { transform: scale(1) rotate(0deg); opacity: 0.3; }
-                    50% { transform: scale(1.2) rotate(180deg); opacity: 0.6; }
-                    100% { transform: scale(1) rotate(360deg); opacity: 0.3; }
-                }
-            `;
-            document.head.appendChild(style);
         }
         
         // 页面加载完成后初始化
