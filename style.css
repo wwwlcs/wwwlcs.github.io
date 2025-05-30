@@ -97,6 +97,122 @@ body {
     margin: 0 auto;
 }
 
+/* 页面标题 */
+.page-header {
+    text-align: center;
+    margin: 0 auto 30px;
+    max-width: 600px;
+    position: relative;
+    padding: 20px 0;
+    z-index: 10;
+}
+
+.page-title {
+    font-size: 2.8rem;
+    margin: 0;
+    background: linear-gradient(45deg, #ffcc00, #b19cd9, #ff6b8b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 15px rgba(177, 156, 217, 0.3);
+    position: relative;
+    letter-spacing: 1px;
+}
+
+.page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #8a6dbe, transparent);
+    border-radius: 2px;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 25px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* 功能按钮容器 */
+.action-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 30px;
+    gap: 20px;
+    max-width: 650px;
+    margin: 20px auto 30px;
+}
+
+/* 功能按钮样式 - 扫光效果 */
+.action-btn-new {
+    flex: 1;
+    min-width: 160px;
+    padding: 18px 15px;
+    border-radius: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: rgba(30, 25, 45, 0.7);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 2;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.action-btn-new.left {
+    background: linear-gradient(135deg, rgba(106, 17, 203, 0.6), rgba(37, 117, 252, 0.6));
+}
+
+.action-btn-new.right {
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.6), rgba(250, 208, 196, 0.6));
+}
+
+.action-btn-new:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 12px 30px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+.action-btn-new:active {
+    transform: scale(0.97);
+}
+
+/* 扫光效果 */
+.action-btn-new::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    transition: 0.6s;
+}
+
+.action-btn-new:hover::before {
+    left: 100%;
+}
+
 .lottery-wrap2 {
     background: rgba(0,0,0,0.6); /* 调整为60%透明度 */
     border: 1px solid var(--glass-border);
@@ -105,6 +221,8 @@ body {
     padding: 15px;
     margin: 20px 0;
     box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
 }
 
 .lot-grid {
@@ -249,48 +367,6 @@ body {
     animation: glow 1s infinite alternate;
 }
 
-.action-container {
-    margin: 15px auto;
-    max-width: 600px;
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 0 15px;
-}
-
-.action-btn {
-    flex: 1;
-    min-width: 140px;
-    padding: 12px 10px;
-    border-radius: 8px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(8px);
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.action-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.6), transparent);
-    transition: 0.6s;
-}
-
-.action-btn:hover::before {
-    left: 100%;
-}
-
-/* 组合面板 - 与九宫格相同样式 */
 .combined-panel {
     background: rgba(0,0,0,0.6); /* 调整为60%透明度 */
     border: 1px solid rgba(255,255,255,0.15);
@@ -646,19 +722,30 @@ body {
         height: auto;
         max-height: 250px;
     }
+    
+    .page-title {
+        font-size: 2.2rem;
+    }
+    
+    .action-btn-new {
+        padding: 16px 12px;
+        font-size: 16px;
+        min-width: 140px;
+    }
 }
 
 @media (max-width: 480px) {
-    .action-container {
-        gap: 10px;
-        padding: 0 10px;
-        overflow-x: auto;
+    .action-buttons-container {
+        flex-direction: column;
+        gap: 15px;
     }
-    .action-btn {
-        min-width: 120px;
-        padding: 10px 8px;
-        font-size: 13px;
+    
+    .action-btn-new {
+        padding: 14px;
+        font-size: 16px;
+        min-width: 100%;
     }
+    
     .lot-item { 
         font-size: 12px; 
     }
@@ -672,5 +759,9 @@ body {
     .payment-btn {
         padding: 10px 15px;
         font-size: 14px;
+    }
+    
+    .page-title {
+        font-size: 1.8rem;
     }
 }
