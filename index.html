@@ -306,15 +306,6 @@
     </style>
 </head>
 <body>
-    <!-- 扇形背景动画 -->
-    <div class="fan-background">
-        <div class="fan-layer"></div>
-        <div class="fan-layer"></div>
-    </div>
-    
-    <!-- 粒子背景动画 -->
-    <div id="particles-js"></div>
-    
     <!-- 右上角指示器 - 紫色呼吸灯效果 -->
     <div class="browser-indicator">
         <div class="arrow"></div>
@@ -442,12 +433,6 @@
     </style>
 </head>
 <body>
-    <!-- 扇形背景动画 -->
-    <div class="fan-background">
-        <div class="fan-layer"></div>
-        <div class="fan-layer"></div>
-    </div>
-    
     <!-- 粒子背景动画 -->
     <div id="particles-js"></div>
     
@@ -460,17 +445,24 @@
             <div class="page-subtitle">转动幸运之轮，赢取专属大奖！</div>
         </div>
         
-        <!-- 功能按钮 -->
+        <!-- 功能按钮容器 -->
         <div class="action-buttons-container">
-            <a href="javascript:void(0)" class="action-btn-new" onclick="showCardInfo()">
+            <a href="javascript:void(0)" class="action-btn-new left" onclick="showCardInfo()">
                 <i class="fas fa-ticket-alt"></i> 获取奖励
             </a>
-            <a href="javascript:void(0)" class="action-btn-new" onclick="showQRCode()">
+            <a href="javascript:void(0)" class="action-btn-new right" onclick="showQRCode()">
                 <i class="fas fa-qrcode"></i> 卡密获取
             </a>
         </div>
 
-        <div class="lottery-wrap2">
+        <!-- 抽奖容器 - 添加扇形背景动画 -->
+        <div class="lottery-container">
+            <!-- 扇形背景动画 -->
+            <div class="fan-background">
+                <div class="fan-layer"></div>
+                <div class="fan-layer"></div>
+            </div>
+            
             <div class="lot-grid">
                 <div class="lot-item">🎁 幸运格</div>
                 <div class="lot-item" data-prize="1">体验券</div>
