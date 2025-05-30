@@ -1,4 +1,4 @@
-/* style.css */
+/* 全局样式 */
 :root {
     --glass-bg: rgba(30, 30, 40, 0.9);
     --glass-border: rgba(255, 255, 255, 0.15);
@@ -7,165 +7,394 @@
     --blur-intensity: 20px;
 }
 
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c) fixed;
-    font-family: 'Microsoft Yahei', sans-serif;
-    backdrop-filter: blur(var(--blur-intensity));
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(26, 42, 108, 0.8), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(178, 31, 31, 0.7), transparent 40%),
+        linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+    background-attachment: fixed;
+    font-family: 'Microsoft Yahei', 'Segoe UI', sans-serif;
     padding: 20px;
-    overflow-y: auto;
+    overflow-x: hidden;
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
 }
 
-/* 粒子容器 */
+/* 粒子背景 */
 #particles-js {
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
+    top: 0;
+    left: 0;
     z-index: -1;
 }
 
-.main-container {
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 10;
+/* 闪光效果 */
+.glitter {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 15px 3px #fff;
+    animation: glitter 4s infinite;
+    opacity: 0;
+    z-index: 5;
+    pointer-events: none;
+}
+
+@keyframes glitter {
+    0% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0); }
 }
 
 /* 页面标题 */
 .page-header {
     text-align: center;
-    margin: 10px 0 20px;
+    margin: 0 auto 20px;
+    max-width: 600px;
+    position: relative;
+    padding: 20px 0;
+    z-index: 10;
 }
 
-.page-header h1 {
-    font-size: 2.2rem;
+.page-title {
+    font-size: 2.5rem;
     margin: 0;
-    background: linear-gradient(45deg, #ffcc00, #b19cd9, #3498db);
+    background: linear-gradient(45deg, #b19cd9, #ffcc00, #3498db);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 15px rgba(177, 156, 217, 0.3);
     position: relative;
     letter-spacing: 1px;
-    font-weight: 600;
 }
 
-.lottery-wrap2 {
-    background: rgba(0,0,0,0.6);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    backdrop-filter: blur(var(--blur-intensity));
+.page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #8a6dbe, transparent);
+    border-radius: 2px;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 15px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* 主容器 */
+.main-container {
+    max-width: 650px;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+    z-index: 10;
+}
+
+/* 功能按钮容器 */
+.action-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+/* 功能按钮样式 */
+.action-btn {
+    flex: 1;
+    min-width: 160px;
     padding: 15px;
-    margin: 20px 0;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    border-radius: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: rgba(30, 25, 45, 0.7);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 2;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        inset 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
+.action-btn.left {
+    background: linear-gradient(135deg, rgba(106, 17, 203, 0.6), rgba(37, 117, 252, 0.6));
+}
+
+.action-btn.right {
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.6), rgba(250, 208, 196, 0.6));
+}
+
+.action-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 12px 30px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+.action-btn:active {
+    transform: scale(0.97);
+}
+
+/* 扫光效果 */
+.action-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: 0.6s;
+}
+
+.action-btn:hover::before {
+    left: 100%;
+}
+
+/* 抽奖盘容器 */
+.lottery-container {
+    background: rgba(20, 15, 30, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 30px;
+    margin: 20px auto;
+    box-shadow: 
+        0 15px 50px rgba(0, 0, 0, 0.5),
+        inset 0 0 30px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease;
+    backdrop-filter: blur(15px);
+}
+
+/* 扇形背景动画 */
+.fan-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.fan-layer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        conic-gradient(
+            from 0deg,
+            transparent 0deg 30deg,
+            rgba(138, 109, 190, 0.1) 30deg 60deg,
+            transparent 60deg 90deg,
+            rgba(52, 152, 219, 0.1) 90deg 120deg,
+            transparent 120deg 150deg,
+            rgba(46, 204, 113, 0.1) 150deg 180deg,
+            transparent 180deg 210deg,
+            rgba(231, 76, 60, 0.1) 210deg 240deg,
+            transparent 240deg 270deg,
+            rgba(155, 89, 182, 0.1) 270deg 300deg,
+            transparent 300deg 330deg,
+            rgba(241, 196, 15, 0.1) 330deg 360deg
+        );
+    transform: translate(-50%, -50%);
+    animation: rotate 60s linear infinite;
+}
+
+.fan-layer:nth-child(2) {
+    background: 
+        conic-gradient(
+            from 15deg,
+            transparent 0deg 30deg,
+            rgba(255, 204, 0, 0.08) 30deg 60deg,
+            transparent 60deg 90deg,
+            rgba(230, 126, 34, 0.08) 90deg 120deg,
+            transparent 120deg 150deg,
+            rgba(26, 188, 156, 0.08) 150deg 180deg,
+            transparent 180deg 210deg,
+            rgba(177, 156, 217, 0.08) 210deg 240deg,
+            transparent 240deg 270deg,
+            rgba(106, 90, 205, 0.08) 270deg 300deg,
+            transparent 300deg 330deg,
+            rgba(255, 107, 139, 0.08) 330deg 360deg
+        );
+    animation-duration: 45s;
+    animation-direction: reverse;
+}
+
+@keyframes rotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 九宫格布局 */
 .lot-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 10px;
+    gap: 15px;
+    padding: 15px;
+    position: relative;
+    z-index: 2;
 }
 
+/* 九宫格项目设计 */
 .lot-item {
     aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid rgba(255,255,255,0.15);
-    border-radius: 12px;
-    font-weight: normal; /* 字体粗细调整为正常 */
+    background: rgba(30, 25, 45, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    font-weight: bold;
     color: #fff;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    font-size: 16px; /* 字体大小调整 */
-    backdrop-filter: blur(8px);
-    animation: itemGlow 2s infinite alternate;
+    font-size: 18px;
+    backdrop-filter: blur(5px);
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    box-shadow: 
+        inset 0 0 15px rgba(0, 0, 0, 0.3),
+        0 5px 20px rgba(0, 0, 0, 0.25);
 }
 
-@keyframes itemGlow {
-    0% { box-shadow: 0 0 5px rgba(177,156,217,0.1); }
-    100% { box-shadow: 0 0 15px rgba(177,156,217,0.3); }
-}
+/* 奖项格子颜色 */
+.lot-item:nth-child(1) { background: rgba(138, 109, 190, 0.35); }
+.lot-item:nth-child(2) { background: rgba(52, 152, 219, 0.35); }
+.lot-item:nth-child(3) { background: rgba(46, 204, 113, 0.35); }
+.lot-item:nth-child(4) { background: rgba(231, 76, 60, 0.35); }
+.lot-item:nth-child(6) { background: rgba(155, 89, 182, 0.35); }
+.lot-item:nth-child(7) { background: rgba(241, 196, 15, 0.35); }
+.lot-item:nth-child(8) { background: rgba(230, 126, 34, 0.35); }
+.lot-item:nth-child(9) { background: rgba(26, 188, 156, 0.35); }
 
 .lot-item:hover {
     transform: scale(1.05);
-    border-color: rgba(177,156,217,0.6);
+    border-color: rgba(177, 156, 217, 0.6);
+    box-shadow: 
+        inset 0 0 20px rgba(0, 0, 0, 0.4),
+        0 8px 30px rgba(177, 156, 217, 0.4);
 }
 
-.lot-item::before {
+/* 中心按钮设计 */
+.lot-item.center {
+    background: linear-gradient(135deg, rgba(138, 109, 190, 0.9), rgba(106, 90, 205, 0.9));
+    cursor: pointer;
+    z-index: 3;
+    font-size: 20px;
+    box-shadow: 
+        0 0 25px rgba(138, 109, 190, 0.6),
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+/* 多层次呼吸灯效果 */
+.lot-item.center::before {
     content: '';
     position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(177,156,217,0.1) 50%, transparent 70%);
-    opacity: 0.3;
-    transition: 0.3s;
-    animation: shine 3s infinite linear;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 18px;
+    border: 2px solid rgba(138, 109, 190, 0.5);
+    animation: pulseBorder1 3s infinite;
+    z-index: -1;
 }
 
-@keyframes shine {
-    0% { transform: translateX(-150%) skew(45deg); }
-    100% { transform: translateX(150%) skew(45deg); }
+.lot-item.center::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 23px;
+    border: 2px solid rgba(138, 109, 190, 0.3);
+    animation: pulseBorder2 3s infinite;
+    z-index: -2;
 }
 
-.lot-item.center {
-    background: rgba(138,109,190,0.7);
-    cursor: pointer;
-    animation: pulse 1.5s infinite;
+@keyframes pulseBorder1 {
+    0%, 100% { 
+        opacity: 0.8;
+        box-shadow: 0 0 10px rgba(138, 109, 190, 0.5);
+    }
+    50% { 
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(138, 109, 190, 0.8);
+    }
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+@keyframes pulseBorder2 {
+    0%, 100% { 
+        opacity: 0.5;
+        box-shadow: 0 0 5px rgba(138, 109, 190, 0.3);
+    }
+    50% { 
+        opacity: 0.8;
+        box-shadow: 0 0 15px rgba(138, 109, 190, 0.6);
+    }
 }
 
+/* 激活状态 */
 .lot-item.active {
-    background: #2ecc71 !important;
+    background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
     border-color: #27ae60 !important;
     transform: scale(0.95);
-    box-shadow: 0 0 15px #2ecc71;
+    box-shadow: 0 0 25px #2ecc71 !important;
     animation: glow 1s infinite alternate;
 }
 
-.action-container {
-    margin: 15px auto;
-    max-width: 600px;
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 0 15px;
+@keyframes glow {
+    from { box-shadow: 0 0 15px #2ecc71; }
+    to { box-shadow: 0 0 35px #2ecc71; }
 }
 
-.action-btn {
-    flex: 1;
-    min-width: 140px;
-    padding: 12px 10px;
-    border-radius: 8px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(8px);
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.action-btn:hover {
-    background: rgba(30, 30, 50, 0.8);
-    transform: translateY(-2px);
-}
-
+/* 奖项说明面板 */
 .combined-panel {
     background: rgba(0,0,0,0.6);
     border: 1px solid rgba(255,255,255,0.15);
@@ -280,308 +509,58 @@ body {
     text-align: center;
 }
 
-.modal-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    backdrop-filter: blur(20px);
-}
-
-.modal-content {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    min-width: 280px;
-    max-width: 90%;
-    animation: modalBounce 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    overflow: hidden;
-    backdrop-filter: blur(var(--blur-intensity));
-    padding: 25px;
-}
-
-.card-input {
-    width: 100%;
-    padding: 12px 15px;
-    margin: 20px 0;
-    background: rgba(255,255,255,0.1) !important;
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
-    color: #fff;
-    text-align: center;
-    font-size: 16px;
-    transition: all 0.3s;
-}
-
-.card-input:focus {
-    outline: none;
-    border-color: var(--prize-color);
-    box-shadow: 0 0 10px rgba(177,156,217,0.3);
-}
-
-.card-info-text {
-    text-align: center;
-    padding: 15px;
-    margin: 10px 0;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    line-height: 1.5;
-}
-
-.purple-btn {
-    background: rgba(138, 109, 190, 0.2) !important;
-    border: 1px solid #8a6dbe !important;
-    color: #b19cd9 !important;
-    padding: 8px 15px;
-    border-radius: 6px;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.purple-btn:hover {
-    background: rgba(138, 109, 190, 0.3) !important;
-}
-
-.wechat-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* 底部信息 */
+.footer {
     margin-top: 20px;
-    padding: 12px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 8px;
-}
-
-.qrcode-body {
     text-align: center;
-    padding: 20px;
-}
-
-.qrcode-body img {
-    width: 200px;
-    height: 200px;
-    border: 2px solid var(--glass-border);
-    border-radius: 12px;
-    margin: 15px 0;
-}
-
-@keyframes modalBounce {
-    0% { transform: scale(0.8) translateY(50px); opacity: 0; }
-    50% { transform: scale(1.05) translateY(-5px); }
-    70% { transform: scale(0.98); }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
-}
-
-@keyframes glow {
-    from { box-shadow: 0 0 10px #2ecc71; }
-    to { box-shadow: 0 0 30px #2ecc71; }
-}
-
-.alert-message {
-    background: rgba(0,0,0,0.7);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin: 0 auto;
-    animation: fadeInOut 2.3s ease forwards;
-    max-width: 100%;
-    text-align: center;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+    max-width: 650px;
 }
 
-@keyframes fadeInOut {
-    0%,100% { opacity: 0; transform: translateY(-20px); }
-    10%,90% { opacity: 1; transform: translateY(0); }
-}
-
-.payment-btn {
-    background: rgba(138, 109, 190, 0.7);
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: block;
-    width: 100%;
-    margin-top: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-.payment-btn:hover {
-    background: rgba(138, 109, 190, 0.9);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.payment-btn.payment-success {
-    background: rgba(76, 175, 80, 0.7);
-}
-
-.verification-code {
-    font-size: 1.2rem;
-    font-weight: bold;
-    font-family: 'Courier New', monospace;
-    letter-spacing: 1px;
-    color: white;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 15px 20px;
-    border-radius: 8px;
-    display: inline-block;
-    margin: 15px 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-}
-
-.copy-payment-btn {
-    background: rgba(138, 109, 190, 0.7);
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    font-size: 1rem;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    margin-top: 15px;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    width: 100%;
-}
-
-.copy-payment-btn:hover {
-    background: rgba(138, 109, 190, 0.9);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-}
-
-.copy-payment-btn.copy-success {
-    background: rgba(76, 175, 80, 0.7);
-}
-
+/* 响应式设计 */
 @media (max-width: 768px) {
-    .combined-panel {
-        grid-template-columns: 1fr;
+    .page-title {
+        font-size: 2.2rem;
     }
-    .history-section, .prize-section {
-        height: auto;
-        max-height: 250px;
+    
+    .action-btn {
+        padding: 16px 12px;
+        font-size: 16px;
+        min-width: 140px;
+    }
+    
+    .lot-item {
+        font-size: 16px;
     }
 }
 
 @media (max-width: 480px) {
-    .action-container {
-        gap: 10px;
-        padding: 0 10px;
-        overflow-x: auto;
-    }
-    .action-btn {
-        min-width: 120px;
-        padding: 10px 8px;
-        font-size: 13px;
-    }
-    .lot-item { 
-        font-size: 14px; 
-    }
-    .modal-content {
-        min-width: 85%;
-        padding: 15px;
-    }
-    .prize-item {
-        font-size: 12px;
-    }
-    .payment-btn {
-        padding: 10px 15px;
-        font-size: 14px;
-    }
-    .page-header h1 {
+    .page-title {
         font-size: 1.8rem;
     }
-}
-
-/* 防作弊状态指示器 */
-.status-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.4);
-    margin: 10px 0;
-    font-size: 14px;
-}
-
-.status-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #ff4757;
-}
-
-.status-dot.active {
-    background: #2ecc71;
-    animation: pulse 1.5s infinite;
-}
-
-.status-timer {
-    color: #aaa;
-    font-size: 13px;
-    margin-top: 5px;
-    text-align: center;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
-    70% { box-shadow: 0 0 0 8px rgba(46, 204, 113, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
-}
-
-/* 支付提示动画 */
-.payment-tip {
-    display: block;
-    margin: 10px 0;
-    padding: 8px;
-    background: rgba(255, 204, 0, 0.15);
-    border: 1px solid rgba(255, 204, 0, 0.3);
-    border-radius: 6px;
-    color: #ffcc00;
-    text-align: center;
-    font-weight: bold;
-    animation: blink 1.5s infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    
+    .lottery-container {
+        padding: 20px;
+        margin-top: 10px;
+    }
+    
+    .lot-grid {
+        gap: 12px;
+        padding: 10px;
+    }
+    
+    .action-buttons-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .action-btn {
+        padding: 14px;
+        font-size: 16px;
+        min-width: 100%;
+    }
 }
