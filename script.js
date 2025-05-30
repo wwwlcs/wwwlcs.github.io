@@ -2,10 +2,10 @@
 "use strict";
 
 const PRIZES = [
-    { id: 1, name: '体验券', prob: 78.0, desc: '免费体验台球1小时' },
-    { id: 2, name: '店长特训', prob: 18.0, desc: '店长一对一指导1小时', dailyLimit: 2 },
-    { id: 3, name: '周会员', prob: 3.9,  desc: '一周会员资格', weeklyLimit: 1 },
-    { id: 4, name: '专属球杆', prob: 0.1, desc: '定制台球杆一支', monthlyLimit: 1 }
+    { id: 1, name: '体验券', prob: 78.0, desc: '恭喜获得体验卷台球1小时' },
+    { id: 2, name: '加时卷', prob: 18.0, desc: '凭中奖记录加时1小时', dailyLimit: 2 },
+    { id: 3, name: '周会员', prob: 3.9,  desc: '工资获得一周会员资格', weeklyLimit: 1 },
+    { id: 4, name: '月会员', prob: 0.1, desc: '恭喜获得SVIP月会员体验', monthlyLimit: 1 }
 ];
 
 const config = {
