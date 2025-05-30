@@ -101,7 +101,7 @@ body {
 /* 页面标题 */
 .page-header {
     text-align: center;
-    margin: 0 auto 30px;
+    margin: 0 auto 15px; /* 减少下边距 */
     max-width: 600px;
     position: relative;
     padding: 20px 0;
@@ -140,13 +140,12 @@ body {
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* 功能按钮容器 - 固定在抽奖面板上方 */
-/* 修改按钮容器样式 */
+/* 功能按钮容器 - 移动到标题和抽奖面板之间 */
 .action-buttons-container {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin: 0 auto 30px; /* 增加下边距 */
+    margin: 0 auto 25px; /* 增加下边距 */
     gap: 20px;
     max-width: 650px;
     position: relative; /* 改为相对定位 */
@@ -154,36 +153,7 @@ body {
     /* 移除原来的绝对定位属性 */
 }
 
-/* 调整抽奖容器的上边距 */
-.lottery-container {
-    background: rgba(20, 15, 30, 0.7);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 25px;
-    padding: 30px;
-    margin: 0 auto 40px; /* 移除上边距 */
-    /* ... 其他样式保持不变 ... */
-}
-
-/* 移动端适配调整 */
-@media (max-width: 768px) {
-    .action-buttons-container {
-        margin-bottom: 20px; /* 移动端下边距调整 */
-    }
-    .lottery-container {
-        margin-top: 0; /* 移除移动端上边距 */
-    }
-}
-
-@media (max-width: 480px) {
-    .action-buttons-container {
-        flex-direction: row;
-        gap: 10px;
-        width: 95%;
-        margin-bottom: 15px;
-    }
-}
-
-/* 功能按钮样式 - 黄金比例设计 */
+/* 功能按钮样式 - 透明度调整为60% */
 .action-btn-new {
     flex: 1;
     min-width: 140px;
@@ -194,7 +164,6 @@ body {
     font-size: 16px;
     color: #fff;
     border: none;
-    background: rgba(30, 25, 45, 0.85);
     transition: all 0.3s;
     position: relative;
     overflow: hidden;
@@ -209,6 +178,7 @@ body {
         inset 0 0 10px rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 0.6; /* 添加透明度 */
 }
 
 .action-btn-new.left {
@@ -221,6 +191,7 @@ body {
 
 .action-btn-new:hover {
     transform: translateY(-5px);
+    opacity: 0.9; /* 悬停时提高透明度 */
     box-shadow: 
         0 8px 25px rgba(0, 0, 0, 0.5),
         inset 0 0 15px rgba(255, 255, 255, 0.2);
@@ -252,7 +223,7 @@ body {
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 25px;
     padding: 30px;
-    margin: 80px auto 40px; /* 增加上边距为按钮留出空间 */
+    margin: 0 auto 40px; /* 移除上边距 */
     box-shadow: 
         0 15px 50px rgba(0, 0, 0, 0.5),
         inset 0 0 30px rgba(255, 255, 255, 0.1);
@@ -775,7 +746,7 @@ body {
     
     /* 移动端按钮位置调整 */
     .action-buttons-container {
-        top: -55px;
+        margin-bottom: 20px;
         gap: 10px;
     }
 }
@@ -785,6 +756,7 @@ body {
         flex-direction: row;
         gap: 10px;
         width: 95%;
+        margin-bottom: 15px;
     }
     
     .action-btn-new {
@@ -814,7 +786,6 @@ body {
     
     .lottery-container {
         padding: 20px;
-        margin-top: 70px;
     }
     
     .lot-grid {
