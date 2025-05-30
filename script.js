@@ -630,84 +630,90 @@ $(function() {
     const faScript = document.createElement('script');
     faScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js';
     document.head.appendChild(faScript);
-});
-// 粒子背景初始化
-particlesJS('particles-js', {
-    particles: {
-        number: { 
-            value: 60, 
-            density: { 
-                enable: true, 
-                value_area: 1000 
-            } 
-        },
-        color: { 
-            value: ["#ffcc00", "#b19cd9", "#3498db", "#ff6b8b", "#8a6dbe"]
-        },
-        shape: { 
-            type: "circle"
-        },
-        opacity: { 
-            value: 0.8, 
-            random: true,
-            anim: {
-                enable: true,
-                speed: 1,
-                opacity_min: 0.3,
-                sync: false
-            }
-        },
-        size: { 
-            value: 4, 
-            random: true,
-            anim: {
-                enable: true,
-                speed: 3,
-                size_min: 1,
-                sync: false
-            }
-        },
-        line_linked: {
-            enable: true,
-            distance: 150,
-            color: "#ffffff",
-            opacity: 0.1,
-            width: 1
-        },
-        move: {
-            enable: true,
-            speed: 2,
-            direction: "none",
-            random: true,
-            straight: false,
-            out_mode: "out",
-            bounce: false
-        }
-    },
-    interactivity: {
-        detect_on: "canvas",
-        events: {
-            onhover: { 
-                enable: true, 
-                mode: "grab" 
-            },
-            onclick: { 
-                enable: true, 
-                mode: "push" 
-            },
-            resize: true
-        },
-        modes: {
-            grab: {
-                distance: 140,
+    
+    // 动态加载 particles.js 库并初始化
+    const particlesScript = document.createElement('script');
+    particlesScript.src = 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js';
+    particlesScript.onload = function() {
+        particlesJS('particles-js', {
+            particles: {
+                number: { 
+                    value: 60, 
+                    density: { 
+                        enable: true, 
+                        value_area: 1000 
+                    } 
+                },
+                color: { 
+                    value: ["#ffcc00", "#b19cd9", "#3498db", "#ff6b8b", "#8a6dbe"]
+                },
+                shape: { 
+                    type: "circle"
+                },
+                opacity: { 
+                    value: 0.8, 
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.3,
+                        sync: false
+                    }
+                },
+                size: { 
+                    value: 4, 
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 3,
+                        size_min: 1,
+                        sync: false
+                    }
+                },
                 line_linked: {
-                    opacity: 0.3
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff",
+                    opacity: 0.1,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
                 }
             },
-            push: {
-                particles_nb: 3
-            }
-        }
-    },
-    retina_detect: true
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { 
+                        enable: true, 
+                        mode: "grab" 
+                    },
+                    onclick: { 
+                        enable: true, 
+                        mode: "push" 
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 0.3
+                        }
+                    },
+                    push: {
+                        particles_nb: 3
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    };
+    document.head.appendChild(particlesScript);
 });
