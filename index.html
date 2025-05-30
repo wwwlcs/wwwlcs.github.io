@@ -14,7 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LCS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -59,10 +58,13 @@
         
         .guide-header h1 {
             font-size: 32px;
-            color: #ffcc00;
             margin-bottom: 15px;
             text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
             letter-spacing: 1px;
+            background: linear-gradient(45deg, #ffcc00, #b19cd9, #ff6b8b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         
         .guide-header p {
@@ -304,6 +306,15 @@
     </style>
 </head>
 <body>
+    <!-- 扇形背景动画 -->
+    <div class="fan-background">
+        <div class="fan-layer"></div>
+        <div class="fan-layer"></div>
+    </div>
+    
+    <!-- 粒子背景动画 -->
+    <div id="particles-js"></div>
+    
     <!-- 右上角指示器 - 紫色呼吸灯效果 -->
     <div class="browser-indicator">
         <div class="arrow"></div>
@@ -431,14 +442,15 @@
     </style>
 </head>
 <body>
-    <!-- 扇形背景 -->
-<div class="fan-background">
-    <div class="fan-layer"></div>
-    <div class="fan-layer"></div>
-</div>
-
-<!-- 粒子背景容器 -->
-<div id="particles-js"></div>
+    <!-- 扇形背景动画 -->
+    <div class="fan-background">
+        <div class="fan-layer"></div>
+        <div class="fan-layer"></div>
+    </div>
+    
+    <!-- 粒子背景动画 -->
+    <div id="particles-js"></div>
+    
     <div id="alert-container"></div>
     
     <div class="main-container">
