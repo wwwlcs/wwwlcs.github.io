@@ -141,19 +141,46 @@ body {
 }
 
 /* 功能按钮容器 - 固定在抽奖面板上方 */
+/* 修改按钮容器样式 */
 .action-buttons-container {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 15px;
+    margin: 0 auto 30px; /* 增加下边距 */
     gap: 20px;
     max-width: 650px;
-    margin: 0 auto 15px;
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative; /* 改为相对定位 */
     z-index: 20;
+    /* 移除原来的绝对定位属性 */
+}
+
+/* 调整抽奖容器的上边距 */
+.lottery-container {
+    background: rgba(20, 15, 30, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 30px;
+    margin: 0 auto 40px; /* 移除上边距 */
+    /* ... 其他样式保持不变 ... */
+}
+
+/* 移动端适配调整 */
+@media (max-width: 768px) {
+    .action-buttons-container {
+        margin-bottom: 20px; /* 移动端下边距调整 */
+    }
+    .lottery-container {
+        margin-top: 0; /* 移除移动端上边距 */
+    }
+}
+
+@media (max-width: 480px) {
+    .action-buttons-container {
+        flex-direction: row;
+        gap: 10px;
+        width: 95%;
+        margin-bottom: 15px;
+    }
 }
 
 /* 功能按钮样式 - 黄金比例设计 */
