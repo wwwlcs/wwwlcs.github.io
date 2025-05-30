@@ -10,7 +10,10 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c) fixed;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(26, 42, 108, 0.8), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(178, 31, 31, 0.7), transparent 40%),
+        linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c) fixed;
     font-family: 'Microsoft Yahei', sans-serif;
     backdrop-filter: blur(var(--blur-intensity));
     padding: 20px;
@@ -19,129 +22,10 @@ body {
 }
 
 .main-container {
-    max-width: 600px;
+    max-width: 650px;
     margin: 0 auto;
-}
-
-.lottery-wrap2 {
-    background: rgba(0,0,0,0.6); /* 调整为60%透明度 */
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    backdrop-filter: blur(var(--blur-intensity));
-    padding: 15px;
-    margin: 20px 0;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
-}
-
-.lot-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 10px;
-}
-
-.lot-item {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid rgba(255,255,255,0.15);
-    border-radius: 12px;
-    font-weight: bold;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.3s;
     position: relative;
-    overflow: hidden;
-    font-size: 14px;
-    backdrop-filter: blur(8px);
-    animation: itemGlow 2s infinite alternate;
-}
-
-@keyframes itemGlow {
-    0% { box-shadow: 0 0 5px rgba(177,156,217,0.1); }
-    100% { box-shadow: 0 0 15px rgba(177,156,217,0.3); }
-}
-
-.lot-item:hover {
-    transform: scale(1.05);
-    border-color: rgba(177,156,217,0.6);
-}
-
-.lot-item::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(177,156,217,0.1) 50%, transparent 70%);
-    opacity: 0.3;
-    transition: 0.3s;
-    animation: shine 3s infinite linear;
-}
-
-@keyframes shine {
-    0% { transform: translateX(-150%) skew(45deg); }
-    100% { transform: translateX(150%) skew(45deg); }
-}
-
-.lot-item.center {
-    background: rgba(138,109,190,0.7);
-    cursor: pointer;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-.lot-item.active {
-    background: #2ecc71 !important;
-    border-color: #27ae60 !important;
-    transform: scale(0.95);
-    box-shadow: 0 0 15px #2ecc71;
-    animation: glow 1s infinite alternate;
-}
-
-.action-container {
-    margin: 15px auto;
-    max-width: 600px;
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 0 15px;
-}
-
-.action-btn {
-    flex: 1;
-    min-width: 140px;
-    padding: 12px 10px;
-    border-radius: 8px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(8px);
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.action-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent);
-    transition: 0.6s;
-}
-
-.action-btn:hover::before {
-    left: 100%;
+    z-index: 10;
 }
 
 /* 组合面板 - 与九宫格相同样式 */
@@ -367,11 +251,6 @@ body {
     100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
-@keyframes glow {
-    from { box-shadow: 0 0 10px #2ecc71; }
-    to { box-shadow: 0 0 30px #2ecc71; }
-}
-
 .alert-message {
     background: rgba(0,0,0,0.7);
     color: white;
@@ -513,9 +392,6 @@ body {
         padding: 10px 8px;
         font-size: 13px;
     }
-    .lot-item { 
-        font-size: 12px; 
-    }
     .modal-content {
         min-width: 85%;
         padding: 15px;
@@ -527,4 +403,61 @@ body {
         padding: 10px 15px;
         font-size: 14px;
     }
+}
+
+/* 防作弊状态指示器 */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.status-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ff4757;
+}
+
+.status-dot.active {
+    background: #2ecc71;
+    animation: pulse 1.5s infinite;
+}
+
+.status-timer {
+    color: #aaa;
+    font-size: 13px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(46, 204, 113, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+/* 支付提示动画 */
+.payment-tip {
+    display: block;
+    margin: 10px 0;
+    padding: 8px;
+    background: rgba(255, 204, 0, 0.15);
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    border-radius: 6px;
+    color: #ffcc00;
+    text-align: center;
+    font-weight: bold;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
