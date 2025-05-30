@@ -430,6 +430,24 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+        
+        /* 新增：确认按钮样式 */
+        .confirm-btn {
+            background: linear-gradient(135deg, #8a6dbe, #6a5acd);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(138, 109, 190, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -444,8 +462,8 @@
             <h1 class="page-title">LCS PRO 豪华抽奖</h1>
             <div class="page-subtitle">转动幸运之轮，赢取专属大奖！</div>
         </div>
-        
-        <!-- 功能按钮容器 -->
+
+        <!-- 功能按钮容器 - 固定在抽奖面板上方 -->
         <div class="action-buttons-container">
             <a href="javascript:void(0)" class="action-btn-new left" onclick="showCardInfo()">
                 <i class="fas fa-ticket-alt"></i> 获取奖励
@@ -478,7 +496,7 @@
 
         <div class="combined-panel">
             <div class="combined-panel-header">
-                <h3>🎯 奖项说明&中奖记录</h3>
+                <h3 class="panel-title">🎯 奖项说明&中奖记录</h3>
                 <button class="clear-history">
                     <span>清空记录</span>
                     <svg viewBox="0 0 24 24" width="14" height="14">
