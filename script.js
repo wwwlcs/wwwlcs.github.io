@@ -209,7 +209,7 @@ class Lottery {
                         <h3 style="margin-bottom:15px;text-align:center">请输入卡密</h3>
                         <input type="text" class="card-input" placeholder="输入卡密开始抽奖" maxlength="18">
                         <div style="margin-top:20px;text-align:center">
-                            <button class="confirm-card action-btn">确认抽奖</button>
+                            <button class="confirm-card confirm-btn">确认抽奖</button>
                         </div>
                     </div>
                 </div>
