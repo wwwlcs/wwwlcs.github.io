@@ -353,22 +353,614 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LCS PRO</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        /* 全局样式 */
+        :root {
+            --glass-bg: rgba(30, 30, 40, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --prize-color: #b19cd9;
+            --danger-red: #ff4757;
+            --blur-intensity: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(26, 42, 108, 0.8), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(178, 31, 31, 0.7), transparent 40%),
+                linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            background-attachment: fixed;
+            font-family: 'Microsoft Yahei', 'Segoe UI', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* 粒子背景 */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* 闪光效果 */
+        .glitter {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 3px #fff;
+            animation: glitter 4s infinite;
+            opacity: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes glitter {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* 页面标题 */
+        .page-header {
+            text-align: center;
+            margin: 0 auto 20px;
+            max-width: 600px;
+            position: relative;
+            padding: 20px 0;
+            z-index: 10;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(45deg, #b19cd9, #ffcc00, #3498db);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(177, 156, 217, 0.3);
+            position: relative;
+            letter-spacing: 1px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #8a6dbe, transparent);
+            border-radius: 2px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 15px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 主容器 */
+        .main-container {
+            max-width: 650px;
+            margin: 0 auto;
+            position: relative;
+            width: 100%;
+            z-index: 10;
+        }
+
+        /* 功能按钮容器 */
+        .action-buttons-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        /* 功能按钮样式 */
+        .action-btn {
+            flex: 1;
+            min-width: 160px;
+            padding: 15px;
+            border-radius: 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            background: rgba(30, 25, 45, 0.7);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            z-index: 2;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                inset 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn.left {
+            background: linear-gradient(135deg, rgba(106, 17, 203, 0.6), rgba(37, 117, 252, 0.6));
+        }
+
+        .action-btn.right {
+            background: linear-gradient(135deg, rgba(255, 154, 158, 0.6), rgba(250, 208, 196, 0.6));
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 12px 30px rgba(0, 0, 0, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* 扫光效果 */
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.6s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        /* 抽奖盘容器 */
+        .lottery-container {
+            background: rgba(20, 15, 30, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 20px auto;
+            box-shadow: 
+                0 15px 50px rgba(0, 0, 0, 0.5),
+                inset 0 0 30px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        /* 扇形背景动画 */
+        .fan-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .fan-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                conic-gradient(
+                    from 0deg,
+                    transparent 0deg 30deg,
+                    rgba(138, 109, 190, 0.1) 30deg 60deg,
+                    transparent 60deg 90deg,
+                    rgba(52, 152, 219, 0.1) 90deg 120deg,
+                    transparent 120deg 150deg,
+                    rgba(46, 204, 113, 0.1) 150deg 180deg,
+                    transparent 180deg 210deg,
+                    rgba(231, 76, 60, 0.1) 210deg 240deg,
+                    transparent 240deg 270deg,
+                    rgba(155, 89, 182, 0.1) 270deg 300deg,
+                    transparent 300deg 330deg,
+                    rgba(241, 196, 15, 0.1) 330deg 360deg
+                );
+            transform: translate(-50%, -50%);
+            animation: rotate 60s linear infinite;
+        }
+
+        .fan-layer:nth-child(2) {
+            background: 
+                conic-gradient(
+                    from 15deg,
+                    transparent 0deg 30deg,
+                    rgba(255, 204, 0, 0.08) 30deg 60deg,
+                    transparent 60deg 90deg,
+                    rgba(230, 126, 34, 0.08) 90deg 120deg,
+                    transparent 120deg 150deg,
+                    rgba(26, 188, 156, 0.08) 150deg 180deg,
+                    transparent 180deg 210deg,
+                    rgba(177, 156, 217, 0.08) 210deg 240deg,
+                    transparent 240deg 270deg,
+                    rgba(106, 90, 205, 0.08) 270deg 300deg,
+                    transparent 300deg 330deg,
+                    rgba(255, 107, 139, 0.08) 330deg 360deg
+                );
+            animation-duration: 45s;
+            animation-direction: reverse;
+        }
+
+        @keyframes rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* 九宫格布局 */
+        .lot-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 九宫格项目设计 */
+        .lot-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 25, 45, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 18px;
+            backdrop-filter: blur(5px);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+            box-shadow: 
+                inset 0 0 15px rgba(0, 0, 0, 0.3),
+                0 5px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        /* 奖项格子颜色 */
+        .lot-item:nth-child(1) { background: rgba(138, 109, 190, 0.35); }
+        .lot-item:nth-child(2) { background: rgba(52, 152, 219, 0.35); }
+        .lot-item:nth-child(3) { background: rgba(46, 204, 113, 0.35); }
+        .lot-item:nth-child(4) { background: rgba(231, 76, 60, 0.35); }
+        .lot-item:nth-child(6) { background: rgba(155, 89, 182, 0.35); }
+        .lot-item:nth-child(7) { background: rgba(241, 196, 15, 0.35); }
+        .lot-item:nth-child(8) { background: rgba(230, 126, 34, 0.35); }
+        .lot-item:nth-child(9) { background: rgba(26, 188, 156, 0.35); }
+
+        .lot-item:hover {
+            transform: scale(1.05);
+            border-color: rgba(177, 156, 217, 0.6);
+            box-shadow: 
+                inset 0 0 20px rgba(0, 0, 0, 0.4),
+                0 8px 30px rgba(177, 156, 217, 0.4);
+        }
+
+        /* 中心按钮设计 */
+        .lot-item.center {
+            background: linear-gradient(135deg, rgba(138, 109, 190, 0.9), rgba(106, 90, 205, 0.9));
+            cursor: pointer;
+            z-index: 3;
+            font-size: 20px;
+            box-shadow: 
+                0 0 25px rgba(138, 109, 190, 0.6),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        /* 多层次呼吸灯效果 */
+        .lot-item.center::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 18px;
+            border: 2px solid rgba(138, 109, 190, 0.5);
+            animation: pulseBorder1 3s infinite;
+            z-index: -1;
+        }
+
+        .lot-item.center::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 23px;
+            border: 2px solid rgba(138, 109, 190, 0.3);
+            animation: pulseBorder2 3s infinite;
+            z-index: -2;
+        }
+
+        @keyframes pulseBorder1 {
+            0%, 100% { 
+                opacity: 0.8;
+                box-shadow: 0 0 10px rgba(138, 109, 190, 0.5);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 20px rgba(138, 109, 190, 0.8);
+            }
+        }
+
+        @keyframes pulseBorder2 {
+            0%, 100% { 
+                opacity: 0.5;
+                box-shadow: 0 0 5px rgba(138, 109, 190, 0.3);
+            }
+            50% { 
+                opacity: 0.8;
+                box-shadow: 0 0 15px rgba(138, 109, 190, 0.6);
+            }
+        }
+
+        /* 激活状态 */
+        .lot-item.active {
+            background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+            border-color: #27ae60 !important;
+            transform: scale(0.95);
+            box-shadow: 0 0 25px #2ecc71 !important;
+            animation: glow 1s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 15px #2ecc71; }
+            to { box-shadow: 0 0 35px #2ecc71; }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .action-btn {
+                padding: 16px 12px;
+                font-size: 16px;
+                min-width: 140px;
+            }
+            
+            .lot-item {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .lottery-container {
+                padding: 20px;
+                margin-top: 10px;
+            }
+            
+            .lot-grid {
+                gap: 12px;
+                padding: 10px;
+            }
+            
+            .action-buttons-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .action-btn {
+                padding: 14px;
+                font-size: 16px;
+                min-width: 100%;
+            }
+        }
+
+        /* 奖项说明面板 */
+        .combined-panel {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            backdrop-filter: blur(var(--blur-intensity));
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+
+        .combined-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .history-section, .prize-section {
+            overflow-y: auto;
+            padding-right: 10px;
+            background: transparent;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .history-section {
+            height: 120px;
+        }
+
+        .prize-section {
+            height: 190px;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 5px;
+        }
+
+        .clear-history {
+            padding: 6px 12px;
+            font-size: 12px;
+            background: rgba(255,71,87,0.1) !important;
+            border: 1px solid var(--danger-red) !important;
+            color: var(--danger-red) !important;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .clear-history:hover {
+            background: rgba(255,71,87,0.2) !important;
+            transform: translateY(-1px);
+        }
+
+        .prize-item {
+            padding: 8px 10px;
+            margin: 5px 0;
+            border-left: 3px solid var(--prize-color);
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+            transition: 0.2s;
+            cursor: pointer;
+            transform: translateX(0);
+            font-size: 13px;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .prize-item:hover {
+            transform: translateX(8px);
+            background: rgba(255,255,255,0.1) !important;
+        }
+
+        .prize-item-1 { border-left-color: #b19cd9; }
+        .prize-item-2 { border-left-color: #2ecc71; }
+        .prize-item-3 { border-left-color: #3498db; }
+        .prize-item-4 { border-left-color: #e74c3c; }
+
+        .history-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .history-placeholder {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* 底部信息 */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 650px;
+        }
+    </style>
 </head>
 <body>
-    <!-- 粒子背景容器 -->
+    <!-- 粒子背景 -->
     <div id="particles-js"></div>
     
-    <div id="alert-container"></div>
+    <!-- 闪光效果 -->
+    <div class="glitter" style="top: 20%; left: 15%; animation-delay: 0.5s;"></div>
+    <div class="glitter" style="top: 70%; left: 80%; animation-delay: 1.2s;"></div>
+    <div class="glitter" style="top: 40%; left: 40%; animation-delay: 2.4s;"></div>
+    <div class="glitter" style="top: 60%; left: 25%; animation-delay: 0.8s;"></div>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1 class="page-title">LCS PRO 豪华抽奖</h1>
+        <div class="page-subtitle">转动幸运之轮，赢取专属大奖！</div>
+    </div>
     
     <div class="main-container">
-        <!-- 页面标题 -->
-        <div class="page-header">
-            <h1>LCS PRO 豪华抽奖</h1>
+        <div id="alert-container"></div>
+        
+        <!-- 功能按钮 -->
+        <div class="action-buttons-container">
+            <a href="javascript:void(0)" class="action-btn left" onclick="showCardInfo()">
+                <i class="fas fa-ticket-alt"></i> 获取奖励
+            </a>
+            <a href="javascript:void(0)" class="action-btn right" onclick="showQRCode()">
+                <i class="fas fa-qrcode"></i> 卡密获取
+            </a>
         </div>
-
-        <div class="lottery-wrap2">
+        
+        <!-- 九宫格抽奖区 -->
+        <div class="lottery-container">
+            <!-- 扇形背景动画 -->
+            <div class="fan-background">
+                <div class="fan-layer"></div>
+                <div class="fan-layer"></div>
+            </div>
+            
             <div class="lot-grid">
                 <div class="lot-item">🎁 幸运格</div>
                 <div class="lot-item" data-prize="1">体验券</div>
@@ -381,12 +973,8 @@
                 <div class="lot-item">🎁 幸运格</div>
             </div>
         </div>
-
-        <div class="action-container">
-            <a href="javascript:void(0)" class="action-btn" onclick="showCardInfo()">🎫 获取奖励</a>
-            <a href="javascript:void(0)" class="action-btn" onclick="showQRCode()">🦊 卡密获取</a>
-        </div>
-
+        
+        <!-- 奖项说明面板 -->
         <div class="combined-panel">
             <div class="combined-panel-header">
                 <h3>🎯 奖项说明&中奖记录</h3>
@@ -410,62 +998,79 @@
             </div>
         </div>
     </div>
+    
+    <div class="footer">
+        LCS PRO 豪华抽奖系统 © 2023 - 让每一次抽奖都充满惊喜
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js"></script>
     <script>
-        // 初始化粒子背景
+        // 重新设计的粒子背景 - 更具科技感和视觉冲击力
         document.addEventListener('DOMContentLoaded', function() {
             particlesJS('particles-js', {
                 particles: {
                     number: { 
-                        value: 60, 
+                        value: 80, 
                         density: { 
                             enable: true, 
                             value_area: 800 
                         } 
                     },
                     color: { 
-                        value: ["#b19cd9", "#ffcc00", "#3498db"]
+                        value: ["#b19cd9", "#ffcc00", "#3498db", "#ff6b8b", "#8a6dbe"]
                     },
                     shape: { 
-                        type: "circle"
+                        type: "circle",
+                        stroke: {
+                            width: 0,
+                            color: "#000000"
+                        }
                     },
                     opacity: { 
-                        value: 0.8, 
+                        value: 0.9, 
                         random: true,
                         anim: {
                             enable: true,
-                            speed: 1,
+                            speed: 1.5,
                             opacity_min: 0.3,
                             sync: false
                         }
                     },
                     size: { 
-                        value: 3, 
+                        value: 5, 
                         random: true,
                         anim: {
                             enable: true,
-                            speed: 3,
-                            size_min: 1,
+                            speed: 4,
+                            size_min: 2,
                             sync: false
                         }
                     },
                     line_linked: {
                         enable: true,
-                        distance: 150,
+                        distance: 130,
                         color: "#ffffff",
-                        opacity: 0.1,
-                        width: 1
+                        opacity: 0.15,
+                        width: 1.5,
+                        shadow: {
+                            enable: true,
+                            color: "#b19cd9",
+                            blur: 5
+                        }
                     },
                     move: {
                         enable: true,
-                        speed: 2,
+                        speed: 2.5,
                         direction: "none",
                         random: true,
                         straight: false,
                         out_mode: "out",
-                        bounce: false
+                        bounce: false,
+                        attract: {
+                            enable: true,
+                            rotateX: 1000,
+                            rotateY: 2000
+                        }
                     }
                 },
                 interactivity: {
@@ -477,25 +1082,97 @@
                         },
                         onclick: { 
                             enable: true, 
-                            mode: "push" 
+                            mode: "repulse" 
                         },
                         resize: true
                     },
                     modes: {
                         grab: {
-                            distance: 140,
+                            distance: 180,
                             line_linked: {
-                                opacity: 0.3
+                                opacity: 0.5
                             }
                         },
+                        repulse: {
+                            distance: 150,
+                            duration: 0.8
+                        },
                         push: {
-                            particles_nb: 3
+                            particles_nb: 4
                         }
                     }
                 },
                 retina_detect: true
             });
         });
+
+        // 抽奖逻辑
+        document.getElementById('startBtn').addEventListener('click', function() {
+            this.classList.add('active');
+            
+            // 添加闪光效果
+            const flash = document.createElement('div');
+            flash.className = 'glitter';
+            flash.style.top = '50%';
+            flash.style.left = '50%';
+            flash.style.animation = 'none';
+            this.appendChild(flash);
+            
+            setTimeout(() => {
+                this.classList.remove('active');
+                flash.remove();
+                
+                // 模拟抽奖效果
+                const items = document.querySelectorAll('.lot-item:not(.center)');
+                const randomIndex = Math.floor(Math.random() * items.length);
+                
+                items[randomIndex].classList.add('active');
+                
+                // 在选中的奖项上添加闪光
+                const prizeFlash = document.createElement('div');
+                prizeFlash.className = 'glitter';
+                prizeFlash.style.top = '50%';
+                prizeFlash.style.left = '50%';
+                prizeFlash.style.animationDelay = '0s';
+                items[randomIndex].appendChild(prizeFlash);
+                
+                setTimeout(() => {
+                    items[randomIndex].classList.remove('active');
+                    prizeFlash.remove();
+                    
+                    // 显示中奖信息
+                    const prize = items[randomIndex].getAttribute('data-prize') || '神秘奖励';
+                    const prizeNames = {
+                        '1': '体验券',
+                        '2': '店长特训',
+                        '3': '周会员',
+                        '4': '专属球杆'
+                    };
+                    
+                    const prizeName = prizeNames[prize] || '神秘奖励';
+                    alert(`恭喜您抽中了: ${prizeName}!`);
+                }, 2000);
+            }, 1500);
+        });
+
+        // 奖项点击效果
+        document.querySelectorAll('.lot-item:not(.center)').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.add('active');
+                setTimeout(() => {
+                    this.classList.remove('active');
+                }, 1000);
+            });
+        });
+
+        // 示例函数
+        function showCardInfo() {
+            alert('奖励信息将在此处显示');
+        }
+
+        function showQRCode() {
+            alert('二维码将在此处显示');
+        }
     </script>
 </body>
 </html>
