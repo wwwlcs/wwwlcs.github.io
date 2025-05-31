@@ -255,7 +255,7 @@ class Lottery {
         }
 
         const timeDiff = now - cardDate;
-        if (timeDiff < 0 || timeDiff > 60000) {
+        if (timeDiff < 0 || timeDiff > 120000) {
             window.showAlert('卡密已失效');
             return false;
         }
